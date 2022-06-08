@@ -4,6 +4,7 @@ import { StyleSheet, LogBox } from "react-native";
 import ScreenMain from "./src/components/ScreenMain";
 import ScreenCamera from "./src/components/ScreenCamera";
 import ScreenResult from "./src/components/ScreenResult";
+import VideoFormData from "./src/components/VideoFormData";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -22,6 +23,7 @@ function App() {
         <Stack.Screen name="Main" component={ScreenMain} />
         <Stack.Screen name="Camera" component={ScreenCamera} />
         <Stack.Screen name="Result" component={ScreenResult} />
+        <Stack.Screen name="Form" component={VideoFormData} />
       </Stack.Navigator>
     </NavigationContainer>
   );

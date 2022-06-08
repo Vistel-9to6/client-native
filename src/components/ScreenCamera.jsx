@@ -21,7 +21,7 @@ function ScreenCamera({ navigation }) {
   const takeVideo = async () => {
     if (camera) {
       const videoData = await camera.recordAsync({
-        maxDuration: 3,
+        maxDuration: 1,
         quality: "1080p",
       });
 

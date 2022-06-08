@@ -2,25 +2,16 @@ import React, { useState, useRef } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Button } from "react-native";
 
-export default function ScreenResult({ route, navigation }) {
+function ScreenResult({ route, navigation }) {
   const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
   const { data } = route.params;
 
-  const sendVideo = async () => {
+  const saveVideo = async () => {
     try {
-      const respond = await fetch("http://192.168.0.10:3000/api/videos", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      navigation.popToTop();
+      navigation.navigate("Form", { video: data });
     } catch (err) {
-      console.dir(err);
+      console.log(err);
     }
   };
 
@@ -46,7 +37,7 @@ export default function ScreenResult({ route, navigation }) {
             : videoRef.current.playAsync()
         }
       />
-      <Button title="send" onPress={sendVideo} />
+      <Button title="저장" onPress={saveVideo} />
     </View>
   );
 }
@@ -63,3 +54,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default ScreenResult;
