@@ -1,41 +1,24 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Button } from "react-native";
-import axios from "axios";
 
 export default function ScreenResult({ route, navigation }) {
-  const [status, setStatus] = useState({});
+  const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
-
   const { data } = route.params;
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    const res = await fetch("http://192.168.0.45:3000/api/videos");
-    console.log(JSON.stringify(res));
-  };
-
   const sendVideo = async () => {
-    const videoData = JSON.stringify({
-      type: "VIDEO",
-      data,
-    });
-
-    console.log("시작");
-
     try {
-      const res = await fetch("http://192.168.0.45:3000/api/videos", {
-        method: "GET",
+      const respond = await fetch("http://192.168.0.10:3000/api/videos", {
+        method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
+        body: JSON.stringify(data),
       });
 
-      console.log(JSON.stringify(res));
+      navigation.popToTop();
     } catch (err) {
       console.dir(err);
     }
@@ -52,13 +35,13 @@ export default function ScreenResult({ route, navigation }) {
         useNativeControls
         resizeMode="contain"
         isLooping
-        onPlaybackStatusUpdate={(status) => setStatus(status)}
+        onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
       />
 
       <Button
-        title={status.isPlaying ? "Pause" : "Play"}
+        title={videoStatus.isPlaying ? "Pause" : "Play"}
         onPress={() =>
-          status.isPlaying
+          videoStatus.isPlaying
             ? videoRef.current.pauseAsync()
             : videoRef.current.playAsync()
         }

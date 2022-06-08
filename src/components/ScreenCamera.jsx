@@ -7,7 +7,6 @@ function ScreenCamera({ navigation }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [camera, setCamera] = useState(null);
-  const [video, setVideo] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -26,7 +25,6 @@ function ScreenCamera({ navigation }) {
         quality: "1080p",
       });
 
-      setVideo(videoData);
       navigation.navigate("Result", { data: videoData });
     }
   };
