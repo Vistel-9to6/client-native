@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet, ScrollView } from "react-native";
 import VideoListItem from "./Video";
+import Profile from "./Profile";
 
 const data = [
   "https://amplify-realbuckettest-dev-215519-deployment.s3.ap-northeast-2.amazonaws.com/public/253e8dac-05a3-4991-9cac-a48567455a6c.mp4",
@@ -31,6 +32,7 @@ function FeedScreen() {
 
   return (
     <View style={styles.container}>
+      <Profile />
       <FlatList
         numColumns={3}
         removeClippedSubviews
