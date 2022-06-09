@@ -21,12 +21,12 @@ function ScreenCamera({ navigation }) {
   }, []);
 
   const takeVideo = async () => {
-    const videoData = await cameraRef.recordAsync({
+    const videoData = await cameraRef.current.recordAsync({
       maxDuration: 3,
       quality: "1080p",
     });
 
-    navigation.navigate("Result", { videoData });
+    navigation.navigate("VideoResult", { videoData });
   };
 
   if (hasCameraPermission === null || hasAudioPermission === null) {
@@ -41,11 +41,7 @@ function ScreenCamera({ navigation }) {
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         <View style={styles.cameraContainer}>
-          <Camera
-            ref={(ref) => cameraRef(ref)}
-            style={styles.fixedRatio}
-            type={type}
-          />
+          <Camera ref={cameraRef} style={styles.fixedRatio} type={type} />
         </View>
         <View style={styles.buttons}>
           <Button
