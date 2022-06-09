@@ -12,7 +12,7 @@ WebBrowser.maybeCompleteAuthSession();
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
 function ScreenLogin({ navigation }) {
-  const { setUser } = UserAuth();
+  const { setUser, setIdToken } = UserAuth();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: EXPO_CLIENT_ID,
@@ -28,6 +28,8 @@ function ScreenLogin({ navigation }) {
 
   const handleLogin = async (id) => {
     try {
+      setIdToken(id);
+
       const response = await fetch(`${API_SERVER_URL}api/google`, {
         method: "POST",
         headers: {
@@ -39,8 +41,8 @@ function ScreenLogin({ navigation }) {
         }),
       });
 
-      const data = await response.json();
-      const { user } = data;
+      const userData = await response.json();
+      const { user } = userData;
       setUser(user);
 
       navigation.navigate("Home");
