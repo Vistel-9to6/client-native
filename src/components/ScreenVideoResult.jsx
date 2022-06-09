@@ -3,7 +3,7 @@ import { Video } from "expo-av";
 import { StyleSheet, View, Button } from "react-native";
 
 function ScreenVideoResult({ route, navigation }) {
-  const [status, setStatus] = useState({});
+  const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
   const { videoData } = route.params;
 
@@ -26,13 +26,13 @@ function ScreenVideoResult({ route, navigation }) {
         useNativeControls
         resizeMode="contain"
         isLooping
-        onPlaybackStatusUpdate={(status) => setStatus(status)}
+        onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
       />
 
       <Button
-        title={status.isPlaying ? "Pause" : "Play"}
+        title={videoStatus.isPlaying ? "Pause" : "Play"}
         onPress={() =>
-          status.isPlaying
+          videoStatus.isPlaying
             ? videoRef.current.pauseAsync()
             : videoRef.current.playAsync()
         }
