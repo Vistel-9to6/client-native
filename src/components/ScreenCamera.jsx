@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { Camera } from "expo-camera";
 
@@ -6,8 +6,7 @@ function ScreenCamera({ navigation }) {
   const [hasAudioPermission, setHasAudioPermission] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [camera, setCamera] = useState(null);
-  const [video, setVideo] = useState(null);
+  const cameraRef = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -20,15 +19,12 @@ function ScreenCamera({ navigation }) {
   }, []);
 
   const takeVideo = async () => {
-    if (camera) {
-      const videoData = await camera.recordAsync({
-        maxDuration: 3,
-        quality: "1080p",
-      });
+    const videoData = await cameraRef.recordAsync({
+      maxDuration: 3,
+      quality: "1080p",
+    });
 
-      setVideo(videoData);
-      navigation.navigate("Result", { data: videoData });
-    }
+    navigation.navigate("Result", { videoData });
   };
 
   if (hasCameraPermission === null || hasAudioPermission === null) {
@@ -44,14 +40,14 @@ function ScreenCamera({ navigation }) {
       <View style={{ flex: 1 }}>
         <View style={styles.cameraContainer}>
           <Camera
-            ref={(ref) => setCamera(ref)}
+            ref={(ref) => cameraRef(ref)}
             style={styles.fixedRatio}
             type={type}
           />
         </View>
         <View style={styles.buttons}>
           <Button
-            title="Flip Video"
+            title="화면전환"
             onPress={() => {
               setType(
                 type === Camera.Constants.Type.back

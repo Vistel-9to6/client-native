@@ -1,43 +1,17 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Button } from "react-native";
-import axios from "axios";
 
-export default function ScreenResult({ route, navigation }) {
+function ScreenVideoResult({ route, navigation }) {
   const [status, setStatus] = useState({});
   const videoRef = useRef(null);
+  const { videoData } = route.params;
 
-  const { data } = route.params;
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    const res = await fetch("http://192.168.0.45:3000/api/videos");
-    console.log(JSON.stringify(res));
-  };
-
-  const sendVideo = async () => {
-    const videoData = JSON.stringify({
-      type: "VIDEO",
-      data,
-    });
-
-    console.log("시작");
-
+  const saveVideo = () => {
     try {
-      const res = await fetch("http://192.168.0.45:3000/api/videos", {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-
-      console.log(JSON.stringify(res));
+      navigation.navigate("VideoPost", { videoData });
     } catch (err) {
-      console.dir(err);
+      console.log(err);
     }
   };
 
@@ -47,7 +21,7 @@ export default function ScreenResult({ route, navigation }) {
         ref={videoRef}
         style={styles.video}
         source={{
-          uri: data.uri,
+          uri: videoData.uri,
         }}
         useNativeControls
         resizeMode="contain"
@@ -63,7 +37,7 @@ export default function ScreenResult({ route, navigation }) {
             : videoRef.current.playAsync()
         }
       />
-      <Button title="send" onPress={sendVideo} />
+      <Button title="저장" onPress={saveVideo} />
     </View>
   );
 }
@@ -80,3 +54,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default ScreenVideoResult;
