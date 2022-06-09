@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { Camera } from "expo-camera";
 
@@ -6,27 +6,27 @@ function ScreenCamera({ navigation }) {
   const [hasAudioPermission, setHasAudioPermission] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
-  const [camera, setCamera] = useState(null);
+  const cameraRef = useRef(null);
 
   useEffect(() => {
     (async () => {
-      const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === "granted");
+      const cameraPermissionsStatus =
+        await Camera.requestCameraPermissionsAsync();
+      setHasCameraPermission(cameraPermissionsStatus.status === "granted");
 
-      const audioStatus = await Camera.requestMicrophonePermissionsAsync();
-      setHasAudioPermission(audioStatus.status === "granted");
+      const audioPermissionsStatus =
+        await Camera.requestMicrophonePermissionsAsync();
+      setHasAudioPermission(audioPermissionsStatus.status === "granted");
     })();
   }, []);
 
   const takeVideo = async () => {
-    if (camera) {
-      const videoData = await camera.recordAsync({
-        maxDuration: 1,
-        quality: "1080p",
-      });
+    const videoData = await cameraRef.current.recordAsync({
+      maxDuration: 1,
+      quality: "1080p",
+    });
 
-      navigation.navigate("Result", { data: videoData });
-    }
+    navigation.navigate("VideoResult", { videoData });
   };
 
   if (hasCameraPermission === null || hasAudioPermission === null) {
@@ -41,15 +41,11 @@ function ScreenCamera({ navigation }) {
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
         <View style={styles.cameraContainer}>
-          <Camera
-            ref={(ref) => setCamera(ref)}
-            style={styles.fixedRatio}
-            type={type}
-          />
+          <Camera ref={cameraRef} style={styles.fixedRatio} type={type} />
         </View>
         <View style={styles.buttons}>
           <Button
-            title="Flip Video"
+            title="화면전환"
             onPress={() => {
               setType(
                 type === Camera.Constants.Type.back
