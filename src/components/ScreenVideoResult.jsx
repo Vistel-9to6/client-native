@@ -26,7 +26,7 @@ function ScreenVideoResult({ route, navigation }) {
         useNativeControls
         resizeMode="contain"
         isLooping
-        onPlaybackStatusUpdate={(status) => console.log(status)}
+        onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
       />
 
       <Button
