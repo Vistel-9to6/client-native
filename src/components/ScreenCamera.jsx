@@ -10,11 +10,13 @@ function ScreenCamera({ navigation }) {
 
   useEffect(() => {
     (async () => {
-      const cameraStatus = await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraStatus.status === "granted");
+      const cameraPermissionStatus =
+        await Camera.requestCameraPermissionsAsync();
+      setHasCameraPermission(cameraPermissionStatus.status === "granted");
 
-      const audioStatus = await Camera.requestMicrophonePermissionsAsync();
-      setHasAudioPermission(audioStatus.status === "granted");
+      const audioPermissionStatus =
+        await Camera.requestMicrophonePermissionsAsync();
+      setHasAudioPermission(audioPermissionStatus.status === "granted");
     })();
   }, []);
 
