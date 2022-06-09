@@ -1,45 +1,38 @@
 import React, { useState, useRef } from "react";
 import { Text, StyleSheet, View, Form, Button } from "react-native";
-Form;
-// import { withNavigation } from "react-navigation";
+import ModalError from "./ModalError";
 
-function VideoFormData({ route, navigation }) {
-  const formdata = new FormData();
-  const { video } = route.params;
-
-  // formdata.append("product[name]", "test");
-  // formdata.append("product[price]", 10);
-  // formdata.append("product[category_ids][]", 2);
-  // formdata.append("product[description]", "12dsadadsa");
-  formdata.append("video", {
-    uri: video.uri,
-  });
-  console.log(formdata);
-
-  const serializeJSON = function (data) {
-    return Object.keys(data)
-      .map((keyName) => {
-        return (
-          encodeURIComponent(keyName) + "=" + encodeURIComponent(data[keyName])
-        );
-      })
-      .join("&");
-  };
+function VideoFormData({ route }) {
+  const { videoData } = route.params;
 
   const sendVideo = async () => {
-    try {
-      const respond = await fetch("http://192.168.0.10:3000/api/videos", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-        body: formdata,
-      });
+    const formdata = new FormData();
 
-      console.log(respond);
-      // navigation.popToTop();
+    const videoOptions = {
+      uri: videoData.uri,
+      type: "video/mp4",
+      name: "vaco.mp4",
+    };
+
+    formdata.append("video", videoOptions);
+
+    const fetchOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      body: formdata,
+    };
+
+    try {
+      const response = await fetch(
+        "http://192.168.0.42:3000/api/videos",
+        fetchOptions,
+      );
+
+      console.log(response);
     } catch (err) {
-      console.log(err);
+      return <ModalError />;
     }
   };
 
@@ -48,17 +41,6 @@ function VideoFormData({ route, navigation }) {
       <Text>Form Data</Text>
       <Button title="send" onPress={sendVideo} />
     </View>
-    // <Form encType="multipart/form-data" onFinish={onSubmit}>
-    //   <input
-    //     type="file"
-    //     name="image"
-    //     multiple
-    //     hidden
-    //     ref={imageInput}
-    //     onChange={onChangeImage}
-    //   />
-    //   <Button onClick={onClickImageUpload}>이미지 업로드</Button>
-    // </Form>
   );
 }
 
