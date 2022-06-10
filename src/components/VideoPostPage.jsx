@@ -6,7 +6,7 @@ import {Picker} from '@react-native-picker/picker';
 
 function VideoPostPage({ route }) {
   const [title, setTitle] = useState("");
-  const [participants, setParticipants] = useState();
+  const [maxCreators, setMaxCreators] = useState();
   const { videoData } = route.params;
 
   const sendVideo = async () => {
@@ -20,7 +20,7 @@ function VideoPostPage({ route }) {
 
     formdata.append("video", videoFile);
     formdata.append("title", title);
-    formdata.append("participants", participants);
+    formdata.append("maxCreators", maxCreators);
 
     const config = {
       method: "POST",
@@ -39,7 +39,7 @@ function VideoPostPage({ route }) {
       const message = await response.json().result;
 
       if (message === "ok") {
-
+        <ModalSuccess />
       }
     } catch (err) {
       return <ModalError />;
@@ -58,14 +58,14 @@ function VideoPostPage({ route }) {
       <View>
         <Text>참여인원</Text>
         <Picker
-          selectedValue={participants}
+          selectedValue={maxCreators}
           onValueChange={(value) =>
-            setParticipants(value)
+            setMaxCreators(value)
           }>
-          <Picker.Item label="2명" value="2명" />
-          <Picker.Item label="3명" value="3명" />
-          <Picker.Item label="4명" value="4명" />
-          <Picker.Item label="5명" value="5명" />
+          <Picker.Item label="2명" value="2" />
+          <Picker.Item label="3명" value="3" />
+          <Picker.Item label="4명" value="4" />
+          <Picker.Item label="5명" value="5" />
         </Picker>
       </View>
       </View>
