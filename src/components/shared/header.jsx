@@ -8,13 +8,17 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-function AppHeader() {
+function AppHeader({ navigation }) {
+  const handleLogin = () => {
+    navigation.navigate("Login");
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.leftSection}>
+      <TouchableOpacity style={styles.logo}>
         <AntDesign name="smileo" size={36} color="black" />
       </TouchableOpacity>
-      <Pressable style={styles.button}>
+      <Pressable style={styles.button} onPress={handleLogin}>
         <Text style={styles.text}>로그인</Text>
       </Pressable>
     </View>
@@ -30,27 +34,30 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "center",
   },
-  leftSection: {
+  logo: {
     position: "absolute",
-    top: 10,
+    top: 3,
     left: 20,
     justifyContent: "center",
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    right: 10,
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: "black",
+    backgroundColor: "white",
   },
   text: {
     fontSize: 16,
     lineHeight: 21,
     fontWeight: "bold",
     letterSpacing: 0.25,
-    color: "white",
+    color: "black",
   },
 });
 

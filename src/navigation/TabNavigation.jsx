@@ -1,9 +1,9 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
 
-import FeedScreen from "./Feed";
-import SearchScreen from "./Search";
-import AppHeader from "./header";
+import Feed from "../components/Feed";
+import SearchScreen from "../screen/SearchScreen";
+import AppHeader from "../components/shared/header";
 
 const EmptyScreen = () => {
   return null;
@@ -11,17 +11,15 @@ const EmptyScreen = () => {
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs({ navigation }) {
+function AppTabs({ navigation }) {
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Feed"
-        component={FeedScreen}
+        component={Feed}
         options={{
-          tabBarIcon: ({ size, color }) => (
-            <AntDesign name="home" size={24} color="black" />
-          ),
-          header: () => <AppHeader />,
+          tabBarIcon: () => <AntDesign name="home" size={24} color="black" />,
+          header: () => <AppHeader navigation={navigation} />,
           headerStyle: {
             backgroundColor: "white",
           },
@@ -37,7 +35,7 @@ function MyTabs({ navigation }) {
           },
         })}
         options={{
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: () => (
             <AntDesign name="camerao" size={24} color="black" />
           ),
         }}
@@ -46,14 +44,14 @@ function MyTabs({ navigation }) {
         name="Search"
         component={SearchScreen}
         options={{
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: () => (
             <AntDesign name="search1" size={24} color="black" />
           ),
-          header: () => <AppHeader />,
+          header: () => <AppHeader navigation={navigation} />,
         }}
       />
     </Tab.Navigator>
   );
 }
 
-export default MyTabs;
+export default AppTabs;

@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Video } from "expo-av";
 
-function VideoListItem({ item }) {
+function FeedItem({ item }) {
   const videoRef = useRef(null);
 
   return (
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VideoListItem;
+export default FeedItem;
