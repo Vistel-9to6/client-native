@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Button } from "react-native";
 
-function ScreenVideoResult({ route, navigation }) {
+function VideoResultScreen({ route, navigation }) {
   const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
   const { videoData } = route.params;
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScreenVideoResult;
+export default VideoResultScreen;

@@ -4,7 +4,7 @@ import ModalError from "./ModalError";
 import ModalSuccess from "./ModalSuccess";
 import {Picker} from '@react-native-picker/picker';
 
-function VideoPostPage({ route }) {
+function VideoPostScreen({ route }) {
   const [title, setTitle] = useState("");
   const [maxCreators, setMaxCreators] = useState();
   const { videoData } = route.params;
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default VideoPostPage;
+export default VideoPostScreen;

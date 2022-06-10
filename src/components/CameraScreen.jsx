@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { Camera } from "expo-camera";
 
-function ScreenCamera({ navigation }) {
+function CameraScreen({ navigation }) {
   const [hasAudioPermission, setHasAudioPermission] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -22,7 +22,7 @@ function ScreenCamera({ navigation }) {
 
   const takeVideo = async () => {
     const videoData = await cameraRef.current.recordAsync({
-      maxDuration: 1,
+      maxDuration: 3,
       quality: "1080p",
     });
 
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScreenCamera;
+export default CameraScreen;
