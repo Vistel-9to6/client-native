@@ -1,7 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import "react-native-gesture-handler";
 
 import AppTabs from "./src/navigation/TabNavigation";
@@ -10,7 +9,7 @@ import Camera from "./src/screen/CameraScreen";
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
@@ -34,3 +33,5 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
+export default App;

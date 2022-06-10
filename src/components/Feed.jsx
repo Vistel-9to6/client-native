@@ -28,7 +28,6 @@ function Feed() {
         setFeeds(videos);
       }
     } catch (err) {
-      console.log(err);
       setError(err);
     }
 
@@ -41,14 +40,14 @@ function Feed() {
 
   return (
     <View style={styles.container}>
-      <Profile style={styles.profile} />
+      <Profile />
       <FlatList
         style={styles.videoList}
         numColumns={3}
         removeClippedSubviews
         nestedScrollEnabled
         data={data}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item?._id}
         renderItem={({ item }) => <FeedItem item={item} />}
       />
     </View>
@@ -60,12 +59,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 50,
     backgroundColor: "white",
-  },
-  profile: {
-    flex: 1,
-  },
-  videoList: {
-    flex: 6,
   },
 });
 
