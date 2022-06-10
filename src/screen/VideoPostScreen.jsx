@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Text, TextInput, View, Button, StyleSheet } from "react-native";
-import ModalError from "./ModalError";
-import ModalSuccess from "./ModalSuccess";
+import ModalError from "../components/ModalError";
+import ModalSuccess from "../components/ModalSuccess";
 import {Picker} from '@react-native-picker/picker';
 
 function VideoPostScreen({ route }) {

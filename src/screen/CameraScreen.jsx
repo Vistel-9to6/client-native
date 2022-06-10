@@ -10,13 +10,13 @@ function CameraScreen({ navigation }) {
 
   useEffect(() => {
     (async () => {
-      const cameraPermissionsStatus =
+      const cameraPermissionStatus =
         await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraPermissionsStatus.status === "granted");
+      setHasCameraPermission(cameraPermissionStatus.status === "granted");
 
-      const audioPermissionsStatus =
+      const audioPermissionStatus =
         await Camera.requestMicrophonePermissionsAsync();
-      setHasAudioPermission(audioPermissionsStatus.status === "granted");
+      setHasAudioPermission(audioPermissionStatus.status === "granted");
     })();
   }, []);
 
