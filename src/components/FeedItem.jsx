@@ -2,15 +2,19 @@ import { useRef } from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
 import { Video } from "expo-av";
 
-function FeedItem({ item }) {
+function FeedItem({ item, navigation }) {
   const videoRef = useRef(null);
 
+  const handlePageMove = () => {
+    navigation.navigate("VideoResult", { item });
+  };
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity onPress={handlePageMove} style={styles.container}>
       <Video
         ref={videoRef}
         style={styles.video}
-        source={{ uri: item }}
+        source={{ uri: item.videoUrl }}
         rate={1.0}
         volume={1.0}
         isMuted={true}
