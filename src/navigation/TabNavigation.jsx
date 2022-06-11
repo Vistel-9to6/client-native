@@ -26,7 +26,7 @@ function AppTabs({ navigation }) {
         }}
       />
       <Tab.Screen
-        name="Camera"
+        name="record"
         component={EmptyScreen}
         listeners={({ navigation }) => ({
           tabPress: (event) => {

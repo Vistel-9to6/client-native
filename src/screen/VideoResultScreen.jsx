@@ -2,14 +2,15 @@ import React, { useState, useRef } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Button } from "react-native";
 
-function ScreenVideoResult({ route, navigation }) {
+function VideoResultScreen({ route, navigation }) {
   const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
-  const { videoData } = route.params;
+  const { liveVideo, galleryVideo } = route.params;
+  const uri = liveVideo ? liveVideo?.uri : galleryVideo?.uri;
 
-  const saveVideo = () => {
+  const saveVideo = async () => {
     try {
-      navigation.navigate("VideoPost", { videoData });
+      navigation.navigate("VideoPost", { uri });
     } catch (err) {
       console.log(err);
     }
@@ -21,11 +22,10 @@ function ScreenVideoResult({ route, navigation }) {
         ref={videoRef}
         style={styles.video}
         source={{
-          uri: videoData.uri,
+          uri,
         }}
         useNativeControls
         resizeMode="contain"
-        isLooping
         onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
       />
 
@@ -45,8 +45,8 @@ function ScreenVideoResult({ route, navigation }) {
 const styles = StyleSheet.create({
   video: {
     alignSelf: "center",
-    width: 350,
-    height: 220,
+    width: "100%",
+    height: "90%",
   },
   buttons: {
     flexDirection: "row",
@@ -55,4 +55,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScreenVideoResult;
+export default VideoResultScreen;
