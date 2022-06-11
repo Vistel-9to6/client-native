@@ -11,6 +11,8 @@ import { StatusBar } from "expo-status-bar";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 
+import ModalError from "../components/ModalError";
+
 import { UserAuth } from "../context/AuthContext";
 import { API_SERVER_URL, EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from "@env";
 
@@ -49,8 +51,8 @@ function LoginScreen({ navigation }) {
       setUser(user);
 
       navigation.navigate("Home");
-    } catch (err) {
-      alert(err);
+    } catch {
+      return <ModalError />;
     }
   };
 
