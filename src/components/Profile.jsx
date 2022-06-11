@@ -1,12 +1,15 @@
 import { View, Image, StyleSheet } from "react-native";
+import { UserAuth } from "../context/AuthContext";
 
 function Profile() {
+  const { user } = UserAuth();
+
   return (
     <View style={styles.container}>
       <Image
         style={styles.profile}
         source={{
-          uri: "https://lh3.googleusercontent.com/a/AATXAJyIXPNhhc8SQyqhJXOkX6aILeeQKADYahwgo3YH=s432-p-rw-no-mo",
+          uri: user?.profilePhoto,
         }}
       />
     </View>
