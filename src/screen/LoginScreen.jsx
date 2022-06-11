@@ -1,11 +1,17 @@
 import { useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  LogBox,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Button, LogBox } from "react-native";
-import { UserAuth } from "../context/AuthContext";
-
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 
+import { UserAuth } from "../context/AuthContext";
 import { API_SERVER_URL, EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from "@env";
 
 WebBrowser.maybeCompleteAuthSession();
@@ -20,11 +26,9 @@ function LoginScreen({ navigation }) {
     responseType: "id_token",
   });
 
-  useEffect(() => {
-    if (response?.type === "success") {
-      handleLogin(response.params.id_token);
-    }
-  }, [response]);
+  const handleGoogleLoginButtonClick = () => {
+    promptAsync({ showInRecents: true, useProxy: true });
+  };
 
   const handleLogin = async (id) => {
     try {
@@ -51,14 +55,21 @@ function LoginScreen({ navigation }) {
     }
   };
 
+  useEffect(() => {
+    if (response?.type === "success") {
+      handleLogin(response.params.id_token);
+    }
+  }, [response]);
+
   return (
     <View style={styles.container}>
-      <Button
-        title={"Login"}
-        onPress={() => {
-          promptAsync({ showInRecents: true, useProxy: true });
-        }}
-      />
+      <Text style={styles.logo}>Vistel</Text>
+      <TouchableOpacity onPress={handleGoogleLoginButtonClick}>
+        <Image
+          style={styles.googleLoginButton}
+          source={require("../../assets/google-login-button.png")}
+        />
+      </TouchableOpacity>
       <StatusBar style="auto" />
     </View>
   );
