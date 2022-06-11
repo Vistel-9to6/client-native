@@ -5,7 +5,9 @@ import { StyleSheet, View, Button } from "react-native";
 function VideoResultScreen({ route, navigation }) {
   const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
-  const { videoData } = route.params;
+  const { videoData, result } = route.params;
+  const uri = videoData ? videoData.uri : result.uri;
+
   const saveVideo = async () => {
     try {
       navigation.navigate("VideoPost", { videoData });
@@ -20,7 +22,7 @@ function VideoResultScreen({ route, navigation }) {
         ref={videoRef}
         style={styles.video}
         source={{
-          uri: videoData.uri,
+          uri,
         }}
         useNativeControls
         resizeMode="contain"
@@ -44,8 +46,8 @@ function VideoResultScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   video: {
     alignSelf: "center",
-    width: 350,
-    height: 220,
+    width: "100%",
+    height: "90%",
   },
   buttons: {
     flexDirection: "row",
