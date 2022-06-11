@@ -89,25 +89,6 @@ function CameraScreen({ navigation }) {
     }
   };
 
-  const showAlert = () =>
-    Alert.alert(
-      "카메라 혹은 오디오 권한 거부",
-      "카메라 혹은 오디오 권한 거부에 따라 참여가 불가능합니다.",
-      [
-        {
-          text: "네",
-          onPress: () => navigation.navigate("Home"),
-        },
-      ],
-      {
-        cancelable: true,
-      },
-    );
-
-  if (!hasCameraPermission || !hasAudioPermission) {
-    return showAlert();
-  }
-
   return (
     <View style={styles.container}>
       {isFocused ? (
