@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, StyleSheet, View, Button } from "react-native";
 
-function ScreenMain({ navigation }) {
+function MainScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text>Vistel</Text>
@@ -18,4 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ScreenMain;
+export default MainScreen;
