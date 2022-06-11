@@ -26,7 +26,6 @@ function VideoResultScreen({ route, navigation }) {
         }}
         useNativeControls
         resizeMode="contain"
-        isLooping
         onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
       />
 
