@@ -77,10 +77,22 @@ function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  logo: {
+    width: 400,
+    margin: 170,
+    textAlign: "center",
+    fontSize: 100,
+  },
+  googleLoginButton: {
+    width: 250,
+    height: 250,
+    resizeMode: "contain",
   },
 });
 
