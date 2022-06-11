@@ -34,7 +34,7 @@ function LoginScreen({ navigation }) {
     try {
       setIdToken(id);
 
-      const response = await fetch(`${API_SERVER_URL}/api/google`, {
+      const response = await fetch(`${API_SERVER_URL}/api/auth/google`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -45,8 +45,7 @@ function LoginScreen({ navigation }) {
         }),
       });
 
-      const userData = await response.json();
-      const { user } = userData;
+      const user = await response.json();
       setUser(user);
 
       navigation.navigate("Home");
