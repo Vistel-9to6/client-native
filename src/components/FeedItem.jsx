@@ -23,10 +23,11 @@ function FeedItem({ item }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1 / 3,
-    margin: 3,
-    height: 200,
+    margin: 1,
+    height: 240,
   },
   video: {
+    flex: 1,
     alignSelf: "center",
     width: "100%",
     height: "100%",

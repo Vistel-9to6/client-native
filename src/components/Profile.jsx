@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
     alignItems: "center",
-    flex: 1,
     backgroundColor: "white",
   },
   profile: {
