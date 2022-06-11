@@ -1,12 +1,4 @@
 import React from "react";
-<<<<<<< HEAD
-
-import NavigationApp from "./src/Navigation/NavigationApp";
-
-export default function App() {
-  return <NavigationApp />;
-}
-=======
 import { StyleSheet } from "react-native";
 import ScreenMain from "./src/components/ScreenMain";
 import ScreenCamera from "./src/components/ScreenCamera";
@@ -38,4 +30,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
->>>>>>> origin/dev
