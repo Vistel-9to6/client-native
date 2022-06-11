@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
@@ -63,6 +70,7 @@ function CameraScreen({ navigation }) {
       }
     }
   };
+
   const stopVideo = async () => {
     if (cameraRef) {
       cameraRef.current.stopRecording();
@@ -81,8 +89,23 @@ function CameraScreen({ navigation }) {
     }
   };
 
-  if (!hasCameraPermission || !hasAudioPermission || !hasGalleryPermissions) {
-    return <View></View>;
+  const showAlert = () =>
+    Alert.alert(
+      "카메라 혹은 오디오 권한 거부",
+      "카메라 혹은 오디오 권한 거부에 따라 참여가 불가능합니다.",
+      [
+        {
+          text: "네",
+          onPress: () => navigation.navigate("Home"),
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+
+  if (!hasCameraPermission || !hasAudioPermission) {
+    return showAlert();
   }
 
   return (
@@ -97,7 +120,6 @@ function CameraScreen({ navigation }) {
           onCameraReady={() => setIsCameraReady(true)}
         />
       ) : null}
-
       <View style={styles.sideBarContainer}>
         <TouchableOpacity
           style={styles.sideBarButton}
@@ -112,7 +134,6 @@ function CameraScreen({ navigation }) {
           <Feather name="refresh-ccw" size={24} color={"white"} />
           <Text style={styles.iconText}>Flip</Text>
         </TouchableOpacity>
-
         <TouchableOpacity
           style={styles.sideBarButton}
           onPress={() =>
@@ -127,33 +148,33 @@ function CameraScreen({ navigation }) {
           <Text style={styles.iconText}>Flash</Text>
         </TouchableOpacity>
       </View>
-
       <View style={styles.bottomBarContainer}>
         <View style={{ flex: 1 }}></View>
-
         <View style={styles.recordButtonContainer}>
           <TouchableOpacity
             disabled={!isCameraReady}
-            onLongPress={() => recordVideo()}
-            onPressOut={() => stopVideo()}
+            onLongPress={recordVideo}
+            onPressOut={stopVideo}
             style={styles.recordButton}
           />
         </View>
-        <View style={{ flex: 1 }}>
-          <TouchableOpacity
-            onPress={() => pickFromGallery()}
-            style={styles.galleryButton}
-          >
-            {galleryItems[0] === undefined ? (
-              <></>
-            ) : (
-              <Image
-                style={styles.galleryButtonImage}
-                source={{ uri: galleryItems[0].uri }}
-              />
-            )}
-          </TouchableOpacity>
-        </View>
+        {hasGalleryPermissions && (
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity
+              onPress={() => pickFromGallery()}
+              style={styles.galleryButton}
+            >
+              {galleryItems[0] === undefined ? (
+                <></>
+              ) : (
+                <Image
+                  style={styles.galleryButtonImage}
+                  source={{ uri: galleryItems[0].uri }}
+                />
+              )}
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );

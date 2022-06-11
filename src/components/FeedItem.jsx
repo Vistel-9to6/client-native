@@ -5,12 +5,15 @@ import { Video } from "expo-av";
 function FeedItem({ item, navigation }) {
   const videoRef = useRef(null);
 
-  const handlePageMove = () => {
+  const handleVideoResultPageMove = () => {
     navigation.navigate("VideoResult", { item });
   };
 
   return (
-    <TouchableOpacity onPress={handlePageMove} style={styles.container}>
+    <TouchableOpacity
+      onPress={handleVideoResultPageMove}
+      style={styles.container}
+    >
       <Video
         ref={videoRef}
         style={styles.video}
