@@ -10,7 +10,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo/vector-icons": "^13.0.0",
     "@react-native-community/masked-view": "0.1.11",
+    "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/native": "6.0.10",
     "@react-navigation/native-stack": "6.6.2",
     "expo": "~45.0.0",
@@ -32,7 +34,8 @@
     "react-native-reanimated": "2.8.0",
     "react-native-safe-area-context": "4.3.1",
     "react-native-screens": "3.13.1",
-    "react-native-web": "0.17.7"
+    "react-native-web": "0.17.7",
+    "expo-video-thumbnails": "~6.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
