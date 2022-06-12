@@ -1,19 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
 import { useIsFocused } from "@react-navigation/core";
 import { Feather } from "@expo/vector-icons";
 
-function CameraScreen({ navigation }) {
+function CameraScreen({ navigation, route }) {
   const [hasAudioPermission, setHasAudioPermission] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasGalleryPermissions, setHasGalleryPermissions] = useState(null);
@@ -22,6 +15,8 @@ function CameraScreen({ navigation }) {
     Camera.Constants.FlashMode.off,
   );
   const cameraRef = useRef(null);
+  const params = route?.params;
+  const videoUrl = params?.uri;
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [isCameraReady, setIsCameraReady] = useState(false);
@@ -56,14 +51,17 @@ function CameraScreen({ navigation }) {
       try {
         const options = {
           maxDuration: 3,
-          quality: Camera.Constants.VideoQuality["480"],
+          quality: Camera.Constants.VideoQuality["1080p"],
         };
 
         const videoRecordPromise = cameraRef.current.recordAsync(options);
 
         if (videoRecordPromise) {
           const liveVideo = await videoRecordPromise;
-          navigation.navigate("VideoResult", { liveVideo });
+
+          videoUrl
+            ? navigation.navigate("VideoConcat", { videoUrl, liveVideo })
+            : navigation.navigate("VideoResult", { liveVideo });
         }
       } catch (error) {
         console.warn(error);
@@ -83,9 +81,13 @@ function CameraScreen({ navigation }) {
       allowsEditing: true,
       aspect: [16, 9],
       quality: 1,
+      maxDuration: 3000,
     });
+
     if (!galleryVideo.cancelled) {
-      navigation.navigate("VideoResult", { galleryVideo });
+      videoUrl
+        ? navigation.navigate("VideoConcat", { videoUrl, galleryVideo })
+        : navigation.navigate("VideoResult", { galleryVideo });
     }
   };
 
