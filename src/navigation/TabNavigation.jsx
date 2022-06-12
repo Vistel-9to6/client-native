@@ -11,7 +11,7 @@ const EmptyScreen = () => {
 
 const Tab = createBottomTabNavigator();
 
-function AppTabs({ navigation }) {
+function TabNavigation({ navigation }) {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -54,4 +54,4 @@ function AppTabs({ navigation }) {
   );
 }
 
-export default AppTabs;
+export default TabNavigation;
