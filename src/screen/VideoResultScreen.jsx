@@ -5,12 +5,24 @@ import { StyleSheet, View, Button } from "react-native";
 function VideoResultScreen({ route, navigation }) {
   const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
-  const { liveVideo, galleryVideo } = route.params;
-  const uri = liveVideo ? liveVideo?.uri : galleryVideo?.uri;
+  const { liveVideo, galleryVideo, item } = route.params;
+  const uri = liveVideo?.uri || galleryVideo?.uri || item?.videoUrl;
 
   const saveVideo = async () => {
     try {
+      videoRef.current.pauseAsync();
+
       navigation.navigate("VideoPost", { uri });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const participateVideo = async () => {
+    try {
+      videoRef.current.pauseAsync();
+
+      navigation.navigate("Camera", { uri });
     } catch (err) {
       console.log(err);
     }
@@ -24,20 +36,16 @@ function VideoResultScreen({ route, navigation }) {
         source={{
           uri,
         }}
+        isLooping
         useNativeControls
         resizeMode="contain"
+        shouldPlay
         onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
       />
-
       <Button
-        title={videoStatus.isPlaying ? "Pause" : "Play"}
-        onPress={() =>
-          videoStatus.isPlaying
-            ? videoRef.current.pauseAsync()
-            : videoRef.current.playAsync()
-        }
+        title={item ? "참여" : "저장"}
+        onPress={item ? participateVideo : saveVideo}
       />
-      <Button title="저장" onPress={saveVideo} />
     </View>
   );
 }
