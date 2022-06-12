@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import { API_SERVER_URL } from "@env";
+import LottieView from "lottie-react-native";
+import loadingAnimation from "../../assets/loadingAnimation.json";
 
 import FeedItem from "./FeedItem";
 import Profile from "./Profile";
@@ -36,17 +38,19 @@ function Feed({ navigation }) {
   return (
     <View style={styles.container}>
       <Profile />
-      <FlatList
-        style={styles.videoList}
-        numColumns={3}
-        removeClippedSubviews
-        nestedScrollEnabled
-        data={feeds}
-        keyExtractor={(item) => item?._id}
-        renderItem={({ item }) => (
-          <FeedItem item={item} navigation={navigation} />
-        )}
-      />
+      {loading && <LottieView source={loadingAnimation} autoPlay loop />}
+      {!loading && (
+        <FlatList
+          numColumns={3}
+          removeClippedSubviews
+          nestedScrollEnabled
+          data={feeds}
+          keyExtractor={(item) => item?._id}
+          renderItem={({ item }) => (
+            <FeedItem item={item} navigation={navigation} />
+          )}
+        />
+      )}
     </View>
   );
 }
