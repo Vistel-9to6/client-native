@@ -1,10 +1,18 @@
 import { useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  LogBox,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, Button, LogBox } from "react-native";
-import { UserAuth } from "../context/AuthContext";
-
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
+import googleLoginButtonImage from "../../assets/google-login-button.png";
+
+import ModalError from "../components/ModalError";
 
 WebBrowser.maybeCompleteAuthSession();
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
@@ -18,11 +26,9 @@ function LoginScreen({ navigation }) {
     responseType: "id_token",
   });
 
-  useEffect(() => {
-    if (response?.type === "success") {
-      handleLogin(response.params.id_token);
-    }
-  }, [response]);
+  const handleGoogleLoginButtonClick = () => {
+    promptAsync({ showInRecents: true, useProxy: true });
+  };
 
   const handleLogin = async (id) => {
     try {
@@ -39,24 +45,30 @@ function LoginScreen({ navigation }) {
         }),
       });
 
-      const userData = await response.json();
-      const { user } = userData;
+      const user = await response.json();
       setUser(user);
 
       navigation.navigate("Home");
-    } catch (err) {
-      alert(err);
+    } catch {
+      return <ModalError />;
     }
   };
 
+  useEffect(() => {
+    if (response?.type === "success") {
+      handleLogin(response.params.id_token);
+    }
+  }, [response]);
+
   return (
     <View style={styles.container}>
-      <Button
-        title={"Login"}
-        onPress={() => {
-          promptAsync({ showInRecents: true, useProxy: true });
-        }}
-      />
+      <Text style={styles.logo}>Vistel</Text>
+      <TouchableOpacity onPress={handleGoogleLoginButtonClick}>
+        <Image
+          style={styles.googleLoginButton}
+          source={googleLoginButtonImage}
+        />
+      </TouchableOpacity>
       <StatusBar style="auto" />
     </View>
   );
@@ -64,10 +76,22 @@ function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
     alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  logo: {
+    width: 400,
+    margin: 170,
+    textAlign: "center",
+    fontSize: 100,
+  },
+  googleLoginButton: {
+    width: 250,
+    height: 250,
+    resizeMode: "contain",
   },
 });
 
