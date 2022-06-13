@@ -6,7 +6,7 @@ function FeedItem({ item, navigation }) {
   const videoRef = useRef(null);
 
   const handleVideoResultPageMove = () => {
-    navigation.navigate("VideoResult", { item });
+    navigation.navigate("VideoResult", { originVideo: item });
   };
 
   return (
@@ -17,7 +17,7 @@ function FeedItem({ item, navigation }) {
       <Video
         ref={videoRef}
         style={styles.video}
-        source={{ uri: item.videoUrl }}
+        source={{ uri: item?.videoUrl }}
         rate={1.0}
         volume={1.0}
         isMuted={true}

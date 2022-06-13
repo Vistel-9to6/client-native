@@ -1,26 +1,25 @@
 import { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
-import { API_SERVER_URL } from "@env";
+import { useIsFocused } from "@react-navigation/native";
 
 import FeedItem from "./FeedItem";
 import Profile from "./Profile";
 
 function Feed({ navigation }) {
-  const [feeds, setFeeds] = useState(null);
+  const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const isFocused = useIsFocused();
 
   const getData = async () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_SERVER_URL}/api/videos`, {
-        method: "GET",
-      });
+      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`);
       const data = await response.json();
 
-      if (data) {
-        setFeeds(data.videoList);
+      if (data?.result === "ok") {
+        setFeeds([...data?.videoList]);
       }
     } catch (err) {
       setError(err);
@@ -31,7 +30,7 @@ function Feed({ navigation }) {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>

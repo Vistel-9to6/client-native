@@ -12,11 +12,9 @@ import ModalSuccess from "../components/ModalSuccess";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
 
-import { API_SERVER_URL } from "@env";
-
 function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
-  const [maxCreators, setMaxCreators] = useState();
+  const [maxCreators, setMaxCreators] = useState(2);
   const [success, setSuccess] = useState(false);
   const { uri } = route.params;
 
@@ -39,16 +37,14 @@ function VideoPostScreen({ route, navigation }) {
     formdata.append("title", title);
     formdata.append("maxCreators", maxCreators);
 
-    const config = {
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      body: formdata,
-    };
-
     try {
-      const response = await fetch(`${API_SERVER_URL}/api/videos`, config);
+      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        body: formdata,
+      });
       const data = await response.json();
 
       if (data.result === "ok") {
@@ -170,7 +166,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     justifyContent: "center",
     borderRadius: 4,
-    marginBottom: 20,
+    marginBottom: 30,
     backgroundColor: "#2196F3",
   },
   uploadText: {

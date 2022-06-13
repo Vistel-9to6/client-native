@@ -14,9 +14,6 @@ import googleLoginButtonImage from "../../assets/google-login-button.png";
 
 import ModalError from "../components/ModalError";
 
-import { UserAuth } from "../context/AuthContext";
-import { API_SERVER_URL, EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from "@env";
-
 WebBrowser.maybeCompleteAuthSession();
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
@@ -24,8 +21,8 @@ function LoginScreen({ navigation }) {
   const { setUser, setIdToken } = UserAuth();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: EXPO_CLIENT_ID,
-    androidClientId: ANDROID_CLIENT_ID,
+    expoClientId: process.env.EXPO_CLIENT_ID,
+    androidClientId: process.env.ANDROID_CLIENT_ID,
     responseType: "id_token",
   });
 
@@ -37,7 +34,7 @@ function LoginScreen({ navigation }) {
     try {
       setIdToken(id);
 
-      const response = await fetch(`${API_SERVER_URL}/api/auth/google`, {
+      const response = await fetch(`${process.env.API_SERVER_URL}/api/google`, {
         method: "POST",
         headers: {
           Accept: "application/json",
