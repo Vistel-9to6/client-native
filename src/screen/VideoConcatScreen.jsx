@@ -5,13 +5,15 @@ import ModalSuccess from "../components/ModalSuccess";
 import { AntDesign } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import * as VideoThumbnails from "expo-video-thumbnails";
+import { UserAuth } from "../context/AuthContext";
 
 function VideoConcatScreen({ route, navigation }) {
   const [success, setSuccess] = useState(false);
+  const [image, setImage] = useState(null);
+  const { idToken } = UserAuth();
+
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = liveVideo?.uri || galleryVideo?.uri;
-
-  const [image, setImage] = useState(null);
 
   useEffect(() => {
     generateThumbnail();
@@ -51,6 +53,7 @@ function VideoConcatScreen({ route, navigation }) {
         method: "PATCH",
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${idToken}`,
         },
         body: formdata,
       });
