@@ -11,12 +11,14 @@ import ModalError from "../components/ModalError";
 import ModalSuccess from "../components/ModalSuccess";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
+import { UserAuth } from "../context/AuthContext";
 
 function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
   const [maxCreators, setMaxCreators] = useState(2);
   const [success, setSuccess] = useState(false);
   const { uri } = route.params;
+  const { idToken } = UserAuth();
 
   useEffect(() => {
     if (success) {
@@ -42,6 +44,7 @@ function VideoPostScreen({ route, navigation }) {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${idToken}`,
         },
         body: formdata,
       });
