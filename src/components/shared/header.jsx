@@ -8,10 +8,12 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
+import { UserAuth } from "../../context/AuthContext";
+
 function AppHeader({ navigation }) {
-  const handleLogin = () => {
-    navigation.navigate("Login");
-  };
+  const { user } = UserAuth();
+
+  const handleLogin = () => navigation.navigate("Login");
 
   return (
     <View style={styles.container}>
@@ -19,7 +21,7 @@ function AppHeader({ navigation }) {
         <AntDesign name="smileo" size={36} color="black" />
       </TouchableOpacity>
       <Pressable style={styles.button} onPress={handleLogin}>
-        <Text style={styles.text}>로그인</Text>
+        <Text style={styles.text}>{user ? "로그아웃" : "로그인"}</Text>
       </Pressable>
     </View>
   );
