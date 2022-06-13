@@ -11,6 +11,7 @@ import { StatusBar } from "expo-status-bar";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import googleLoginButtonImage from "../../assets/google-login-button.png";
+import { UserAuth } from "../context/AuthContext";
 
 import ModalError from "../components/ModalError";
 
@@ -32,21 +33,23 @@ function LoginScreen({ navigation }) {
 
   const handleLogin = async (id) => {
     try {
-      setIdToken(id);
-
-      const response = await fetch(`${process.env.API_SERVER_URL}/api/google`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${process.env.API_SERVER_URL}/api/auth/google`,
+        {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: id,
+          }),
         },
-        body: JSON.stringify({
-          token: id,
-        }),
-      });
+      );
 
       const user = await response.json();
       setUser(user);
+      setIdToken(user.token);
 
       navigation.navigate("Home");
     } catch {
