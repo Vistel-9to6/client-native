@@ -11,16 +11,25 @@ import { AntDesign } from "@expo/vector-icons";
 import { UserAuth } from "../../context/AuthContext";
 
 function AppHeader({ navigation }) {
-  const { user } = UserAuth();
+  const { user, setUser, setIdToken } = UserAuth();
 
   const handleLogin = () => navigation.navigate("Login");
+  const handleLogout = () => {
+    setUser("");
+    setIdToken("");
+
+    navigation.navigate("Home");
+  };
 
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.logo}>
         <AntDesign name="smileo" size={36} color="black" />
       </TouchableOpacity>
-      <Pressable style={styles.button} onPress={handleLogin}>
+      <Pressable
+        style={styles.button}
+        onPress={user ? handleLogout : handleLogin}
+      >
         <Text style={styles.text}>{user ? "로그아웃" : "로그인"}</Text>
       </Pressable>
     </View>
