@@ -6,8 +6,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import * as VideoThumbnails from "expo-video-thumbnails";
 
-import { API_SERVER_URL } from "@env";
-
 function VideoConcatScreen({ route, navigation }) {
   const [success, setSuccess] = useState(false);
   const { videoUrl, liveVideo, galleryVideo } = route.params;
@@ -49,7 +47,7 @@ function VideoConcatScreen({ route, navigation }) {
     formdata.append("video", videoFile);
 
     try {
-      const response = await fetch(`${API_SERVER_URL}/api/videos`, {
+      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`, {
         method: "PATCH",
         headers: {
           "Content-Type": "multipart/form-data",

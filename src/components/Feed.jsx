@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { API_SERVER_URL } from "@env";
 
 import FeedItem from "./FeedItem";
 import Profile from "./Profile";
@@ -16,7 +15,7 @@ function Feed({ navigation }) {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_SERVER_URL}/api/videos`);
+      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`);
       const data = await response.json();
 
       if (data?.result === "ok") {

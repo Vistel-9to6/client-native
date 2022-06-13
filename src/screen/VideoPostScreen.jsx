@@ -12,8 +12,6 @@ import ModalSuccess from "../components/ModalSuccess";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
 
-import { API_SERVER_URL } from "@env";
-
 function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
   const [maxCreators, setMaxCreators] = useState(2);
@@ -40,7 +38,7 @@ function VideoPostScreen({ route, navigation }) {
     formdata.append("maxCreators", maxCreators);
 
     try {
-      const response = await fetch(`${API_SERVER_URL}/api/videos`, {
+      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`, {
         method: "POST",
         headers: {
           "Content-Type": "multipart/form-data",
