@@ -16,7 +16,7 @@ function CameraScreen({ navigation, route }) {
   );
   const cameraRef = useRef(null);
   const params = route?.params;
-  const videoUrl = params?.uri;
+  const originVideo = params?.uri;
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [isCameraReady, setIsCameraReady] = useState(false);
@@ -59,8 +59,8 @@ function CameraScreen({ navigation, route }) {
         if (videoRecordPromise) {
           const liveVideo = await videoRecordPromise;
 
-          videoUrl
-            ? navigation.navigate("VideoConcat", { videoUrl, liveVideo })
+          originVideo
+            ? navigation.navigate("VideoConcat", { originVideo, liveVideo })
             : navigation.navigate("VideoResult", { liveVideo });
         }
       } catch (error) {
@@ -85,8 +85,8 @@ function CameraScreen({ navigation, route }) {
     });
 
     if (!galleryVideo.cancelled) {
-      videoUrl
-        ? navigation.navigate("VideoConcat", { videoUrl, galleryVideo })
+      originVideo
+        ? navigation.navigate("VideoConcat", { originVideo, galleryVideo })
         : navigation.navigate("VideoResult", { galleryVideo });
     }
   };

@@ -8,7 +8,7 @@ import * as VideoThumbnails from "expo-video-thumbnails";
 
 function VideoConcatScreen({ route, navigation }) {
   const [success, setSuccess] = useState(false);
-  const { videoUrl, liveVideo, galleryVideo } = route.params;
+  const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = liveVideo?.uri || galleryVideo?.uri;
 
   const [image, setImage] = useState(null);
@@ -19,7 +19,7 @@ function VideoConcatScreen({ route, navigation }) {
 
   const generateThumbnail = async () => {
     try {
-      const { uri } = await VideoThumbnails.getThumbnailAsync(videoUrl, {
+      const { uri } = await VideoThumbnails.getThumbnailAsync(originVideo, {
         time: 100,
       });
       setImage(uri);
@@ -43,7 +43,7 @@ function VideoConcatScreen({ route, navigation }) {
       name: `${Date.now()}.mp4`,
     };
 
-    formdata.append("originVideoUrl", videoUrl);
+    formdata.append("originVideoUrl", originVideo);
     formdata.append("video", videoFile);
 
     try {

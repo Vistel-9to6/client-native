@@ -6,7 +6,7 @@ function FeedItem({ item, navigation }) {
   const videoRef = useRef(null);
 
   const handleVideoResultPageMove = () => {
-    navigation.navigate("VideoResult", { item });
+    navigation.navigate("VideoResult", { originVideo: item });
   };
 
   return (

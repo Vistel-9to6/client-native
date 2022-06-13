@@ -5,8 +5,8 @@ import { StyleSheet, View, Button } from "react-native";
 function VideoResultScreen({ route, navigation }) {
   const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
-  const { liveVideo, galleryVideo, item } = route.params;
-  const uri = liveVideo?.uri || galleryVideo?.uri || item?.videoUrl;
+  const { originVideo, liveVideo, galleryVideo } = route.params;
+  const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
 
   const saveVideo = async () => {
     try {
@@ -43,8 +43,8 @@ function VideoResultScreen({ route, navigation }) {
         onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
       />
       <Button
-        title={item ? "참여" : "저장"}
-        onPress={item ? participateVideo : saveVideo}
+        title={originVideo ? "참여" : "저장"}
+        onPress={originVideo ? participateVideo : saveVideo}
       />
     </View>
   );
