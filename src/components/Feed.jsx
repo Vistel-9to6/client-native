@@ -53,7 +53,7 @@ function Feed({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
+    paddingTop: 50,
     backgroundColor: "white",
   },
 });
