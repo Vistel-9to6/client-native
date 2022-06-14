@@ -170,7 +170,7 @@ function Download({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 45,
     backgroundColor: "white",
   },
   header: {
