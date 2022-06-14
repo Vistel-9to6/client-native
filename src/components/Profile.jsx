@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   profile: {
-    width: 40,
-    height: 40,
+    width: 100,
+    height: 100,
     borderRadius: 50,
   },
 });
