@@ -1,9 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign } from "@expo/vector-icons";
+import { UserAuth } from "../context/AuthContext";
 
 import Feed from "../components/Feed";
 import SearchScreen from "../screen/SearchScreen";
 import AppHeader from "../components/shared/header";
+
+import { AntDesign } from "@expo/vector-icons";
 
 const EmptyScreen = () => {
   return null;
@@ -12,6 +14,7 @@ const EmptyScreen = () => {
 const Tab = createBottomTabNavigator();
 
 function TabNavigation({ navigation }) {
+  const { idToken } = UserAuth();
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -26,12 +29,15 @@ function TabNavigation({ navigation }) {
         }}
       />
       <Tab.Screen
-        name="record"
+        name="Record"
         component={EmptyScreen}
         listeners={({ navigation }) => ({
           tabPress: (event) => {
             event.preventDefault();
-            navigation.navigate("Camera");
+
+            idToken
+              ? navigation.navigate("Camera")
+              : navigation.navigate("Login");
           },
         })}
         options={{

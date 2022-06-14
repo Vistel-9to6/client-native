@@ -32,7 +32,7 @@ function VideoPostScreen({ route, navigation }) {
     const videoFile = {
       uri,
       type: "multipart/form-data",
-      name: `${title}.mp4`,
+      name: `${Date.now()}_${title}.mp4`,
     };
 
     formdata.append("video", videoFile);
@@ -96,7 +96,7 @@ function VideoPostScreen({ route, navigation }) {
           </View>
         </View>
       </View>
-      <View style={styles.bottonsContainer}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={uploadVideo} style={styles.uploadButton}>
           <Text style={styles.uploadText}>업로드</Text>
         </TouchableOpacity>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: "lightgray",
   },
-  bottonsContainer: {
+  buttonContainer: {
     alignItems: "center",
     left: 0,
     right: 0,

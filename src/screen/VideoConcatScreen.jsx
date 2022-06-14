@@ -25,8 +25,8 @@ function VideoConcatScreen({ route, navigation }) {
         time: 100,
       });
       setImage(uri);
-    } catch (e) {
-      console.warn(e);
+    } catch (error) {
+      console.warn(error);
     }
   };
 
