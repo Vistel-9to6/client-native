@@ -51,7 +51,7 @@ function LoginScreen({ navigation }) {
       setUser(user);
       setIdToken(user.token);
 
-      navigation.navigate("Home");
+      navigation.goBack();
     } catch {
       return <ModalError />;
     }
