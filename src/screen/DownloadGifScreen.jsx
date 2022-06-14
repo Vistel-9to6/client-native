@@ -16,6 +16,9 @@ import { UserAuth } from "../context/AuthContext";
 import { Box, Slider } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 
+const exampleGif =
+  "https://cdn.vox-cdn.com/thumbor/IF0m88w-ozKL_EhRqKJ0vy_3MtA=/800x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/654972/ash_and_pikachu.0.gif";
+
 function Download({ navigation, route }) {
   const { uri } = route.params;
   const { idToken } = UserAuth();
@@ -81,7 +84,6 @@ function Download({ navigation, route }) {
       }
 
       if (permission.status !== "granted") {
-        console.log("permission should be needed");
         navigation.navigate("Home");
       }
 
@@ -114,9 +116,7 @@ function Download({ navigation, route }) {
         <Image
           resizeMode="cover"
           source={{
-            uri: gifUrl
-              ? gifUrl
-              : "https://cdn.vox-cdn.com/thumbor/IF0m88w-ozKL_EhRqKJ0vy_3MtA=/800x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/654972/ash_and_pikachu.0.gif",
+            uri: gifUrl ? gifUrl : exampleGif,
           }}
           style={styles.mediaPreview}
         />

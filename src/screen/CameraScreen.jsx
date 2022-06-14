@@ -48,8 +48,6 @@ function CameraScreen({ navigation, route }) {
         cameraPermissionStatus.status !== "granted" &&
         audioPermissionStatus.status !== "granted"
       ) {
-        console.log("permission should be needed");
-
         navigation.navigate("Home");
       }
     })();
