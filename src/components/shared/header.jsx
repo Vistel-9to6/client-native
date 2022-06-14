@@ -23,6 +23,12 @@ function AppHeader({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={styles.loginContainer}>
+        <Image
+          style={styles.profile}
+          source={{
+            uri: user?.profilePhoto,
+          }}
+        />
         <TouchableOpacity
           style={styles.login}
           onPress={user ? handleLogout : handleLogin}
@@ -43,17 +49,26 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   logoContainer: {
-    left: -30,
+    top: 5,
+    left: -50,
     diplay: "flex",
-    width: "50%",
+    width: "70%",
   },
   logo: {
     justifyContent: "center",
     width: undefined,
     height: 50,
   },
+  profile: {
+    position: "absolute",
+    right: 105,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
   loginContainer: {
     diplay: "flex",
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     width: "30%",
