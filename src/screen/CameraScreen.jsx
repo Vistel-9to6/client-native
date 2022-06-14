@@ -43,6 +43,15 @@ function CameraScreen({ navigation, route }) {
         });
         setGalleryItems(userGalleryMedia.assets);
       }
+
+      if (
+        cameraPermissionStatus.status !== "granted" &&
+        audioPermissionStatus.status !== "granted"
+      ) {
+        console.log("permission should be needed");
+
+        navigation.navigate("Home");
+      }
     })();
   }, []);
 
@@ -51,7 +60,7 @@ function CameraScreen({ navigation, route }) {
       try {
         const options = {
           maxDuration: 3,
-          quality: Camera.Constants.VideoQuality["1080p"],
+          quality: Camera.Constants.VideoQuality["480p"],
         };
 
         const videoRecordPromise = cameraRef.current.recordAsync(options);

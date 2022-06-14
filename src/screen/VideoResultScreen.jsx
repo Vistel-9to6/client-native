@@ -1,10 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Button } from "react-native";
+import { UserAuth } from "../context/AuthContext";
 
 function VideoResultScreen({ route, navigation }) {
-  const [videoStatus, setVideoStatus] = useState({});
   const videoRef = useRef(null);
+  const { idToken } = UserAuth();
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
 
@@ -13,18 +14,32 @@ function VideoResultScreen({ route, navigation }) {
       videoRef.current.pauseAsync();
 
       navigation.navigate("VideoPost", { uri });
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const creatGif = async () => {
+    videoRef.current.pauseAsync();
+
+    if (idToken) {
+      navigation.navigate("Gif", { uri });
+    } else {
+      navigation.navigate("Login");
     }
   };
 
   const participateVideo = async () => {
-    try {
-      videoRef.current.pauseAsync();
+    if (idToken) {
+      try {
+        videoRef.current.pauseAsync();
 
-      navigation.navigate("Camera", { uri });
-    } catch (err) {
-      console.log(err);
+        navigation.navigate("Camera", { uri });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      navigation.navigate("Login");
     }
   };
 
@@ -40,8 +55,8 @@ function VideoResultScreen({ route, navigation }) {
         useNativeControls
         resizeMode="contain"
         shouldPlay
-        onPlaybackStatusUpdate={(status) => setVideoStatus(status)}
       />
+      {originVideo && <Button title="gif 만들기" onPress={creatGif} />}
       <Button
         title={originVideo ? "참여" : "저장"}
         onPress={originVideo ? participateVideo : saveVideo}
