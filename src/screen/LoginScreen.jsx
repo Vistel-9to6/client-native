@@ -10,8 +10,8 @@ import {
 import { StatusBar } from "expo-status-bar";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
-import googleLoginButtonImage from "../../assets/google-login-button.png";
 import { UserAuth } from "../context/AuthContext";
+import googleLoginButtonImage from "../../assets/google-login-button.png";
 
 import ModalError from "../components/ModalError";
 

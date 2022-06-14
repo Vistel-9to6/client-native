@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
 
-function ModalError() {
+function ModalError({ err }) {
   return (
     <View style={styles.container}>
-      <Text>Response Error</Text>
+      <Text>{err}</Text>
     </View>
   );
 }

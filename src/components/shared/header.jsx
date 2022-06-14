@@ -1,12 +1,6 @@
 import React from "react";
-import {
-  View,
-  Pressable,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import vistelLogo from "../../../assets/vistel-logo.png";
 
 import { UserAuth } from "../../context/AuthContext";
 
@@ -23,52 +17,57 @@ function AppHeader({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.logo}>
-        <AntDesign name="smileo" size={36} color="black" />
-      </TouchableOpacity>
-      <Pressable
-        style={styles.button}
-        onPress={user ? handleLogout : handleLogin}
-      >
-        <Text style={styles.text}>{user ? "로그아웃" : "로그인"}</Text>
-      </Pressable>
+      <View style={styles.logoContainer}>
+        <TouchableOpacity>
+          <Image source={vistelLogo} style={styles.logo} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.loginContainer}>
+        <TouchableOpacity
+          style={styles.login}
+          onPress={user ? handleLogout : handleLogin}
+        >
+          <Text>{user ? "로그아웃" : "로그인"}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    height: 50,
-    marginTop: 50,
+    diplay: "flex",
+    flexDirection: "row",
+    paddingTop: 40,
+    justifyContent: "space-between",
     backgroundColor: "white",
-    alignItems: "flex-end",
-    justifyContent: "center",
+  },
+  logoContainer: {
+    left: -30,
+    diplay: "flex",
+    width: "50%",
   },
   logo: {
-    position: "absolute",
-    top: 3,
-    left: 20,
     justifyContent: "center",
+    width: undefined,
+    height: 50,
   },
-  button: {
+  loginContainer: {
+    diplay: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "30%",
+  },
+  login: {
+    diplay: "flex",
     alignItems: "center",
     justifyContent: "center",
     position: "absolute",
-    top: 0,
-    right: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
+    width: "70%",
+    height: "70%",
+    borderRadius: 5,
     elevation: 3,
     backgroundColor: "white",
-  },
-  text: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
-    color: "black",
   },
 });
 

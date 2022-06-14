@@ -64,7 +64,8 @@ function VideoConcatScreen({ route, navigation }) {
         return <ModalSuccess />;
       }
     } catch (err) {
-      return <ModalError />;
+      console.log(err);
+      return <ModalError err={err} />;
     }
   };
 
