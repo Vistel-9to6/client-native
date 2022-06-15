@@ -148,8 +148,7 @@ function EditGifScreen({ navigation, route }) {
             <TouchableOpacity
               style={{
                 ...styles.buttonFilter,
-                backgroundColor: filter.color === "SEPIA" ? "yellow" : "white",
-                borderWidth: filter.color === "SEPIA" ? "2px" : "1px",
+                backgroundColor: filter.color === "SEPIA" ? "black" : "white",
               }}
               onPress={() => colorButtonPress("SEPIA")}
             >
@@ -159,8 +158,7 @@ function EditGifScreen({ navigation, route }) {
               style={{
                 ...styles.buttonFilter,
                 backgroundColor:
-                  filter.color === "GRAYSCALE" ? "yellow" : "white",
-                borderWidth: filter.color === "GRAYSCALE" ? "2px" : "1px",
+                  filter.color === "GRAYSCALE" ? "black" : "white",
               }}
               onPress={() => colorButtonPress("GRAYSCALE")}
             >
@@ -170,8 +168,7 @@ function EditGifScreen({ navigation, route }) {
               style={{
                 ...styles.buttonFilter,
                 backgroundColor:
-                  filter.color === "REVERSAL" ? "yellow" : "white",
-                borderWidth: filter.color === "REVERSAL" ? "2px" : "1px",
+                  filter.color === "REVERSAL" ? "black" : "white",
               }}
               onPress={() => colorButtonPress("REVERSAL")}
             >
@@ -183,8 +180,7 @@ function EditGifScreen({ navigation, route }) {
             <TouchableOpacity
               style={{
                 ...styles.buttonFilter,
-                backgroundColor: filter.grid === "2x2" ? "yellow" : "white",
-                borderWidth: filter.grid === "2x2" ? "2px" : "1px",
+                backgroundColor: filter.grid === "2x2" ? "black" : "white",
               }}
               onPress={() => gridButtonPress("2x2")}
             >
@@ -193,8 +189,7 @@ function EditGifScreen({ navigation, route }) {
             <TouchableOpacity
               style={{
                 ...styles.buttonFilter,
-                backgroundColor: filter.grid === "3x3" ? "yellow" : "white",
-                borderWidth: filter.grid === "3x3" ? "2px" : "1px",
+                backgroundColor: filter.grid === "3x3" ? "black" : "white",
               }}
               onPress={() => gridButtonPress("3x3")}
             >
@@ -203,8 +198,7 @@ function EditGifScreen({ navigation, route }) {
             <TouchableOpacity
               style={{
                 ...styles.buttonFilter,
-                backgroundColor: filter.grid === "4x4" ? "yellow" : "white",
-                borderWidth: filter.grid === "4x4" ? "2px" : "1px",
+                backgroundColor: filter.grid === "4x4" ? "black" : "white",
               }}
               onPress={() => gridButtonPress("4x4")}
             >
@@ -216,8 +210,7 @@ function EditGifScreen({ navigation, route }) {
             <TouchableOpacity
               style={{
                 ...styles.buttonFilter,
-                backgroundColor: filter.fps === "1" ? "yellow" : "white",
-                borderWidth: filter.fps === "1" ? "2px" : "1px",
+                backgroundColor: filter.fps === "1" ? "black" : "white",
               }}
               onPress={() => fpsButtonPress("1")}
             >
@@ -226,8 +219,7 @@ function EditGifScreen({ navigation, route }) {
             <TouchableOpacity
               style={{
                 ...styles.buttonFilter,
-                backgroundColor: filter.fps === "15" ? "yellow" : "white",
-                borderWidth: filter.fps === "15" ? "2px" : "1px",
+                backgroundColor: filter.fps === "15" ? "black" : "white",
               }}
               onPress={() => fpsButtonPress("15")}
             >
@@ -244,7 +236,7 @@ function EditGifScreen({ navigation, route }) {
               backgroundColor: isLoading ? "#99CCFF" : "#2196F3",
             }}
           >
-            {isLoading && <ActivityIndicator size="large" color="yellow" />}
+            {isLoading && <ActivityIndicator size="large" color="black" />}
             <Text style={styles.buttonText}>
               {gifUrl ? "저장하기" : "변환하기"}
             </Text>
@@ -290,13 +282,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     backgroundColor: "white",
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "lightgray",
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },
   filter: {
     color: "black",
+    fontSize: 17,
   },
   mediaPreview: {
     aspectRatio: 9 / 16,
@@ -331,7 +324,7 @@ const styles = StyleSheet.create({
     borderColor: "white",
   },
   buttonText: {
-    color: "#fff",
+    color: "white",
     fontWeight: "bold",
     fontSize: 20,
   },
