@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Button } from "react-native";
 import { UserAuth } from "../context/AuthContext";
+import { generateThumbnail } from "../api/thumbnail";
 
 function VideoResultScreen({ route, navigation }) {
   const videoRef = useRef(null);
@@ -9,17 +10,23 @@ function VideoResultScreen({ route, navigation }) {
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
 
-  const saveVideo = async () => {
-    try {
-      videoRef.current.pauseAsync();
+  const postVideo = async () => {
+    if (idToken) {
+      try {
+        videoRef.current.pauseAsync();
 
-      navigation.navigate("VideoPost", { uri });
-    } catch (error) {
-      console.log(error);
+        const thumbnail = await generateThumbnail(uri);
+
+        navigation.navigate("VideoPost", { uri, thumbnail });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      navigation.navigate("Login");
     }
   };
 
-  const creatGif = async () => {
+  const creatGif = () => {
     videoRef.current.pauseAsync();
 
     if (idToken) {
@@ -34,7 +41,7 @@ function VideoResultScreen({ route, navigation }) {
       try {
         videoRef.current.pauseAsync();
 
-        navigation.navigate("Camera", { uri });
+        navigation.navigate("Camera", { originVideo });
       } catch (error) {
         console.log(error);
       }
@@ -59,7 +66,7 @@ function VideoResultScreen({ route, navigation }) {
       {originVideo && <Button title="gif 만들기" onPress={creatGif} />}
       <Button
         title={originVideo ? "참여" : "저장"}
-        onPress={originVideo ? participateVideo : saveVideo}
+        onPress={originVideo ? participateVideo : postVideo}
       />
     </View>
   );

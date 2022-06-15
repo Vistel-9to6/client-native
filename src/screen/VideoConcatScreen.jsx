@@ -4,31 +4,13 @@ import ModalError from "../components/ModalError";
 import ModalSuccess from "../components/ModalSuccess";
 import { AntDesign } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
-import * as VideoThumbnails from "expo-video-thumbnails";
 import { UserAuth } from "../context/AuthContext";
 
 function VideoConcatScreen({ route, navigation }) {
   const [success, setSuccess] = useState(false);
-  const [image, setImage] = useState(null);
   const { idToken } = UserAuth();
-
-  const { originVideo, liveVideo, galleryVideo } = route.params;
+  const { originVideo, liveVideo, galleryVideo } = route.params.data;
   const uri = liveVideo?.uri || galleryVideo?.uri;
-
-  useEffect(() => {
-    generateThumbnail();
-  }, []);
-
-  const generateThumbnail = async () => {
-    try {
-      const { uri } = await VideoThumbnails.getThumbnailAsync(originVideo, {
-        time: 100,
-      });
-      setImage(uri);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
 
   useEffect(() => {
     if (success) {
@@ -45,7 +27,7 @@ function VideoConcatScreen({ route, navigation }) {
       name: `${Date.now()}.mp4`,
     };
 
-    formdata.append("originVideoUrl", originVideo);
+    formdata.append("originVideoUrl", originVideo.videoUrl);
     formdata.append("video", videoFile);
 
     try {
@@ -79,7 +61,10 @@ function VideoConcatScreen({ route, navigation }) {
         </TouchableOpacity>
       </View>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: image }} style={styles.mediaPreview} />
+        <Image
+          source={{ uri: originVideo.thumbnailUrl }}
+          style={styles.mediaPreview}
+        />
         <Fontisto style={styles.plus} name="plus-a" size={24} color="black" />
         <Image source={{ uri }} style={styles.mediaPreview} />
       </View>

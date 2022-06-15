@@ -17,7 +17,7 @@ function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
   const [maxCreators, setMaxCreators] = useState(2);
   const [success, setSuccess] = useState(false);
-  const { uri } = route.params;
+  const { uri, thumbnail } = route.params;
   const { idToken } = UserAuth();
 
   useEffect(() => {
@@ -35,7 +35,14 @@ function VideoPostScreen({ route, navigation }) {
       name: `${Date.now()}_${title}.mp4`,
     };
 
+    const thumbnailFile = {
+      uri: thumbnail,
+      type: "multipart/form-data",
+      name: `${Date.now()}_${title}_thumbnail.jpg`,
+    };
+
     formdata.append("video", videoFile);
+    formdata.append("thumbnail", thumbnailFile);
     formdata.append("title", title);
     formdata.append("maxCreators", maxCreators);
 
