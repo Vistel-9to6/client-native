@@ -3,7 +3,6 @@ import { View, FlatList, StyleSheet } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 
 import FeedItem from "./FeedItem";
-import Profile from "./Profile";
 
 function Feed({ navigation }) {
   const [feeds, setFeeds] = useState([]);
@@ -34,7 +33,6 @@ function Feed({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Profile />
       <FlatList
         style={styles.videoList}
         numColumns={3}
@@ -53,8 +51,9 @@ function Feed({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 8,
     backgroundColor: "white",
+    flexDirection: "column",
   },
 });
 
