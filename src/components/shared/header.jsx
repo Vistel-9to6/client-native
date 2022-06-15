@@ -53,13 +53,6 @@ const styles = StyleSheet.create({
     width: undefined,
     height: 50,
   },
-  profile: {
-    position: "absolute",
-    right: 105,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
   loginContainer: {
     diplay: "flex",
     flexDirection: "row",

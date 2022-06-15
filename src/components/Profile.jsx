@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profile: {
-    width: 150,
-    height: 150,
+    width: 100,
+    height: 100,
     borderRadius: 75,
   },
 });

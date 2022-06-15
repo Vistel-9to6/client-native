@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Video } from "expo-av";
-import { StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { UserAuth } from "../context/AuthContext";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -9,7 +9,7 @@ import { StatusBar } from "expo-status-bar";
 function VideoResultScreen({ route, navigation }) {
   const videoRef = useRef(null);
   const [like, setLike] = useState(false);
-  const { idToken } = UserAuth();
+  const { idToken, user } = UserAuth();
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
 
@@ -96,10 +96,21 @@ function VideoResultScreen({ route, navigation }) {
             style={styles.button}
           >
             <Text style={styles.next}>
-              {originVideo ? "VISTEL 참여하기" : "다음"}
+              {originVideo ? "스토리 더하기" : "다음"}
             </Text>
           </TouchableOpacity>
         </View>
+      </View>
+      <View style={styles.videoInfo}>
+        <Text style={{ color: "white", fontSize: 25 }}>
+          {originVideo.title}
+        </Text>
+        <Image
+          style={styles.profile}
+          source={{
+            uri: user?.profilePhoto,
+          }}
+        />
       </View>
     </View>
   );
@@ -150,6 +161,21 @@ const styles = StyleSheet.create({
   next: {
     color: "black",
     fontSize: 15,
+  },
+  videoInfo: {
+    position: "absolute",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    bottom: 55,
+    paddingHorizontal: 15,
+  },
+  profile: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "white",
   },
 });
 
