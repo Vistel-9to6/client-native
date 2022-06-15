@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { UserAuth } from "../context/AuthContext";
+import { generateThumbnail } from "../api/thumbnail";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
@@ -13,17 +14,23 @@ function VideoResultScreen({ route, navigation }) {
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
 
-  const saveVideo = async () => {
-    try {
-      videoRef.current.pauseAsync();
+  const postVideo = async () => {
+    if (idToken) {
+      try {
+        videoRef.current.pauseAsync();
 
-      navigation.navigate("VideoPost", { uri });
-    } catch (error) {
-      console.log(error);
+        const thumbnail = await generateThumbnail(uri);
+
+        navigation.navigate("VideoPost", { uri, thumbnail });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      navigation.navigate("Login");
     }
   };
 
-  const createGif = async () => {
+  const createGif = () => {
     videoRef.current.pauseAsync();
 
     if (idToken) {
@@ -38,7 +45,7 @@ function VideoResultScreen({ route, navigation }) {
       try {
         videoRef.current.pauseAsync();
 
-        navigation.navigate("Camera", { uri });
+        navigation.navigate("Camera", { originVideo });
       } catch (error) {
         console.log(error);
       }
@@ -92,7 +99,7 @@ function VideoResultScreen({ route, navigation }) {
         </View>
         <View style={styles.buttonBox}>
           <TouchableOpacity
-            onPress={originVideo ? participateVideo : saveVideo}
+            onPress={originVideo ? participateVideo : postVideo}
             style={styles.button}
           >
             <Text style={styles.next}>

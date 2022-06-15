@@ -15,8 +15,7 @@ function CameraScreen({ navigation, route }) {
     Camera.Constants.FlashMode.off,
   );
   const cameraRef = useRef(null);
-  const params = route?.params;
-  const originVideo = params?.uri;
+  const originVideo = route?.params?.originVideo;
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [isCameraReady, setIsCameraReady] = useState(false);
@@ -67,7 +66,12 @@ function CameraScreen({ navigation, route }) {
           const liveVideo = await videoRecordPromise;
 
           originVideo
-            ? navigation.navigate("VideoConcat", { originVideo, liveVideo })
+            ? navigation.navigate("VideoConcat", {
+                data: {
+                  originVideo,
+                  liveVideo,
+                },
+              })
             : navigation.navigate("VideoResult", { liveVideo });
         }
       } catch (error) {
