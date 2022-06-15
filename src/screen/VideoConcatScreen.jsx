@@ -14,7 +14,7 @@ function VideoConcatScreen({ route, navigation }) {
 
   useEffect(() => {
     if (success) {
-      navigation.navigate("Home", { msg: true });
+      navigation.navigate("Home");
     }
   }, [success]);
 
