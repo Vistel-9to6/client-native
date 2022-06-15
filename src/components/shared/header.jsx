@@ -23,12 +23,6 @@ function AppHeader({ navigation }) {
         </TouchableOpacity>
       </View>
       <View style={styles.loginContainer}>
-        <Image
-          style={styles.profile}
-          source={{
-            uri: user?.profilePhoto,
-          }}
-        />
         <TouchableOpacity
           style={styles.login}
           onPress={user ? handleLogout : handleLogin}
