@@ -15,10 +15,10 @@ function VideoResultScreen({ route, navigation }) {
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
 
   const postVideo = async () => {
+    videoRef.current.pauseAsync();
+
     if (idToken) {
       try {
-        videoRef.current.pauseAsync();
-
         const thumbnail = await generateThumbnail(uri);
 
         navigation.navigate("VideoPost", { uri, thumbnail });
@@ -34,17 +34,21 @@ function VideoResultScreen({ route, navigation }) {
     videoRef.current.pauseAsync();
 
     if (idToken) {
-      navigation.navigate("Gif", { uri });
+      try {
+        navigation.navigate("Gif", { uri });
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       navigation.navigate("Login");
     }
   };
 
   const participateVideo = async () => {
+    videoRef.current.pauseAsync();
+
     if (idToken) {
       try {
-        videoRef.current.pauseAsync();
-
         navigation.navigate("Camera", { originVideo });
       } catch (error) {
         console.log(error);
@@ -76,20 +80,20 @@ function VideoResultScreen({ route, navigation }) {
                 onPress={createGif}
                 style={styles.downloadGifIcon}
               >
-                <AntDesign name="download" size={24} color="white" />
+                <AntDesign name="download" size={32} color="white" />
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.downloadGifIcon}
                 onPress={() => setLike(!like)}
               >
                 {like ? (
-                  <Entypo name="heart" size={24} color="white" />
+                  <Entypo name="heart" size={32} color="white" />
                 ) : (
-                  <Entypo name="heart-outlined" size={24} color="white" />
+                  <Entypo name="heart-outlined" size={32} color="white" />
                 )}
               </TouchableOpacity>
 
-              <Text style={styles.gitText}>GIF</Text>
+              <Text style={styles.gifText}>GIF</Text>
             </>
           ) : (
             <View style={styles.buttonBox}>
@@ -108,17 +112,23 @@ function VideoResultScreen({ route, navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.videoInfo}>
-        <Text style={{ color: "white", fontSize: 25 }}>
-          {originVideo.title}
-        </Text>
-        <Image
-          style={styles.profile}
-          source={{
-            uri: user?.profilePhoto,
-          }}
-        />
-      </View>
+      {originVideo && (
+        <View style={styles.videoInfo}>
+          <Text style={{ color: "white", fontSize: 25 }}>
+            {originVideo.title}
+          </Text>
+          {user ? (
+            <Image
+              style={styles.profile}
+              source={{
+                uri: user?.profilePhoto,
+              }}
+            />
+          ) : (
+            <></>
+          )}
+        </View>
+      )}
     </View>
   );
 }
@@ -154,9 +164,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "#FFF",
   },
-  gitText: {
-    top: 25,
-    left: 18,
+  gifText: {
+    top: 33,
+    left: 22,
     color: "white",
     fontSize: 10,
     position: "absolute",
