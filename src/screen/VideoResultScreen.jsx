@@ -1,10 +1,14 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Video } from "expo-av";
-import { StyleSheet, View, Button } from "react-native";
+import { StyleSheet, View, Text, Button, TouchableOpacity } from "react-native";
 import { UserAuth } from "../context/AuthContext";
+import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 
 function VideoResultScreen({ route, navigation }) {
   const videoRef = useRef(null);
+  const [like, setLike] = useState(false);
   const { idToken } = UserAuth();
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
@@ -19,7 +23,7 @@ function VideoResultScreen({ route, navigation }) {
     }
   };
 
-  const creatGif = async () => {
+  const createGif = async () => {
     videoRef.current.pauseAsync();
 
     if (idToken) {
@@ -44,7 +48,8 @@ function VideoResultScreen({ route, navigation }) {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
+      <StatusBar style="light" />
       <Video
         ref={videoRef}
         style={styles.video}
@@ -56,25 +61,95 @@ function VideoResultScreen({ route, navigation }) {
         resizeMode="contain"
         shouldPlay
       />
-      {originVideo && <Button title="gif 만들기" onPress={creatGif} />}
-      <Button
-        title={originVideo ? "참여" : "저장"}
-        onPress={originVideo ? participateVideo : saveVideo}
-      />
+      <View style={styles.headerContainer}>
+        <View style={styles.iconBox}>
+          {originVideo ? (
+            <>
+              <TouchableOpacity
+                onPress={createGif}
+                style={styles.downloadGifIcon}
+              >
+                <AntDesign name="download" size={24} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.downloadGifIcon}
+                onPress={() => setLike(!like)}
+              >
+                {like ? (
+                  <Entypo name="heart" size={24} color="white" />
+                ) : (
+                  <Entypo name="heart-outlined" size={24} color="white" />
+                )}
+              </TouchableOpacity>
+
+              <Text style={styles.gitText}>GIF</Text>
+            </>
+          ) : (
+            <View style={styles.buttonBox}>
+              <Text style={styles.start}>Vistel 시작하기</Text>
+            </View>
+          )}
+        </View>
+        <View style={styles.buttonBox}>
+          <TouchableOpacity
+            onPress={originVideo ? participateVideo : saveVideo}
+            style={styles.button}
+          >
+            <Text style={styles.next}>
+              {originVideo ? "VISTEL 참여하기" : "다음"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "black",
+  },
   video: {
     alignSelf: "center",
     width: "100%",
-    height: "90%",
+    height: "100%",
   },
-  buttons: {
+  headerContainer: {
+    width: "100%",
     flexDirection: "row",
+    justifyContent: "space-between",
+    top: 0,
+    marginTop: 50,
+    paddingHorizontal: 10,
+    position: "absolute",
+  },
+  iconBox: {
+    flexDirection: "row",
+  },
+  downloadGifIcon: {
+    paddingHorizontal: 15,
+  },
+  button: {
+    paddingHorizontal: 15,
+    paddingVertical: 5,
     justifyContent: "center",
-    alignItems: "center",
+    borderRadius: 5,
+    backgroundColor: "#FFF",
+  },
+  gitText: {
+    top: 25,
+    left: 18,
+    color: "white",
+    fontSize: 10,
+    position: "absolute",
+  },
+  start: {
+    color: "black",
+    fontSize: 15,
+  },
+  next: {
+    color: "black",
+    fontSize: 15,
   },
 });
 

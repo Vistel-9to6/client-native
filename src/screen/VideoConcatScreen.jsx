@@ -64,7 +64,8 @@ function VideoConcatScreen({ route, navigation }) {
         return <ModalSuccess />;
       }
     } catch (err) {
-      return <ModalError />;
+      console.log(err);
+      return <ModalError err={err} />;
     }
   };
 
@@ -77,10 +78,11 @@ function VideoConcatScreen({ route, navigation }) {
         >
           <AntDesign name="left" size={27} color="black" />
         </TouchableOpacity>
+        {/* <Text>동영상 병합</Text> */}
       </View>
       <View style={styles.imageContainer}>
         <Image source={{ uri: image }} style={styles.mediaPreview} />
-        <Fontisto style={styles.plus} name="plus-a" size={24} color="black" />
+        <Fontisto style={styles.plus} name="plus-a" size={30} color="black" />
         <Image source={{ uri }} style={styles.mediaPreview} />
       </View>
       <View style={styles.bottonsContainer}>
@@ -110,6 +112,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    marginBottom: 50,
     height: "50%",
   },
   mediaPreview: {
@@ -119,26 +122,28 @@ const styles = StyleSheet.create({
     width: "40%",
   },
   plus: {
-    margin: 15,
+    marginHorizontal: 10,
   },
   bottonsContainer: {
     alignItems: "center",
     left: 0,
     right: 0,
     bottom: 0,
+    width: "100%",
     position: "absolute",
   },
   concatButton: {
     paddingHorizontal: 30,
-    paddingVertical: 10,
+    paddingVertical: 13,
     justifyContent: "center",
+    alignItems: "center",
     borderRadius: 4,
-    marginBottom: 30,
+    width: "100%",
     backgroundColor: "#2196F3",
   },
   concatText: {
     color: "white",
-    fontSize: 15,
+    fontSize: 20,
   },
 });
 

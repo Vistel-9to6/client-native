@@ -10,8 +10,9 @@ import {
 import { StatusBar } from "expo-status-bar";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
-import googleLoginButtonImage from "../../assets/google-login-button.png";
 import { UserAuth } from "../context/AuthContext";
+import googleLoginButtonImage from "../../assets/google-login-button.png";
+import vistelLogo from "../../assets/vistel-logo.png";
 
 import ModalError from "../components/ModalError";
 
@@ -64,37 +65,51 @@ function LoginScreen({ navigation }) {
   }, [response]);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>Vistel</Text>
-      <TouchableOpacity onPress={handleGoogleLoginButtonClick}>
-        <Image
-          style={styles.googleLoginButton}
-          source={googleLoginButtonImage}
-        />
-      </TouchableOpacity>
+    <>
       <StatusBar style="auto" />
-    </View>
+      <View style={styles.container}>
+        <View style={styles.logoBox}>
+          <Image source={vistelLogo} style={styles.logo} />
+        </View>
+        <View style={styles.loginBox}>
+          <TouchableOpacity onPress={handleGoogleLoginButtonClick}>
+            <Image
+              style={styles.googleLoginButton}
+              source={googleLoginButtonImage}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly",
+    flex: 1,
     alignItems: "center",
+    justifyContent: "center",
     backgroundColor: "#fff",
   },
+  logoBox: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
   logo: {
+    top: 70,
     width: 400,
-    margin: 170,
-    textAlign: "center",
-    fontSize: 100,
+    height: 600,
+    resizeMode: "center",
+  },
+  loginBox: {
+    flex: 1,
+    marginTop: 50,
+    alignItems: "center",
   },
   googleLoginButton: {
-    width: 250,
-    height: 250,
     resizeMode: "contain",
+    width: 250,
   },
 });
 

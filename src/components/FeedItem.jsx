@@ -4,7 +4,6 @@ import { Video } from "expo-av";
 
 function FeedItem({ item, navigation }) {
   const videoRef = useRef(null);
-
   const handleVideoResultPageMove = () => {
     navigation.navigate("VideoResult", { originVideo: item });
   };
@@ -31,7 +30,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1 / 3,
     margin: 1,
-    height: 240,
+    height: 200,
   },
   video: {
     flex: 1,

@@ -4,8 +4,10 @@ import { UserAuth } from "../context/AuthContext";
 import Feed from "../components/Feed";
 import SearchScreen from "../screen/SearchScreen";
 import AppHeader from "../components/shared/header";
+import Profile from "../components/Profile";
 
 import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 const EmptyScreen = () => {
   return null;
@@ -24,8 +26,19 @@ function TabNavigation({ navigation }) {
           tabBarIcon: () => <AntDesign name="home" size={24} color="black" />,
           header: () => <AppHeader navigation={navigation} />,
           headerStyle: {
-            backgroundColor: "white",
+            backgroundColor: "black",
           },
+          tabBarStyle: { height: 60 },
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          tabBarIcon: () => (
+            <AntDesign name="search1" size={24} color="black" />
+          ),
+          header: () => <AppHeader navigation={navigation} />,
         }}
       />
       <Tab.Screen
@@ -47,12 +60,19 @@ function TabNavigation({ navigation }) {
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={SearchScreen}
+        name="Profile"
+        component={Profile}
+        listeners={({ navigation }) => ({
+          tabPress: (event) => {
+            event.preventDefault();
+
+            idToken
+              ? navigation.navigate("Profile")
+              : navigation.navigate("Login");
+          },
+        })}
         options={{
-          tabBarIcon: () => (
-            <AntDesign name="search1" size={24} color="black" />
-          ),
+          tabBarIcon: () => <Feather name="user" size={24} color="black" />,
           header: () => <AppHeader navigation={navigation} />,
         }}
       />

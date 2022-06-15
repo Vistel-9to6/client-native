@@ -12,6 +12,7 @@ import ModalSuccess from "../components/ModalSuccess";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
 import { UserAuth } from "../context/AuthContext";
+import { StatusBar } from "expo-status-bar";
 
 function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
@@ -61,6 +62,8 @@ function VideoPostScreen({ route, navigation }) {
 
   return (
     <View style={styles.container}>
+      <StatusBar style="auto" />
+
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -68,6 +71,7 @@ function VideoPostScreen({ route, navigation }) {
         >
           <AntDesign name="left" size={27} color="black" />
         </TouchableOpacity>
+        <Text style={styles.pageTitle}>Vistel 새 게시물</Text>
       </View>
       <View style={styles.imageContainer}>
         <Image source={{ uri }} style={styles.mediaPreview} />
@@ -97,8 +101,8 @@ function VideoPostScreen({ route, navigation }) {
         </View>
       </View>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={uploadVideo} style={styles.uploadButton}>
-          <Text style={styles.uploadText}>업로드</Text>
+        <TouchableOpacity onPress={uploadVideo}>
+          <AntDesign name="check" style={styles.uploadIcon} />
         </TouchableOpacity>
       </View>
     </View>
@@ -108,18 +112,24 @@ function VideoPostScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 40,
     backgroundColor: "white",
   },
   header: {
-    height: "7%",
+    height: "9%",
+    flexDirection: "row",
   },
   backButton: {
     flex: 1,
     marginLeft: 10,
   },
+  pageTitle: {
+    flex: 5,
+    fontSize: 20,
+  },
   imageContainer: {
     alignItems: "center",
+    marginTop: 20,
     borderRadius: 10,
   },
   mediaPreview: {
@@ -128,20 +138,15 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     width: "40%",
   },
-  inputText: {
-    flex: 1,
-    paddingVertical: 10,
-    marginRight: 20,
+  title: {
+    height: 50,
+    marginBottom: 10,
   },
   infoContainer: {
     margin: 20,
     flex: 1,
     flexDirection: "column",
     marginRight: 20,
-  },
-  title: {
-    height: 50,
-    marginBottom: 10,
   },
   participantsContainer: {
     flexDirection: "row",
@@ -159,22 +164,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: "center",
-    left: 0,
-    right: 0,
-    bottom: 0,
+    right: 5,
+    top: 40,
     position: "absolute",
   },
-  uploadButton: {
-    paddingHorizontal: 30,
-    paddingVertical: 10,
-    justifyContent: "center",
-    borderRadius: 4,
-    marginBottom: 30,
-    backgroundColor: "#2196F3",
-  },
-  uploadText: {
-    color: "white",
-    fontSize: 15,
+  uploadIcon: {
+    fontSize: 38,
+    color: "#2196F3",
   },
 });
 
