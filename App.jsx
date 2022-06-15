@@ -11,8 +11,8 @@ import VideoResultScreen from "./src/screen/VideoResultScreen";
 import VideoPostScreen from "./src/screen/VideoPostScreen";
 import VideoConcatScreen from "./src/screen/VideoConcatScreen";
 import LoginScreen from "./src/screen/LoginScreen";
-import DownloadGifScreen from "./src/screen/DownloadGifScreen";
 import Profile from "./src/components/Profile";
+import EditGifScreen from "./src/screen/EditGifScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,7 +55,7 @@ function App() {
             />
             <Stack.Screen
               name="Gif"
-              component={DownloadGifScreen}
+              component={EditGifScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
