@@ -78,7 +78,7 @@ function VideoConcatScreen({ route, navigation }) {
         >
           <AntDesign name="left" size={27} color="black" />
         </TouchableOpacity>
-        {/* <Text>동영상 병합</Text> */}
+        <Text style={styles.pageTitle}>스토리 더하기</Text>
       </View>
       <View style={styles.imageContainer}>
         <Image source={{ uri: image }} style={styles.mediaPreview} />
@@ -102,10 +102,16 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 50,
     height: "10%",
+    flexDirection: "row",
   },
   backButton: {
     flex: 1,
     marginLeft: 10,
+  },
+  pageTitle: {
+    flex: 5,
+    fontSize: 20,
+    top: -3,
   },
   imageContainer: {
     flex: 1,
