@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { View, StyleSheet, Image } from "react-native";
 import { UserAuth } from "../context/AuthContext";
 
 import Feed from "../components/Feed";
@@ -8,6 +9,8 @@ import Profile from "../components/Profile";
 
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 const EmptyScreen = () => {
   return null;
@@ -16,14 +19,17 @@ const EmptyScreen = () => {
 const Tab = createBottomTabNavigator();
 
 function TabNavigation({ navigation }) {
-  const { idToken } = UserAuth();
+  const { idToken, user } = UserAuth();
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Feed"
         component={Feed}
         options={{
-          tabBarIcon: () => <AntDesign name="home" size={24} color="black" />,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => (
+            <Entypo name="home" size={30} color={color} />
+          ),
           header: () => <AppHeader navigation={navigation} />,
           headerStyle: {
             backgroundColor: "black",
@@ -32,13 +38,18 @@ function TabNavigation({ navigation }) {
         }}
       />
       <Tab.Screen
-        name="Search"
-        component={SearchScreen}
+        name="Slide"
+        component={Feed}
         options={{
-          tabBarIcon: () => (
-            <AntDesign name="search1" size={24} color="black" />
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome name="list" size={30} color={color} />
           ),
           header: () => <AppHeader navigation={navigation} />,
+          headerStyle: {
+            backgroundColor: "black",
+          },
+          tabBarStyle: { height: 60 },
         }}
       />
       <Tab.Screen
@@ -54,9 +65,23 @@ function TabNavigation({ navigation }) {
           },
         })}
         options={{
-          tabBarIcon: () => (
-            <AntDesign name="camerao" size={24} color="black" />
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="pluscircleo" size={40} color={color} />
           ),
+          tabBarStyle: { height: 60 },
+        }}
+      />
+      <Tab.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="search1" size={30} color={color} />
+          ),
+          header: () => <AppHeader navigation={navigation} />,
+          tabBarStyle: { height: 60 },
         }}
       />
       <Tab.Screen
@@ -72,12 +97,33 @@ function TabNavigation({ navigation }) {
           },
         })}
         options={{
-          tabBarIcon: () => <Feather name="user" size={24} color="black" />,
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => {
+            return user ? (
+              <Image
+                style={styles.profile}
+                source={{
+                  uri: user?.profilePhoto,
+                }}
+              />
+            ) : (
+              <Feather name="user" size={30} color={color} />
+            );
+          },
           header: () => <AppHeader navigation={navigation} />,
+          tabBarStyle: { height: 60 },
         }}
       />
     </Tab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  profile: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+});
 
 export default TabNavigation;
