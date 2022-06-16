@@ -51,7 +51,7 @@ function Feed({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 8,
+    paddingTop: 5,
     backgroundColor: "white",
     flexDirection: "column",
   },

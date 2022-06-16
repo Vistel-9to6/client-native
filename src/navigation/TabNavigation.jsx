@@ -1,11 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, StyleSheet, Image } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import { UserAuth } from "../context/AuthContext";
 
 import Feed from "../components/Feed";
 import SearchScreen from "../screen/SearchScreen";
 import AppHeader from "../components/shared/header";
 import Profile from "../components/Profile";
+import FeedSlide from "../components/FeedSlide";
 
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -39,16 +40,13 @@ function TabNavigation({ navigation }) {
       />
       <Tab.Screen
         name="Slide"
-        component={Feed}
+        component={FeedSlide}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
             <FontAwesome name="list" size={30} color={color} />
           ),
-          header: () => <AppHeader navigation={navigation} />,
-          headerStyle: {
-            backgroundColor: "black",
-          },
+          header: () => null,
           tabBarStyle: { height: 60 },
         }}
       />
