@@ -11,7 +11,7 @@ import VideoResultScreen from "./src/screen/VideoResultScreen";
 import VideoPostScreen from "./src/screen/VideoPostScreen";
 import VideoConcatScreen from "./src/screen/VideoConcatScreen";
 import LoginScreen from "./src/screen/LoginScreen";
-import Profile from "./src/components/Profile";
+import ProfileScreen from "./src/components/Profile";
 import EditGifScreen from "./src/screen/EditGifScreen";
 
 const Stack = createNativeStackNavigator();
@@ -60,7 +60,7 @@ function App() {
             />
             <Stack.Screen
               name="Profile"
-              component={Profile}
+              component={ProfileScreen}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

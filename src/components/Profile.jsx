@@ -5,7 +5,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 import FeedItem from "./FeedItem";
 
-function Profile({ navigation }) {
+function ProfileScreen({ navigation }) {
   const { user, idToken } = UserAuth();
   const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default ProfileScreen;
