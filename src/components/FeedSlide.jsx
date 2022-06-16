@@ -27,9 +27,8 @@ function FeedSlide() {
   const onViewableItemsChanged = useRef(({ changed }) => {
     changed.forEach((element) => {
       const cell = mediaRefs.current[element.key];
-
       if (cell) {
-        if (element.isViewble) {
+        if (element.isViewable) {
           cell.play();
         } else {
           cell.stop();
