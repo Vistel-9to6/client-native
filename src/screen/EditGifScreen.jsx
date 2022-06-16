@@ -7,12 +7,14 @@ import {
   StyleSheet,
   ActivityIndicator,
   ToastAndroid,
+  FlatList,
 } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
 import { UserAuth } from "../context/AuthContext";
 
 import { AntDesign } from "@expo/vector-icons";
+import { Button } from "react-native";
 
 const exampleGif =
   "https://cdn.vox-cdn.com/thumbor/IF0m88w-ozKL_EhRqKJ0vy_3MtA=/800x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/654972/ash_and_pikachu.0.gif";
@@ -23,7 +25,7 @@ function EditGifScreen({ navigation, route }) {
   const [gifUrl, setGifUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasLibraryPermissions, setHasLibraryPermissions] = useState(null);
-  const [filter, setfilter] = useState({
+  const [filter, setFilter] = useState({
     color: "",
     grid: "",
     fps: "",
@@ -100,28 +102,43 @@ function EditGifScreen({ navigation, route }) {
     }
   };
 
+  const colors = ["SEPIA", "GRAYSCALE", "REVERSAL"];
+
   const colorButtonPress = (title) => {
     if (title === filter.color) {
-      setfilter({ ...filter, color: "" });
+      setFilter({ ...filter, color: "" });
     } else {
-      setfilter({ ...filter, color: title });
+      setFilter({ ...filter, color: title });
     }
   };
+
+  const grids = ["2", "3", "4"];
 
   const gridButtonPress = (title) => {
     if (title === filter.grid) {
-      setfilter({ ...filter, grid: "" });
+      setFilter({ ...filter, grid: "" });
     } else {
-      setfilter({ ...filter, grid: title });
+      setFilter({ ...filter, grid: title });
     }
   };
 
+  const fps = ["1", "15"];
+
   const fpsButtonPress = (title) => {
     if (title === filter.fps) {
-      setfilter({ ...filter, fps: "" });
+      setFilter({ ...filter, fps: "" });
     } else {
-      setfilter({ ...filter, fps: title });
+      setFilter({ ...filter, fps: title });
     }
+  };
+
+  const initializeOption = () => {
+    setGifUrl("");
+    setFilter({
+      color: "",
+      grid: "",
+      fps: "",
+    });
   };
 
   return (
@@ -133,6 +150,9 @@ function EditGifScreen({ navigation, route }) {
         >
           <AntDesign name="left" size={27} color="black" />
         </TouchableOpacity>
+        <Text style={styles.pageTitle}>
+          {gifUrl ? "변환 결과" : "GIF 예시"}
+        </Text>
       </View>
       <View style={styles.contentsContainer}>
         <Image
@@ -142,114 +162,135 @@ function EditGifScreen({ navigation, route }) {
           }}
           style={styles.mediaPreview}
         />
-        <View style={styles.filtersContainer}>
+        {gifUrl ? (
+          <Button onPress={initializeOption} title="다시 선택하기" />
+        ) : (
           <View style={styles.filterContainer}>
-            <Text style={styles.textTitle}>색상</Text>
-            <TouchableOpacity
-              style={{
-                ...styles.buttonFilter,
-                backgroundColor: filter.color === "SEPIA" ? "yellow" : "white",
-                borderWidth: filter.color === "SEPIA" ? "2px" : "1px",
-              }}
-              onPress={() => colorButtonPress("SEPIA")}
-            >
-              <Text style={styles.filter}>세피아</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...styles.buttonFilter,
-                backgroundColor:
-                  filter.color === "GRAYSCALE" ? "yellow" : "white",
-                borderWidth: filter.color === "GRAYSCALE" ? "2px" : "1px",
-              }}
-              onPress={() => colorButtonPress("GRAYSCALE")}
-            >
-              <Text style={styles.filter}>흑백</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...styles.buttonFilter,
-                backgroundColor:
-                  filter.color === "REVERSAL" ? "yellow" : "white",
-                borderWidth: filter.color === "REVERSAL" ? "2px" : "1px",
-              }}
-              onPress={() => colorButtonPress("REVERSAL")}
-            >
-              <Text style={styles.filter}>반전</Text>
-            </TouchableOpacity>
+            <View style={styles.filterRow}>
+              <View style={styles.optionTitleBox}>
+                <Text style={{ fontSize: 15 }}>색상</Text>
+              </View>
+              <FlatList
+                contentContainerStyle={styles.itemList}
+                keyExtractor={(item) => item}
+                data={colors}
+                renderItem={({ item }) => (
+                  <View style={styles.item}>
+                    <TouchableOpacity
+                      num={item}
+                      style={{
+                        ...styles.optionButton,
+                        backgroundColor:
+                          filter.color === item ? "black" : "white",
+                      }}
+                      onPress={() => colorButtonPress(item)}
+                    >
+                      <Text
+                        style={{
+                          ...styles.option,
+                          color: filter.color === item ? "white" : "black",
+                        }}
+                      >
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </View>
+            <View style={styles.filterRow}>
+              <View style={styles.optionTitleBox}>
+                <Text>격자</Text>
+              </View>
+              <FlatList
+                contentContainerStyle={styles.itemList}
+                keyExtractor={(item) => item}
+                data={grids}
+                renderItem={({ item }) => (
+                  <View style={styles.item}>
+                    <TouchableOpacity
+                      num={item}
+                      style={{
+                        ...styles.optionButton,
+                        backgroundColor:
+                          filter.grid === `${item}x${item}` ? "black" : "white",
+                      }}
+                      onPress={() => gridButtonPress(`${item}x${item}`)}
+                    >
+                      <Text
+                        style={{
+                          ...styles.option,
+                          color:
+                            filter.grid === `${item}x${item}`
+                              ? "white"
+                              : "black",
+                        }}
+                      >{`${item}x${item}`}</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </View>
+            <View style={styles.filterRow}>
+              <View style={styles.optionTitleBox}>
+                <Text>FPS</Text>
+              </View>
+              <FlatList
+                contentContainerStyle={styles.itemList}
+                keyExtractor={(item) => item}
+                data={fps}
+                renderItem={({ item }) => (
+                  <View style={styles.item}>
+                    <TouchableOpacity
+                      num={item}
+                      style={{
+                        ...styles.optionButton,
+                        backgroundColor:
+                          filter.fps === item ? "black" : "white",
+                      }}
+                      onPress={() => fpsButtonPress(item)}
+                    >
+                      <Text
+                        style={{
+                          ...styles.option,
+                          color: filter.fps === item ? "white" : "black",
+                        }}
+                      >
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            </View>
+            <View style={styles.normalText}>
+              <Text style={{ color: "blue", fontSize: 13 }}>
+                옵션을 선택하지 않으면 기본모드로 설정 됩니다
+              </Text>
+            </View>
           </View>
-          <View style={styles.filterContainer}>
-            <Text style={styles.textTitle}>grid</Text>
-            <TouchableOpacity
-              style={{
-                ...styles.buttonFilter,
-                backgroundColor: filter.grid === "2x2" ? "yellow" : "white",
-                borderWidth: filter.grid === "2x2" ? "2px" : "1px",
-              }}
-              onPress={() => gridButtonPress("2x2")}
-            >
-              <Text style={styles.filter}>2x2</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...styles.buttonFilter,
-                backgroundColor: filter.grid === "3x3" ? "yellow" : "white",
-                borderWidth: filter.grid === "3x3" ? "2px" : "1px",
-              }}
-              onPress={() => gridButtonPress("3x3")}
-            >
-              <Text style={styles.filter}>3x3</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...styles.buttonFilter,
-                backgroundColor: filter.grid === "4x4" ? "yellow" : "white",
-                borderWidth: filter.grid === "4x4" ? "2px" : "1px",
-              }}
-              onPress={() => gridButtonPress("4x4")}
-            >
-              <Text style={styles.filter}>4x4</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.filterContainer}>
-            <Text style={styles.textTitle}>fps</Text>
-            <TouchableOpacity
-              style={{
-                ...styles.buttonFilter,
-                backgroundColor: filter.fps === "1" ? "yellow" : "white",
-                borderWidth: filter.fps === "1" ? "2px" : "1px",
-              }}
-              onPress={() => fpsButtonPress("1")}
-            >
-              <Text style={styles.filter}>1 fps</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={{
-                ...styles.buttonFilter,
-                backgroundColor: filter.fps === "15" ? "yellow" : "white",
-                borderWidth: filter.fps === "15" ? "2px" : "1px",
-              }}
-              onPress={() => fpsButtonPress("15")}
-            >
-              <Text style={styles.filter}>15 fps</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        )}
       </View>
-      <View style={styles.footer}>
-        <TouchableOpacity onPress={gifUrl ? saveGif : convertVideoToGif}>
-          <View
-            style={{
-              ...styles.button,
-              backgroundColor: isLoading ? "#99CCFF" : "#2196F3",
-            }}
-          >
-            {isLoading && <ActivityIndicator size="large" color="yellow" />}
-            <Text style={styles.buttonText}>
-              {gifUrl ? "저장하기" : "변환하기"}
-            </Text>
-          </View>
-        </TouchableOpacity>
+      <View style={styles.bottonContainer}>
+        <View
+          style={{
+            ...styles.button,
+            backgroundColor: isLoading ? "#99CCFF" : "#2196F3",
+          }}
+        >
+          {isLoading ? (
+            <ActivityIndicator size="large" color="black" />
+          ) : (
+            <TouchableOpacity
+              onPress={gifUrl ? saveGif : convertVideoToGif}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>
+                {gifUrl ? "저장하기" : "변환하기"}
+              </Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -258,81 +299,100 @@ function EditGifScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 40,
     backgroundColor: "white",
   },
   header: {
     width: "100%",
     height: "7%",
+    flexDirection: "row",
   },
   backButton: {
+    flex: 1,
     marginLeft: 10,
+  },
+  pageTitle: {
+    flex: 5,
+    fontSize: 20,
+    bottom: 5,
   },
   contentsContainer: {
     flex: 1,
     alignItems: "center",
   },
-  filtersContainer: {
-    flex: 1,
-    height: 200,
-    alignItems: "center",
-    justifyContent: "center",
+  mediaPreview: {
+    aspectRatio: 9 / 16,
+    marginBottom: 20,
+    height: "50%",
   },
   filterContainer: {
-    marginVertical: 10,
+    flex: 1,
+    marginBottom: 100,
+  },
+  filterRow: {
+    flex: 1,
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
+    paddingLeft: 10,
+  },
+  itemList: {
+    flexDirection: "row",
+    justifyContent: "center",
+    width: "100%",
+  },
+  item: {
+    paddingVertical: 10,
+  },
+  optionTitleBox: {
+    width: "15%",
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
   },
-  buttonFilter: {
-    width: 70,
-    height: 40,
+  optionTitle: {
+    fontSize: 18,
+  },
+  option: {
+    color: "black",
+    fontSize: 11,
+  },
+  optionButton: {
+    width: 85,
+    height: 50,
     marginHorizontal: 5,
     backgroundColor: "white",
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "lightgray",
     borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
   },
-  filter: {
-    color: "black",
-  },
-  mediaPreview: {
-    aspectRatio: 9 / 16,
-    backgroundColor: "black",
-    borderRadius: 15,
-    height: "60%",
-  },
-  textTitle: {
-    fontSize: 18,
-    marginRight: 10,
-  },
-  textDetails: {
-    fontSize: 15,
-    marginVertical: 5,
-  },
-  footer: {
-    height: 70,
-    display: "flex",
+  normalText: {
+    alignItems: "center",
+    left: 0,
+    right: 0,
+    bottom: -37,
     width: "100%",
-    flexDirection: "row",
-    alignItems: "stretch",
+    position: "absolute",
+  },
+  bottonContainer: {
+    alignItems: "center",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: "100%",
+    position: "absolute",
   },
   button: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    paddingVertical: 5,
     alignItems: "center",
     width: "100%",
     backgroundColor: "#2196F3",
-    paddingVertical: 20,
-    borderWidth: 0.5,
-    borderColor: "white",
   },
   buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
+    color: "white",
     fontSize: 20,
   },
 });
