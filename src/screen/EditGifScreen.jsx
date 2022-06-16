@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TouchableOpacity,
@@ -16,19 +16,19 @@ import { UserAuth } from "../context/AuthContext";
 import { AntDesign } from "@expo/vector-icons";
 import { Button } from "react-native";
 
-const exampleGif =
-  "https://cdn.vox-cdn.com/thumbor/IF0m88w-ozKL_EhRqKJ0vy_3MtA=/800x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/654972/ash_and_pikachu.0.gif";
-
 function EditGifScreen({ navigation, route }) {
   const { uri } = route.params;
   const { idToken } = UserAuth();
   const [gifUrl, setGifUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasLibraryPermissions, setHasLibraryPermissions] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(
+    `${process.env.AWS_BUCKET_URL}/assets/1x1_original_15.gif`,
+  );
   const [filter, setFilter] = useState({
-    color: "",
-    grid: "",
-    fps: "",
+    color: "original",
+    grid: "1x1",
+    fps: 15,
   });
 
   const showToastMessage = () => {
@@ -102,11 +102,11 @@ function EditGifScreen({ navigation, route }) {
     }
   };
 
-  const colors = ["SEPIA", "GRAYSCALE", "REVERSAL"];
+  const colors = ["sepia", "grayscale", "reversal"];
 
   const colorButtonPress = (title) => {
     if (title === filter.color) {
-      setFilter({ ...filter, color: "" });
+      setFilter({ ...filter, color: "original" });
     } else {
       setFilter({ ...filter, color: title });
     }
@@ -116,7 +116,7 @@ function EditGifScreen({ navigation, route }) {
 
   const gridButtonPress = (title) => {
     if (title === filter.grid) {
-      setFilter({ ...filter, grid: "" });
+      setFilter({ ...filter, grid: "1x1" });
     } else {
       setFilter({ ...filter, grid: title });
     }
@@ -126,7 +126,7 @@ function EditGifScreen({ navigation, route }) {
 
   const fpsButtonPress = (title) => {
     if (title === filter.fps) {
-      setFilter({ ...filter, fps: "" });
+      setFilter({ ...filter, fps: 15 });
     } else {
       setFilter({ ...filter, fps: title });
     }
@@ -135,11 +135,17 @@ function EditGifScreen({ navigation, route }) {
   const initializeOption = () => {
     setGifUrl("");
     setFilter({
-      color: "",
-      grid: "",
-      fps: "",
+      color: "original",
+      grid: "1x1",
+      fps: 15,
     });
   };
+
+  useEffect(() => {
+    setPreviewUrl(
+      `${process.env.AWS_BUCKET_URL}/assets/${filter.grid}_${filter.color}_${filter.fps}.gif`,
+    );
+  }, [filter]);
 
   return (
     <View style={styles.container}>
@@ -158,7 +164,7 @@ function EditGifScreen({ navigation, route }) {
         <Image
           resizeMode="cover"
           source={{
-            uri: gifUrl ? gifUrl : exampleGif,
+            uri: gifUrl ? gifUrl : previewUrl,
           }}
           style={styles.mediaPreview}
         />
@@ -167,9 +173,7 @@ function EditGifScreen({ navigation, route }) {
         ) : (
           <View style={styles.filterContainer}>
             <View style={styles.filterRow}>
-              <View style={styles.optionTitleBox}>
-                <Text style={{ fontSize: 15 }}>색상</Text>
-              </View>
+              <Text style={styles.optionTitle}>색상</Text>
               <FlatList
                 contentContainerStyle={styles.itemList}
                 keyExtractor={(item) => item}
@@ -199,9 +203,7 @@ function EditGifScreen({ navigation, route }) {
               />
             </View>
             <View style={styles.filterRow}>
-              <View style={styles.optionTitleBox}>
-                <Text>격자</Text>
-              </View>
+              <Text style={styles.optionTitle}>격자</Text>
               <FlatList
                 contentContainerStyle={styles.itemList}
                 keyExtractor={(item) => item}
@@ -232,9 +234,7 @@ function EditGifScreen({ navigation, route }) {
               />
             </View>
             <View style={styles.filterRow}>
-              <View style={styles.optionTitleBox}>
-                <Text>FPS</Text>
-              </View>
+              <Text style={styles.optionTitle}>FPS</Text>
               <FlatList
                 contentContainerStyle={styles.itemList}
                 keyExtractor={(item) => item}
@@ -264,7 +264,7 @@ function EditGifScreen({ navigation, route }) {
               />
             </View>
             <View style={styles.normalText}>
-              <Text style={{ color: "blue", fontSize: 13 }}>
+              <Text style={{ color: "blue", fontSize: 11 }}>
                 옵션을 선택하지 않으면 기본모드로 설정 됩니다
               </Text>
             </View>
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     width: "15%",
     height: "100%",
     alignItems: "center",
-    justifyContent: "center",
+    paddingHorizontal: 10,
   },
   optionTitle: {
     fontSize: 18,
