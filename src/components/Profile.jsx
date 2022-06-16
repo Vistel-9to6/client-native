@@ -78,8 +78,10 @@ const styles = StyleSheet.create({
   profileBox: {
     flex: 1,
     flexDirection: "column",
-    marginBottom: 150,
     alignItems: "center",
+  },
+  videoListBox: {
+    marginTop: 150,
   },
   profile: {
     width: 100,
