@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   button: {
-    paddingVertical: 5,
+    paddingVertical: 7,
     alignItems: "center",
     width: "100%",
     backgroundColor: "#2196F3",

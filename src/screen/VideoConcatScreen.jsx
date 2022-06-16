@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import ModalError from "../components/ModalError";
 import ModalSuccess from "../components/ModalSuccess";
 import { AntDesign } from "@expo/vector-icons";
@@ -9,6 +16,7 @@ import { UserAuth } from "../context/AuthContext";
 function VideoConcatScreen({ route, navigation }) {
   const [success, setSuccess] = useState(false);
   const { idToken } = UserAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const { originVideo, liveVideo, galleryVideo } = route.params.data;
   const uri = liveVideo?.uri || galleryVideo?.uri;
 
@@ -19,6 +27,7 @@ function VideoConcatScreen({ route, navigation }) {
   }, [success]);
 
   const concatVideo = async () => {
+    setIsLoading(true);
     const formdata = new FormData();
 
     const videoFile = {
@@ -39,7 +48,9 @@ function VideoConcatScreen({ route, navigation }) {
         },
         body: formdata,
       });
+
       const data = await response.json();
+      setIsLoading(false);
 
       if (data.result === "ok") {
         setSuccess(true);
@@ -70,10 +81,21 @@ function VideoConcatScreen({ route, navigation }) {
         <Fontisto style={styles.plus} name="plus-a" size={24} color="black" />
         <Image source={{ uri }} style={styles.mediaPreview} />
       </View>
-      <View style={styles.bottonsContainer}>
-        <TouchableOpacity onPress={concatVideo} style={styles.concatButton}>
-          <Text style={styles.concatText}>합치기</Text>
-        </TouchableOpacity>
+      <View style={styles.bottonContainer}>
+        <View
+          style={{
+            ...styles.concatButton,
+            backgroundColor: isLoading ? "#99CCFF" : "#2196F3",
+          }}
+        >
+          {isLoading ? (
+            <ActivityIndicator size="large" color="black" />
+          ) : (
+            <TouchableOpacity onPress={concatVideo} style={styles.concatButton}>
+              <Text style={styles.concatText}>합치기</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -115,7 +137,7 @@ const styles = StyleSheet.create({
   plus: {
     marginHorizontal: 10,
   },
-  bottonsContainer: {
+  bottonContainer: {
     alignItems: "center",
     left: 0,
     right: 0,
@@ -124,11 +146,8 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   concatButton: {
-    paddingHorizontal: 30,
-    paddingVertical: 13,
-    justifyContent: "center",
+    paddingVertical: 7,
     alignItems: "center",
-    borderRadius: 4,
     width: "100%",
     backgroundColor: "#2196F3",
   },

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1 / 3,
     margin: 1,
-    height: 200,
+    height: 190,
   },
   video: {
     flex: 1,
