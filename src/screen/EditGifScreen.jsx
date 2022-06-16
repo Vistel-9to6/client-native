@@ -112,11 +112,7 @@ function EditGifScreen({ navigation, route }) {
     }
   };
 
-  const grids = [];
-
-  for (let i = 2; i <= 4; i++) {
-    grids.push(i);
-  }
+  const grids = ["2", "3", "4"];
 
   const gridButtonPress = (title) => {
     if (title === filter.grid) {
@@ -126,7 +122,7 @@ function EditGifScreen({ navigation, route }) {
     }
   };
 
-  const fps = ["1", "15", "30"];
+  const fps = ["1", "15"];
 
   const fpsButtonPress = (title) => {
     if (title === filter.fps) {
@@ -171,7 +167,9 @@ function EditGifScreen({ navigation, route }) {
         ) : (
           <View style={styles.filterContainer}>
             <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>색상</Text>
+              <View style={styles.optionTitleBox}>
+                <Text style={{ fontSize: 15 }}>색상</Text>
+              </View>
               <FlatList
                 contentContainerStyle={styles.itemList}
                 keyExtractor={(item) => item}
@@ -201,7 +199,9 @@ function EditGifScreen({ navigation, route }) {
               />
             </View>
             <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>격자</Text>
+              <View style={styles.optionTitleBox}>
+                <Text>격자</Text>
+              </View>
               <FlatList
                 contentContainerStyle={styles.itemList}
                 keyExtractor={(item) => item}
@@ -232,7 +232,9 @@ function EditGifScreen({ navigation, route }) {
               />
             </View>
             <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>FPS</Text>
+              <View style={styles.optionTitleBox}>
+                <Text>FPS</Text>
+              </View>
               <FlatList
                 contentContainerStyle={styles.itemList}
                 keyExtractor={(item) => item}
@@ -331,20 +333,25 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     width: "100%",
-    paddingHorizontal: 10,
+    paddingLeft: 10,
   },
   itemList: {
-    flex: 1,
     flexDirection: "row",
-    left: 10,
+    justifyContent: "center",
+    width: "100%",
   },
   item: {
-    flex: 1,
     paddingVertical: 10,
   },
+  optionTitleBox: {
+    width: "15%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   optionTitle: {
-    flex: 3,
     fontSize: 18,
   },
   option: {
