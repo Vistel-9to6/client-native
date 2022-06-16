@@ -264,7 +264,7 @@ function EditGifScreen({ navigation, route }) {
               />
             </View>
             <View style={styles.normalText}>
-              <Text style={{ color: "blue", fontSize: 11 }}>
+              <Text style={{ color: "blue", fontSize: 13 }}>
                 옵션을 선택하지 않으면 기본모드로 설정 됩니다
               </Text>
             </View>
