@@ -1,20 +1,30 @@
 import { useEffect, useState } from "react";
 import { View, Image, FlatList, StyleSheet, Text } from "react-native";
 import { UserAuth } from "../context/AuthContext";
+import { useIsFocused } from "@react-navigation/native";
 
 import FeedItem from "./FeedItem";
 
 function Profile({ navigation }) {
-  const { user } = UserAuth();
+  const { user, idToken } = UserAuth();
   const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const isFocused = useIsFocused();
 
   const getData = async () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`);
+      const response = await fetch(
+        `${process.env.API_SERVER_URL}/api/videos/${user.userId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+        },
+      );
       const data = await response.json();
 
       if (data?.result === "ok") {
@@ -29,7 +39,7 @@ function Profile({ navigation }) {
 
   useEffect(() => {
     getData();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
