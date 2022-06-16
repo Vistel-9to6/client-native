@@ -97,6 +97,8 @@ function EditGifScreen({ navigation, route }) {
       }
 
       showToastMessage();
+
+      navigation.goBack();
     } catch (error) {
       console.log(error);
     }
