@@ -158,7 +158,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
         </View>
         <View style={styles.buttonBox}>
           <TouchableOpacity onPress={participateVideo} style={styles.button}>
-            <Text style={styles.next}>{"스토리 더하기"}</Text>
+            <Text style={styles.next}>스토리 더하기</Text>
           </TouchableOpacity>
         </View>
       </View>
