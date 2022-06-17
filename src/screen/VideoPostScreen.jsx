@@ -7,12 +7,13 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import ModalError from "../components/ModalError";
-import ModalSuccess from "../components/ModalSuccess";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
 import { UserAuth } from "../context/AuthContext";
+import { ModalHandler } from "../context/modalContext";
 import { StatusBar } from "expo-status-bar";
+
+import ModalContainer from "../components/shared/modal";
 
 function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
@@ -20,12 +21,7 @@ function VideoPostScreen({ route, navigation }) {
   const [success, setSuccess] = useState(false);
   const { uri, thumbnail } = route.params;
   const { idToken } = UserAuth();
-
-  useEffect(() => {
-    if (success) {
-      navigation.navigate("Home");
-    }
-  }, [success]);
+  const { openModal, setOpenModal } = ModalHandler();
 
   const uploadVideo = async () => {
     const formdata = new FormData();
@@ -56,21 +52,25 @@ function VideoPostScreen({ route, navigation }) {
         },
         body: formdata,
       });
-      const data = await response.json();
+      const data = await response.jso();
 
       if (data.result === "ok") {
         setSuccess(true);
-        return <ModalSuccess />;
       }
-    } catch (err) {
-      return <ModalError />;
+    } catch {
+      setOpenModal(true);
     }
   };
+
+  useEffect(() => {
+    if (success) {
+      navigation.navigate("Home");
+    }
+  }, [success]);
 
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
-
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -112,6 +112,14 @@ function VideoPostScreen({ route, navigation }) {
           <AntDesign name="check" style={styles.uploadIcon} />
         </TouchableOpacity>
       </View>
+      {openModal && (
+        <ModalContainer
+          needToGoBack={true}
+          navigation={navigation}
+          modalHeader="Error"
+          modalBody="동영상 생성 실패! 다시 시도해 주세요."
+        />
+      )}
     </View>
   );
 }
