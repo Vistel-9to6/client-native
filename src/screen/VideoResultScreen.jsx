@@ -115,16 +115,12 @@ function VideoResultScreen({ route, navigation }) {
           <Text style={{ color: "white", fontSize: 25 }}>
             {originVideo.title}
           </Text>
-          {user ? (
-            <Image
-              style={styles.profile}
-              source={{
-                uri: user?.profilePhoto,
-              }}
-            />
-          ) : (
-            <></>
-          )}
+          <Image
+            style={styles.profile}
+            source={{
+              uri: originVideo?.creators[0].profilePhoto,
+            }}
+          />
         </View>
       )}
     </View>
