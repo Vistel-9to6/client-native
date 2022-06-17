@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
@@ -19,6 +20,7 @@ function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
   const [maxCreators, setMaxCreators] = useState(2);
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { uri, thumbnail } = route.params;
   const { idToken } = UserAuth();
   const { openModal, setOpenModal } = ModalHandler();
@@ -44,6 +46,7 @@ function VideoPostScreen({ route, navigation }) {
     formdata.append("maxCreators", maxCreators);
 
     try {
+      setIsLoading(true);
       const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`, {
         method: "POST",
         headers: {
@@ -53,6 +56,7 @@ function VideoPostScreen({ route, navigation }) {
         body: formdata,
       });
       const data = await response.json();
+      setIsLoading(false);
 
       if (data.result === "ok") {
         setSuccess(true);
@@ -109,7 +113,11 @@ function VideoPostScreen({ route, navigation }) {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={uploadVideo}>
-          <AntDesign name="check" style={styles.uploadIcon} />
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#2196F3" />
+          ) : (
+            <AntDesign name="check" style={styles.uploadIcon} />
+          )}
         </TouchableOpacity>
       </View>
       {openModal && (

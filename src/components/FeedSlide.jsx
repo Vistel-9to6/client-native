@@ -55,7 +55,7 @@ function FeedSlide({ navigation }) {
     return (
       <View
         style={[
-          { flex: 1, height: Dimensions.get("window").height - 65.3 },
+          { flex: 1, height: Dimensions.get("window").height - 55.3 },
           index % 2 === 0
             ? { backgroundColor: "gray" }
             : { backgroundColor: "darkgray" },
