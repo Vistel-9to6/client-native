@@ -11,7 +11,7 @@ import VideoResultScreen from "./src/screen/VideoResultScreen";
 import VideoPostScreen from "./src/screen/VideoPostScreen";
 import VideoConcatScreen from "./src/screen/VideoConcatScreen";
 import LoginScreen from "./src/screen/LoginScreen";
-import ProfileScreen from "./src/components/Profile";
+import ProfileScreen from "./src/screen/ProfileScreen";
 import EditGifScreen from "./src/screen/EditGifScreen";
 
 const Stack = createNativeStackNavigator();

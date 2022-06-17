@@ -3,7 +3,7 @@ import { View, Image, FlatList, StyleSheet, Text } from "react-native";
 import { UserAuth } from "../context/AuthContext";
 import { useIsFocused } from "@react-navigation/native";
 
-import FeedItem from "./FeedItem";
+import FeedItem from "../components/FeedItem";
 
 function ProfileScreen({ navigation }) {
   const { user, idToken } = UserAuth();

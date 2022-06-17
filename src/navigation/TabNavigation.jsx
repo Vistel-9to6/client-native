@@ -5,7 +5,7 @@ import { UserAuth } from "../context/AuthContext";
 import Feed from "../components/Feed";
 import SearchScreen from "../screen/SearchScreen";
 import AppHeader from "../components/shared/header";
-import Profile from "../components/Profile";
+import Profile from "../screen/ProfileScreen";
 import FeedSlide from "../components/FeedSlide";
 
 import { AntDesign } from "@expo/vector-icons";
