@@ -17,7 +17,6 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
   const videoRef = useRef(null);
   const [like, setLike] = useState(false);
   const { idToken, user } = UserAuth();
-  const originVideo = item?.videoUrl;
 
   useImperativeHandle(parentRef, () => ({
     play,
@@ -27,7 +26,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
 
   useEffect(() => {
     return () => unload();
-  }, []);
+  }, [item]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -101,8 +100,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
     videoRef.current.pauseAsync();
 
     if (idToken) {
-      console.log(originVideo);
-      navigation.navigate("Gif", { uri: originVideo });
+      navigation.navigate("Gif", { uri: item.videoUrl });
     } else {
       navigation.navigate("Login");
     }
@@ -113,7 +111,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
 
     if (idToken) {
       try {
-        navigation.navigate("Camera", { originVideo });
+        navigation.navigate("Camera", { originVideo: item });
       } catch (error) {
         console.log(error);
       }
@@ -160,9 +158,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
         </View>
         <View style={styles.buttonBox}>
           <TouchableOpacity onPress={participateVideo} style={styles.button}>
-            <Text style={styles.next}>
-              {originVideo ? "스토리 더하기" : "다음"}
-            </Text>
+            <Text style={styles.next}>{"스토리 더하기"}</Text>
           </TouchableOpacity>
         </View>
       </View>
