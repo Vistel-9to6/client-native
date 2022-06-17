@@ -3,10 +3,14 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
+import { ModalHandler } from "../context/modalContext";
 import { useIsFocused } from "@react-navigation/core";
 import { Feather } from "@expo/vector-icons";
 
+import ModalContainer from "../components/shared/modal";
+
 function CameraScreen({ navigation, route }) {
+  const cameraRef = useRef(null);
   const [hasAudioPermission, setHasAudioPermission] = useState(null);
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasGalleryPermissions, setHasGalleryPermissions] = useState(null);
@@ -14,8 +18,8 @@ function CameraScreen({ navigation, route }) {
   const [cameraFlash, setCameraFlash] = useState(
     Camera.Constants.FlashMode.off,
   );
-  const cameraRef = useRef(null);
   const originVideo = route?.params?.originVideo;
+  const { openModal, setOpenModal } = ModalHandler();
 
   const [galleryItems, setGalleryItems] = useState([]);
   const [isCameraReady, setIsCameraReady] = useState(false);
@@ -75,7 +79,7 @@ function CameraScreen({ navigation, route }) {
             : navigation.navigate("VideoResult", { liveVideo });
         }
       } catch (error) {
-        console.warn(error);
+        setOpenModal(true);
       }
     }
   };
@@ -175,6 +179,12 @@ function CameraScreen({ navigation, route }) {
           </View>
         )}
       </View>
+      {openModal && (
+        <ModalContainer
+          modalHeader="Error"
+          modalBody="동영상 촬영 실패! 다시 시도해주세요."
+        />
+      )}
     </View>
   );
 }

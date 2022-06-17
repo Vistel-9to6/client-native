@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import {
   StyleSheet,
   View,
-  Text,
   LogBox,
   Image,
   TouchableOpacity,
@@ -11,16 +10,19 @@ import { StatusBar } from "expo-status-bar";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import { UserAuth } from "../context/AuthContext";
-import googleLoginButtonImage from "../../assets/google-login-button.png";
-import vistelLogo from "../../assets/vistel-logo.png";
+import { ModalHandler } from "../context/modalContext";
 
-import ModalError from "../components/ModalError";
+import ModalContainer from "../components/shared/modal";
+
+import googleLoginButtonImage from "../../assets/google-login-button.png";
+import vistelLogoSmall from "../../assets/vistel-logo-small.png";
 
 WebBrowser.maybeCompleteAuthSession();
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
 function LoginScreen({ navigation }) {
   const { setUser, setIdToken } = UserAuth();
+  const { openModal, setOpenModal } = ModalHandler();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: process.env.EXPO_CLIENT_ID,
@@ -54,7 +56,7 @@ function LoginScreen({ navigation }) {
 
       navigation.goBack();
     } catch {
-      return <ModalError />;
+      setOpenModal(true);
     }
   };
 
@@ -68,9 +70,7 @@ function LoginScreen({ navigation }) {
     <>
       <StatusBar style="auto" />
       <View style={styles.container}>
-        <View style={styles.logoBox}>
-          <Image source={vistelLogo} style={styles.logo} />
-        </View>
+        <Image source={vistelLogoSmall} style={styles.logo} />
         <View style={styles.loginBox}>
           <TouchableOpacity onPress={handleGoogleLoginButtonClick}>
             <Image
@@ -79,6 +79,14 @@ function LoginScreen({ navigation }) {
             />
           </TouchableOpacity>
         </View>
+        {openModal && (
+          <ModalContainer
+            isRequiredToGoBack={true}
+            navigation={navigation}
+            modalHeader="Error"
+            modalBody="로그인 실패! 다시 시도해 주세요."
+          />
+        )}
       </View>
     </>
   );
@@ -98,13 +106,12 @@ const styles = StyleSheet.create({
   },
   logo: {
     top: 70,
-    width: 400,
-    height: 600,
+    marginTop: 100,
     resizeMode: "center",
   },
   loginBox: {
     flex: 1,
-    marginTop: 50,
+    marginTop: 180,
     alignItems: "center",
   },
   googleLoginButton: {

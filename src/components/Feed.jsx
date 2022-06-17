@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
+import { ModalHandler } from "../context/modalContext";
 import { useIsFocused } from "@react-navigation/native";
 
 import FeedItem from "./FeedItem";
+import ModalContainer from "../components/shared/modal";
 
 function Feed({ navigation }) {
   const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const { openModal, setOpenModal } = ModalHandler();
   const isFocused = useIsFocused();
 
   const getData = async () => {
@@ -20,8 +22,8 @@ function Feed({ navigation }) {
       if (data?.result === "ok") {
         setFeeds([...data?.videoList]);
       }
-    } catch (err) {
-      setError(err);
+    } catch (error) {
+      setOpenModal(true);
     }
 
     setLoading(false);
@@ -44,6 +46,12 @@ function Feed({ navigation }) {
           <FeedItem item={item} navigation={navigation} />
         )}
       />
+      {openModal && (
+        <ModalContainer
+          modalHeader="Error"
+          modalBody="동영상 목록을 가져오는 데 실패했습니다."
+        />
+      )}
     </View>
   );
 }

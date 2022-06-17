@@ -11,10 +11,12 @@ import {
 } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
-import { UserAuth } from "../context/AuthContext";
-
-import { AntDesign } from "@expo/vector-icons";
 import { Button } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { UserAuth } from "../context/AuthContext";
+import { ModalHandler } from "../context/modalContext";
+
+import ModalContainer from "../components/shared/modal";
 
 function EditGifScreen({ navigation, route }) {
   const { uri } = route.params;
@@ -30,6 +32,8 @@ function EditGifScreen({ navigation, route }) {
     grid: "1x1",
     fps: 15,
   });
+  const [downloading, setDownloading] = useState(false);
+  const { openModal, setOpenModal } = ModalHandler();
 
   const showToastMessage = () => {
     ToastAndroid.showWithGravity(
@@ -61,14 +65,14 @@ function EditGifScreen({ navigation, route }) {
       const data = await response.json();
 
       if (data.result === "ng") {
-        console.log("실패");
+        setOpenModal(true);
         return;
       }
 
       setGifUrl(data.file);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      setOpenModal(true);
     }
   };
 
@@ -98,11 +102,12 @@ function EditGifScreen({ navigation, route }) {
 
       showToastMessage();
     } catch (error) {
-      console.log(error);
+      setOpenModal(true);
+      setDownloading(true);
     }
   };
 
-  const colors = ["sepia", "grayscale", "reversal"];
+  const colors = ["SEPIA", "GRAYSCALE", "REVERSAL"];
 
   const colorButtonPress = (title) => {
     if (title === filter.color) {
@@ -292,6 +297,18 @@ function EditGifScreen({ navigation, route }) {
           )}
         </View>
       </View>
+      {openModal && (
+        <ModalContainer
+          isRequiredToGoBack={true}
+          navigation={navigation}
+          modalHeader="Error"
+          modalBody={
+            downloading
+              ? "GIF 다운로드 실패! 다시 시도해주세요."
+              : "GIF 만들기 실패! 다시 시도해 주세요."
+          }
+        />
+      )}
     </View>
   );
 }

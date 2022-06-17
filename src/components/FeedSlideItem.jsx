@@ -59,11 +59,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
       return;
     }
 
-    try {
-      await videoRef.current.playAsync();
-    } catch (err) {
-      console.log(err);
-    }
+    await videoRef.current.playAsync();
   };
 
   const stop = async () => {
@@ -77,11 +73,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
       return;
     }
 
-    try {
-      await videoRef.current.stopAsync();
-    } catch (err) {
-      console.log(err);
-    }
+    await videoRef.current.stopAsync();
   };
 
   const unload = async () => {
@@ -89,11 +81,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
       return;
     }
 
-    try {
-      await videoRef.current.unloadAsync();
-    } catch (err) {
-      console.log(err);
-    }
+    await videoRef.current.unloadAsync();
   };
 
   const createGif = () => {
@@ -110,11 +98,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
     videoRef.current.pauseAsync();
 
     if (idToken) {
-      try {
-        navigation.navigate("Camera", { originVideo: item });
-      } catch (error) {
-        console.log(error);
-      }
+      navigation.navigate("Camera", { originVideo: item });
     } else {
       navigation.navigate("Login");
     }
