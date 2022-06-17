@@ -52,7 +52,7 @@ function VideoPostScreen({ route, navigation }) {
         },
         body: formdata,
       });
-      const data = await response.jso();
+      const data = await response.json();
 
       if (data.result === "ok") {
         setSuccess(true);
