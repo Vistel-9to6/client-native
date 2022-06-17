@@ -89,7 +89,7 @@ function VideoConcatScreen({ route, navigation }) {
           }}
         >
           {isLoading ? (
-            <ActivityIndicator size="large" color="black" />
+            <ActivityIndicator size="large" color="#2196F3" />
           ) : (
             <TouchableOpacity onPress={concatVideo} style={styles.concatButton}>
               <Text style={styles.concatText}>합치기</Text>

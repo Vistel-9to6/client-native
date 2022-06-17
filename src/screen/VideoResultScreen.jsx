@@ -96,9 +96,7 @@ function VideoResultScreen({ route, navigation }) {
               <Text style={styles.gifText}>GIF</Text>
             </>
           ) : (
-            <View style={styles.buttonBox}>
-              <Text style={styles.start}>Vistel 시작하기</Text>
-            </View>
+            <></>
           )}
         </View>
         <View style={styles.buttonBox}>
