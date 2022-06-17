@@ -1,11 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { View, FlatList, StyleSheet, Dimensions } from "react-native";
+import { ModalHandler } from "../context/modalContext";
 
 import FeedSlideItem from "./FeedSlideItem";
+import ModalContainer from "../components/shared/modal";
 
 function FeedSlide() {
   const mediaRefs = useRef([]);
   const [feed, setFeed] = useState([]);
+  const { openModal, setOpenModal } = ModalHandler();
 
   const getFeed = async () => {
     try {
@@ -16,7 +19,7 @@ function FeedSlide() {
         setFeed([...data?.videoList]);
       }
     } catch (err) {
-      console.log(err);
+      setOpenModal(true);
     }
   };
 
@@ -74,6 +77,12 @@ function FeedSlide() {
         decelerationRate={"normal"}
         onViewableItemsChanged={onViewableItemsChanged.current}
       />
+      {openModal && (
+        <ModalContainer
+          modalHeader="Error"
+          modalBody="동영상 목록을 가져오는 데 실패했습니다."
+        />
+      )}
     </View>
   );
 }
