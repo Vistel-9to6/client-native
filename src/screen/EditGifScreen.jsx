@@ -279,7 +279,7 @@ function EditGifScreen({ navigation, route }) {
           }}
         >
           {isLoading ? (
-            <ActivityIndicator size="large" color="black" />
+            <ActivityIndicator size="large" color="#2196F3" />
           ) : (
             <TouchableOpacity
               onPress={gifUrl ? saveGif : convertVideoToGif}

@@ -97,7 +97,12 @@ function CameraScreen({ navigation, route }) {
 
     if (!galleryVideo.cancelled) {
       originVideo
-        ? navigation.navigate("VideoConcat", { originVideo, galleryVideo })
+        ? navigation.navigate("VideoConcat", {
+            data: {
+              originVideo,
+              galleryVideo,
+            },
+          })
         : navigation.navigate("VideoResult", { galleryVideo });
     }
   };
