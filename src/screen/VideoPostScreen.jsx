@@ -20,10 +20,10 @@ function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
   const [maxCreators, setMaxCreators] = useState(2);
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { uri, thumbnail } = route.params;
   const { idToken } = UserAuth();
   const { openModal, setOpenModal } = ModalHandler();
-  const [isLoading, setIsLoading] = useState(false);
 
   const uploadVideo = async () => {
     const formdata = new FormData();
