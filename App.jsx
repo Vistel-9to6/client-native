@@ -13,6 +13,7 @@ import VideoConcatScreen from "./src/screen/VideoConcatScreen";
 import LoginScreen from "./src/screen/LoginScreen";
 import Profile from "./src/components/Profile";
 import EditGifScreen from "./src/screen/EditGifScreen";
+import FeedSlide from "./src/components/FeedSlide";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,11 @@ function App() {
             <Stack.Screen
               name="Home"
               component={TabNavigation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Slide"
+              component={FeedSlide}
               options={{ headerShown: false }}
             />
             <Stack.Screen
