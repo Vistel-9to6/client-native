@@ -343,6 +343,7 @@ const styles = StyleSheet.create({
     aspectRatio: 9 / 16,
     marginBottom: 20,
     height: "50%",
+    backgroundColor: "black",
   },
   filterContainer: {
     flex: 1,
