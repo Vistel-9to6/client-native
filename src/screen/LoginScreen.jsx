@@ -50,7 +50,7 @@ function LoginScreen({ navigation }) {
         },
       );
 
-      const user = await response.jso();
+      const user = await response.json();
       setUser(user);
       setIdToken(user.token);
 
