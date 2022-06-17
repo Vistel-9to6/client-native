@@ -101,6 +101,8 @@ function EditGifScreen({ navigation, route }) {
       }
 
       showToastMessage();
+
+      navigation.goBack();
     } catch (error) {
       setOpenModal(true);
       setDownloading(true);
