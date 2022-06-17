@@ -81,7 +81,7 @@ function LoginScreen({ navigation }) {
         </View>
         {openModal && (
           <ModalContainer
-            needToGoBack={true}
+            isRequiredToGoBack={true}
             navigation={navigation}
             modalHeader="Error"
             modalBody="로그인 실패! 다시 시도해 주세요."

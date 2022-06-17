@@ -299,7 +299,7 @@ function EditGifScreen({ navigation, route }) {
       </View>
       {openModal && (
         <ModalContainer
-          needToGoBack={true}
+          isRequiredToGoBack={true}
           navigation={navigation}
           modalHeader="Error"
           modalBody={

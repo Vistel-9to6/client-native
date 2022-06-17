@@ -2,7 +2,12 @@ import React from "react";
 import { Center, Modal, Button } from "native-base";
 import { ModalHandler } from "../../context/modalContext";
 
-function ModalContainer({ navigation, needToGoBack, modalHeader, modalBody }) {
+function ModalContainer({
+  navigation,
+  isRequiredToGoBack,
+  modalHeader,
+  modalBody,
+}) {
   const { openModal, setOpenModal } = ModalHandler();
 
   return (
@@ -25,7 +30,7 @@ function ModalContainer({ navigation, needToGoBack, modalHeader, modalBody }) {
               onPress={() => {
                 setOpenModal(false);
 
-                if (needToGoBack) {
+                if (isRequiredToGoBack) {
                   navigation.goBack();
                 }
               }}

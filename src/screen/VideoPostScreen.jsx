@@ -114,7 +114,7 @@ function VideoPostScreen({ route, navigation }) {
       </View>
       {openModal && (
         <ModalContainer
-          needToGoBack={true}
+          isRequiredToGoBack={true}
           navigation={navigation}
           modalHeader="Error"
           modalBody="동영상 생성 실패! 다시 시도해 주세요."
