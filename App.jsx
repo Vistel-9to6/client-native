@@ -66,11 +66,6 @@ function App() {
                 component={Profile}
                 options={{ headerShown: false }}
               />
-              <Stack.Screen
-                name="Modal"
-                component={ModalContainer}
-                options={{ headerShown: false }}
-              />
             </Stack.Navigator>
           </NavigationContainer>
         </NativeBaseProvider>
