@@ -4,10 +4,10 @@ import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
 import { useIsFocused } from "@react-navigation/native";
 
-import FeedItem from "./FeedItem";
+import FeedItem from "../components/FeedItem";
 import ModalContainer from "../components/shared/modal";
 
-function Profile({ navigation }) {
+function ProfileScreen({ navigation }) {
   const { user, idToken } = UserAuth();
   const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -86,8 +86,10 @@ const styles = StyleSheet.create({
   profileBox: {
     flex: 1,
     flexDirection: "column",
-    marginBottom: 150,
     alignItems: "center",
+  },
+  videoListBox: {
+    marginTop: 150,
   },
   profile: {
     width: 100,
@@ -96,4 +98,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default ProfileScreen;
