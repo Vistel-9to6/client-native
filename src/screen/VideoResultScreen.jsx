@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Video } from "expo-av";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 import { UserAuth } from "../context/AuthContext";
 import { generateThumbnail } from "../api/thumbnail";
 import { AntDesign } from "@expo/vector-icons";
@@ -13,6 +14,7 @@ function VideoResultScreen({ route, navigation }) {
   const { idToken, user } = UserAuth();
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
+  const isFocused = useIsFocused();
 
   const postVideo = async () => {
     videoRef.current.pauseAsync();
@@ -49,6 +51,12 @@ function VideoResultScreen({ route, navigation }) {
       navigation.navigate("Login");
     }
   };
+
+  useEffect(() => {
+    if (isFocused) {
+      videoRef.current.playAsync();
+    }
+  }, [isFocused]);
 
   return (
     <View style={styles.container}>
