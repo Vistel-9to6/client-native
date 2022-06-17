@@ -32,7 +32,7 @@ function Profile({ navigation }) {
       if (data?.result === "ok") {
         setFeeds([...data?.videoList]);
       }
-    } catch (err) {
+    } catch (error) {
       setOpenModal(true);
     }
 

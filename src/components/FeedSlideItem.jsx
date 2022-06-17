@@ -29,8 +29,8 @@ const PostSingle = forwardRef(({ item }, parentRef) => {
 
     try {
       await ref.current.playAsync();
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -47,8 +47,8 @@ const PostSingle = forwardRef(({ item }, parentRef) => {
 
     try {
       await ref.current.stopAsync();
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -59,8 +59,8 @@ const PostSingle = forwardRef(({ item }, parentRef) => {
 
     try {
       await ref.current.unloadAsync();
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   };
 

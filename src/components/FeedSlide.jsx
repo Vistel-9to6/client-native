@@ -18,7 +18,7 @@ function FeedSlide() {
       if (data?.result === "ok") {
         setFeed([...data?.videoList]);
       }
-    } catch (err) {
+    } catch (error) {
       setOpenModal(true);
     }
   };

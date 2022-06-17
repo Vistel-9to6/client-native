@@ -53,7 +53,7 @@ function VideoConcatScreen({ route, navigation }) {
       if (data.result === "ok") {
         setSuccess(true);
       }
-    } catch (err) {
+    } catch (error) {
       setOpenModal(true);
     }
   };
