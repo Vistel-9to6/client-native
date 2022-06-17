@@ -29,13 +29,13 @@ function TabNavigation({ navigation }) {
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
-            <Entypo name="home" size={30} color={color} />
+            <Entypo name="home" size={25} color={color} />
           ),
           header: () => <AppHeader navigation={navigation} />,
           headerStyle: {
             backgroundColor: "black",
           },
-          tabBarStyle: { height: 60 },
+          tabBarStyle: { height: 50 },
         }}
       />
       <Tab.Screen
@@ -44,10 +44,10 @@ function TabNavigation({ navigation }) {
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
-            <FontAwesome name="list" size={30} color={color} />
+            <FontAwesome name="list" size={25} color={color} />
           ),
           header: () => null,
-          tabBarStyle: { height: 60 },
+          tabBarStyle: { height: 50 },
         }}
       />
       <Tab.Screen
@@ -65,9 +65,9 @@ function TabNavigation({ navigation }) {
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
-            <AntDesign name="pluscircleo" size={40} color={color} />
+            <AntDesign name="pluscircleo" size={35} color={color} />
           ),
-          tabBarStyle: { height: 60 },
+          tabBarStyle: { height: 50 },
         }}
       />
       <Tab.Screen
@@ -76,10 +76,10 @@ function TabNavigation({ navigation }) {
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
-            <AntDesign name="search1" size={30} color={color} />
+            <AntDesign name="search1" size={25} color={color} />
           ),
           header: () => <AppHeader navigation={navigation} />,
-          tabBarStyle: { height: 60 },
+          tabBarStyle: { height: 50 },
         }}
       />
       <Tab.Screen
@@ -105,11 +105,11 @@ function TabNavigation({ navigation }) {
                 }}
               />
             ) : (
-              <Feather name="user" size={30} color={color} />
+              <Feather name="user" size={25} color={color} />
             );
           },
           header: () => <AppHeader navigation={navigation} />,
-          tabBarStyle: { height: 60 },
+          tabBarStyle: { height: 50 },
         }}
       />
     </Tab.Navigator>
