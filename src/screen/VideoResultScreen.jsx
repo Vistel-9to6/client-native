@@ -23,7 +23,7 @@ function VideoResultScreen({ route, navigation }) {
 
         navigation.navigate("VideoPost", { uri, thumbnail });
       } catch (error) {
-        console.log(error);
+        navigation.goBack();
       }
     } else {
       navigation.navigate("Login");
@@ -34,11 +34,7 @@ function VideoResultScreen({ route, navigation }) {
     videoRef.current.pauseAsync();
 
     if (idToken) {
-      try {
-        navigation.navigate("Gif", { uri });
-      } catch (error) {
-        console.log(error);
-      }
+      navigation.navigate("Gif", { uri });
     } else {
       navigation.navigate("Login");
     }
@@ -48,11 +44,7 @@ function VideoResultScreen({ route, navigation }) {
     videoRef.current.pauseAsync();
 
     if (idToken) {
-      try {
-        navigation.navigate("Camera", { originVideo });
-      } catch (error) {
-        console.log(error);
-      }
+      navigation.navigate("Camera", { originVideo });
     } else {
       navigation.navigate("Login");
     }
