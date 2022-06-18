@@ -60,7 +60,7 @@ function CameraScreen({ navigation, route }) {
     if (cameraRef) {
       try {
         const options = {
-          maxDuration: 3,
+          maxDuration: 10,
           quality: Camera.Constants.VideoQuality["480p"],
         };
 
