@@ -11,6 +11,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { Fontisto } from "@expo/vector-icons";
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
+import { concatVideos } from "../api/index ";
 
 import ModalContainer from "../components/shared/modal";
 
@@ -38,17 +39,7 @@ function VideoConcatScreen({ route, navigation }) {
     formdata.append("video", videoFile);
 
     try {
-      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: formdata,
-      });
-
-      const data = await response.json();
-      setIsLoading(false);
+      const data = await concatVideos(formdata, idToken);
 
       if (data.result === "ok") {
         setSuccess(true);
@@ -56,6 +47,8 @@ function VideoConcatScreen({ route, navigation }) {
     } catch (error) {
       setOpenModal(true);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {

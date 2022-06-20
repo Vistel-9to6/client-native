@@ -3,6 +3,7 @@ import { View, Image, FlatList, StyleSheet, Text } from "react-native";
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
 import { useIsFocused } from "@react-navigation/native";
+import { getUserInfo } from "../api/index";
 
 import FeedItem from "../components/FeedItem";
 import ModalContainer from "../components/shared/modal";
@@ -18,16 +19,7 @@ function ProfileScreen({ navigation }) {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${process.env.API_SERVER_URL}/api/videos/${user.userId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
-        },
-      );
-      const data = await response.json();
+      const data = await getUserInfo(user.userId, idToken);
 
       if (data?.result === "ok") {
         setFeeds([...data?.videoList]);

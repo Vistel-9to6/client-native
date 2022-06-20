@@ -70,7 +70,7 @@ function TabNavigation({ navigation }) {
           tabBarStyle: { height: 50 },
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={{
@@ -81,7 +81,7 @@ function TabNavigation({ navigation }) {
           header: () => <AppHeader navigation={navigation} />,
           tabBarStyle: { height: 50 },
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Profile"
         component={Profile}

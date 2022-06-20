@@ -11,6 +11,7 @@ import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
+import { loginGoogle } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
 
@@ -36,21 +37,8 @@ function LoginScreen({ navigation }) {
 
   const handleLogin = async (id) => {
     try {
-      const response = await fetch(
-        `${process.env.API_SERVER_URL}/api/auth/google`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: id,
-          }),
-        },
-      );
+      const user = await loginGoogle(id);
 
-      const user = await response.json();
       setUser(user);
       setIdToken(user.token);
 

@@ -13,27 +13,33 @@ import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
 import { Button } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { UserAuth } from "../context/AuthContext";
-import { ModalHandler } from "../context/modalContext";
 
 import ModalContainer from "../components/shared/modal";
+import OptionList from "../components/OptionList";
+
+import { ModalHandler } from "../context/modalContext";
+import { UserAuth } from "../context/AuthContext";
+import { convertGif } from "../api/index";
+
+const defaultFilterValue = {
+  color: "original",
+  grid: "1x1",
+  fps: 15,
+};
+
+const defaultImageValue = `${process.env.AWS_BUCKET_URL}/assets/1x1_original_15.gif`;
 
 function EditGifScreen({ navigation, route }) {
   const { uri } = route.params;
-  const { idToken } = UserAuth();
   const [gifUrl, setGifUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasLibraryPermissions, setHasLibraryPermissions] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(
-    `${process.env.AWS_BUCKET_URL}/assets/1x1_original_15.gif`,
-  );
-  const [filter, setFilter] = useState({
-    color: "original",
-    grid: "1x1",
-    fps: 15,
-  });
+  const [previewUrl, setPreviewUrl] = useState(defaultImageValue);
+  const [filter, setFilter] = useState(defaultFilterValue);
   const [downloading, setDownloading] = useState(false);
+
   const { openModal, setOpenModal } = ModalHandler();
+  const { idToken } = UserAuth();
 
   const showToastMessage = () => {
     ToastAndroid.showWithGravity(
@@ -47,22 +53,7 @@ function EditGifScreen({ navigation, route }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        `${process.env.API_SERVER_URL}/api/videos/gif`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${idToken}`,
-          },
-          body: JSON.stringify({
-            videoUrl: uri,
-            filter,
-          }),
-        },
-      );
-
-      const data = await response.json();
+      const data = await convertGif(idToken, uri, filter);
 
       if (data.result === "ng") {
         setOpenModal(true);
@@ -70,10 +61,11 @@ function EditGifScreen({ navigation, route }) {
       }
 
       setGifUrl(data.file);
-      setIsLoading(false);
     } catch (error) {
       setOpenModal(true);
     }
+
+    setIsLoading(false);
   };
 
   const saveGif = async () => {
@@ -109,43 +101,9 @@ function EditGifScreen({ navigation, route }) {
     }
   };
 
-  const colors = ["SEPIA", "GRAYSCALE", "REVERSAL"];
-
-  const colorButtonPress = (title) => {
-    if (title === filter.color) {
-      setFilter({ ...filter, color: "original" });
-    } else {
-      setFilter({ ...filter, color: title });
-    }
-  };
-
-  const grids = ["2", "3", "4"];
-
-  const gridButtonPress = (title) => {
-    if (title === filter.grid) {
-      setFilter({ ...filter, grid: "1x1" });
-    } else {
-      setFilter({ ...filter, grid: title });
-    }
-  };
-
-  const fps = ["1", "15"];
-
-  const fpsButtonPress = (title) => {
-    if (title === filter.fps) {
-      setFilter({ ...filter, fps: 15 });
-    } else {
-      setFilter({ ...filter, fps: title });
-    }
-  };
-
   const initializeOption = () => {
     setGifUrl("");
-    setFilter({
-      color: "original",
-      grid: "1x1",
-      fps: 15,
-    });
+    setFilter(defaultFilterValue);
   };
 
   useEffect(() => {
@@ -153,6 +111,35 @@ function EditGifScreen({ navigation, route }) {
       `${process.env.AWS_BUCKET_URL}/assets/${filter.grid}_${filter.color}_${filter.fps}.gif`,
     );
   }, [filter]);
+
+  const filters = [
+    {
+      id: 0,
+      filter: "color",
+      options: [
+        { id: 0, type: "SEPIA" },
+        { id: 1, type: "GRAYSCALE" },
+        { id: 2, type: "REVERSAL" },
+      ],
+    },
+    {
+      id: 1,
+      filter: "grid",
+      options: [
+        { id: 0, type: "2x2" },
+        { id: 1, type: "3x3" },
+        { id: 2, type: "4x4" },
+      ],
+    },
+    {
+      id: 2,
+      filter: "fps",
+      options: [
+        { id: 0, type: 1 },
+        { id: 1, type: "15" },
+      ],
+    },
+  ];
 
   return (
     <View style={styles.container}>
@@ -179,97 +166,13 @@ function EditGifScreen({ navigation, route }) {
           <Button onPress={initializeOption} title="다시 선택하기" />
         ) : (
           <View style={styles.filterContainer}>
-            <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>색상</Text>
-              <FlatList
-                contentContainerStyle={styles.itemList}
-                keyExtractor={(item) => item}
-                data={colors}
-                renderItem={({ item }) => (
-                  <View style={styles.item}>
-                    <TouchableOpacity
-                      num={item}
-                      style={{
-                        ...styles.optionButton,
-                        backgroundColor:
-                          filter.color === item ? "black" : "white",
-                      }}
-                      onPress={() => colorButtonPress(item)}
-                    >
-                      <Text
-                        style={{
-                          ...styles.option,
-                          color: filter.color === item ? "white" : "black",
-                        }}
-                      >
-                        {item}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-            </View>
-            <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>격자</Text>
-              <FlatList
-                contentContainerStyle={styles.itemList}
-                keyExtractor={(item) => item}
-                data={grids}
-                renderItem={({ item }) => (
-                  <View style={styles.item}>
-                    <TouchableOpacity
-                      num={item}
-                      style={{
-                        ...styles.optionButton,
-                        backgroundColor:
-                          filter.grid === `${item}x${item}` ? "black" : "white",
-                      }}
-                      onPress={() => gridButtonPress(`${item}x${item}`)}
-                    >
-                      <Text
-                        style={{
-                          ...styles.option,
-                          color:
-                            filter.grid === `${item}x${item}`
-                              ? "white"
-                              : "black",
-                        }}
-                      >{`${item}x${item}`}</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-            </View>
-            <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>FPS</Text>
-              <FlatList
-                contentContainerStyle={styles.itemList}
-                keyExtractor={(item) => item}
-                data={fps}
-                renderItem={({ item }) => (
-                  <View style={styles.item}>
-                    <TouchableOpacity
-                      num={item}
-                      style={{
-                        ...styles.optionButton,
-                        backgroundColor:
-                          filter.fps === item ? "black" : "white",
-                      }}
-                      onPress={() => fpsButtonPress(item)}
-                    >
-                      <Text
-                        style={{
-                          ...styles.option,
-                          color: filter.fps === item ? "white" : "black",
-                        }}
-                      >
-                        {item}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-            </View>
+            <FlatList
+              data={filters}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <OptionList item={item} filter={filter} onPress={setFilter} />
+              )}
+            />
             <View style={styles.normalText}>
               <Text style={{ color: "blue", fontSize: 11 }}>
                 옵션을 선택하지 않으면 기본모드로 설정 됩니다

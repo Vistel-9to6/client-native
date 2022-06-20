@@ -10,9 +10,10 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
-import { StatusBar } from "expo-status-bar";
+import { postVideo } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
 
@@ -26,6 +27,8 @@ function VideoPostScreen({ route, navigation }) {
   const { openModal, setOpenModal } = ModalHandler();
 
   const uploadVideo = async () => {
+    setIsLoading(true);
+
     const formdata = new FormData();
 
     const videoFile = {
@@ -46,17 +49,7 @@ function VideoPostScreen({ route, navigation }) {
     formdata.append("maxCreators", maxCreators);
 
     try {
-      setIsLoading(true);
-      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: formdata,
-      });
-      const data = await response.json();
-      setIsLoading(false);
+      const data = await postVideo(formdata, idToken);
 
       if (data.result === "ok") {
         setSuccess(true);
@@ -64,6 +57,8 @@ function VideoPostScreen({ route, navigation }) {
     } catch {
       setOpenModal(true);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 import FeedItem from "./FeedItem";
 import ModalContainer from "../components/shared/modal";
+import { getVideoList } from "../api/index";
 
 function Feed({ navigation }) {
   const [feeds, setFeeds] = useState([]);
@@ -16,9 +17,7 @@ function Feed({ navigation }) {
     setLoading(true);
 
     try {
-      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`);
-      const data = await response.json();
-
+      const data = await getVideoList();
       if (data?.result === "ok") {
         setFeeds([...data?.videoList]);
       }

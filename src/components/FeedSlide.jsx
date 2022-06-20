@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { ModalHandler } from "../context/modalContext";
+import { getVideoList } from "../api";
 
 import FeedSlideItem from "./FeedSlideItem";
 import ModalContainer from "../components/shared/modal";
@@ -18,13 +19,10 @@ function FeedSlide({ navigation }) {
   const { openModal, setOpenModal } = ModalHandler();
 
   const getFeed = async () => {
+    setIsLoading(true);
+
     try {
-      setIsLoading(true);
-
-      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`);
-      const data = await response.json();
-
-      setIsLoading(false);
+      const data = await getVideoList();
 
       if (data?.result === "ok") {
         setFeed([...data?.videoList]);
@@ -32,6 +30,8 @@ function FeedSlide({ navigation }) {
     } catch (error) {
       setOpenModal(true);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
