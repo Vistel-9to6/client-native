@@ -7,6 +7,7 @@ import { getUserInfo } from "../api/index";
 
 import FeedItem from "../components/FeedItem";
 import ModalContainer from "../components/shared/modal";
+import { errorMessage, fetchResult } from "../../constants";
 
 function ProfileScreen({ navigation }) {
   const { user, idToken } = UserAuth();
@@ -21,7 +22,7 @@ function ProfileScreen({ navigation }) {
     try {
       const data = await getUserInfo(user.userId, idToken);
 
-      if (data?.result === "ok") {
+      if (data?.result === fetchResult.SUCCESS) {
         setFeeds([...data?.videoList]);
       }
     } catch (error) {
@@ -60,8 +61,8 @@ function ProfileScreen({ navigation }) {
       </View>
       {openModal && (
         <ModalContainer
-          modalHeader="Error"
-          modalBody="동영상 목록을 가져오는 데 실패했습니다."
+          modalHeader={errorMessage.ERROR}
+          modalBody={errorMessage.ERROR_VIDEOLIST}
         />
       )}
     </View>

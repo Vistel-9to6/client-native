@@ -8,6 +8,8 @@ import { useIsFocused } from "@react-navigation/core";
 import { Feather } from "@expo/vector-icons";
 
 import ModalContainer from "../components/shared/modal";
+import { PERMISSION_GRANTED } from "../../constants/text";
+import { cameraStatus, errorMessage } from "../../constants/index";
 
 function CameraScreen({ navigation, route }) {
   const cameraRef = useRef(null);
@@ -29,17 +31,21 @@ function CameraScreen({ navigation, route }) {
     (async () => {
       const cameraPermissionStatus =
         await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraPermissionStatus.status === "granted");
+      setHasCameraPermission(
+        cameraPermissionStatus.status === PERMISSION_GRANTED,
+      );
 
       const audioPermissionStatus =
         await Camera.requestMicrophonePermissionsAsync();
-      setHasAudioPermission(audioPermissionStatus.status === "granted");
+      setHasAudioPermission(
+        audioPermissionStatus.status === PERMISSION_GRANTED,
+      );
 
       const galleryStatus =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
-      setHasGalleryPermissions(galleryStatus.status === "granted");
+      setHasGalleryPermissions(galleryStatus.status === PERMISSION_GRANTED);
 
-      if (galleryStatus.status === "granted") {
+      if (galleryStatus.status === PERMISSION_GRANTED) {
         const userGalleryMedia = await MediaLibrary.getAssetsAsync({
           sortBy: ["creationTime"],
           mediaType: ["video"],
@@ -48,8 +54,8 @@ function CameraScreen({ navigation, route }) {
       }
 
       if (
-        cameraPermissionStatus.status !== "granted" &&
-        audioPermissionStatus.status !== "granted"
+        cameraPermissionStatus.status !== PERMISSION_GRANTED &&
+        audioPermissionStatus.status !== PERMISSION_GRANTED
       ) {
         navigation.navigate("Home");
       }
@@ -61,7 +67,8 @@ function CameraScreen({ navigation, route }) {
       try {
         const options = {
           maxDuration: 10,
-          quality: Camera.Constants.VideoQuality["480p"],
+          quality:
+            Camera.Constants.VideoQuality[cameraStatus.RECORDING_QUALITY],
         };
 
         const videoRecordPromise = cameraRef.current.recordAsync(options);
@@ -117,7 +124,7 @@ function CameraScreen({ navigation, route }) {
         <Camera
           ref={cameraRef}
           style={styles.camera}
-          ratio={"16:9"}
+          ratio={cameraStatus.CAMERA_RATIO}
           type={cameraType}
           flashMode={cameraFlash}
           onCameraReady={() => setIsCameraReady(true)}
@@ -181,8 +188,8 @@ function CameraScreen({ navigation, route }) {
       </View>
       {openModal && (
         <ModalContainer
-          modalHeader="Error"
-          modalBody="동영상 촬영 실패! 다시 시도해주세요."
+          modalHeader={errorMessage.ERROR}
+          modalBody={errorMessage.ERROR_RECORD_VIDEO}
         />
       )}
     </View>

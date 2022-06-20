@@ -1,37 +1,7 @@
-import { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
-import { ModalHandler } from "../context/modalContext";
-import { useIsFocused } from "@react-navigation/native";
-
 import FeedItem from "./FeedItem";
-import ModalContainer from "../components/shared/modal";
-import { getVideoList } from "../api/index";
 
-function Feed({ navigation }) {
-  const [feeds, setFeeds] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const { openModal, setOpenModal } = ModalHandler();
-  const isFocused = useIsFocused();
-
-  const getData = async () => {
-    setLoading(true);
-
-    try {
-      const data = await getVideoList();
-      if (data?.result === "ok") {
-        setFeeds([...data?.videoList]);
-      }
-    } catch (error) {
-      setOpenModal(true);
-    }
-
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getData();
-  }, [isFocused]);
-
+function Feed({ navigation, videos }) {
   return (
     <View style={styles.container}>
       <FlatList
@@ -39,18 +9,12 @@ function Feed({ navigation }) {
         numColumns={3}
         removeClippedSubviews
         nestedScrollEnabled
-        data={feeds}
+        data={videos}
         keyExtractor={(item) => item?._id}
         renderItem={({ item }) => (
           <FeedItem item={item} navigation={navigation} />
         )}
       />
-      {openModal && (
-        <ModalContainer
-          modalHeader="Error"
-          modalBody="동영상 목록을 가져오는 데 실패했습니다."
-        />
-      )}
     </View>
   );
 }

@@ -14,6 +14,7 @@ import { ModalHandler } from "../context/modalContext";
 import { loginGoogle } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
+import { errorMessage } from "../../constants";
 
 import googleLoginButtonImage from "../../assets/google-login-button.png";
 import vistelLogoSmall from "../../assets/vistel-logo-small.png";
@@ -71,8 +72,8 @@ function LoginScreen({ navigation }) {
           <ModalContainer
             isRequiredToGoBack={true}
             navigation={navigation}
-            modalHeader="Error"
-            modalBody="로그인 실패! 다시 시도해 주세요."
+            modalHeader={errorMessage.ERROR}
+            modalBody={errorMessage.ERROR_LOGIN_FAILURE}
           />
         )}
       </View>

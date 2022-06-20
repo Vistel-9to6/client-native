@@ -1,16 +1,11 @@
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-
-const defaultFilterValue = {
-  color: "original",
-  grid: "1x1",
-  fps: 15,
-};
+import { defalutGifFilterValue } from "../../constants/index";
 
 function Option({ item, filterType, filter, onPress }) {
   const handleButtonPress = () => {
     console.log(item.type);
     if (item.type === filter[filterType]) {
-      onPress({ ...filter, [filterType]: defaultFilterValue[filterType] });
+      onPress({ ...filter, [filterType]: defalutGifFilterValue[filterType] });
     } else {
       onPress({ ...filter, [filterType]: item.type });
     }

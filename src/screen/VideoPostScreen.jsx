@@ -16,6 +16,8 @@ import { ModalHandler } from "../context/modalContext";
 import { postVideo } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
+import { INPUT_TITLE } from "../../constants/text";
+import { fetchResult, errorMessage } from "../../constants";
 
 function VideoPostScreen({ route, navigation }) {
   const [title, setTitle] = useState("");
@@ -51,7 +53,7 @@ function VideoPostScreen({ route, navigation }) {
     try {
       const data = await postVideo(formdata, idToken);
 
-      if (data.result === "ok") {
+      if (data.result === fetchResult.SUCCESS) {
         setSuccess(true);
       }
     } catch {
@@ -88,7 +90,7 @@ function VideoPostScreen({ route, navigation }) {
           style={styles.title}
           multiline
           maxLength={100}
-          placeholder="제목을 입력하세요..."
+          placeholder={INPUT_TITLE}
           onChangeText={(value) => setTitle(value)}
         />
         <View style={styles.participantsContainer}>
@@ -119,8 +121,8 @@ function VideoPostScreen({ route, navigation }) {
         <ModalContainer
           isRequiredToGoBack={true}
           navigation={navigation}
-          modalHeader="Error"
-          modalBody="동영상 생성 실패! 다시 시도해 주세요."
+          modalHeader={errorMessage.ERROR}
+          modalBody={errorMessage.ERROR_POST_FAILURE}
         />
       )}
     </View>

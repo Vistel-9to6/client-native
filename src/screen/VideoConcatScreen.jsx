@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
+import { AntDesign, Fontisto } from "@expo/vector-icons";
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
 import { concatVideos } from "../api/index ";
 
 import ModalContainer from "../components/shared/modal";
+import { fetchResult, errorMessage } from "../../constants";
 
 function VideoConcatScreen({ route, navigation }) {
   const [success, setSuccess] = useState(false);
@@ -41,7 +41,7 @@ function VideoConcatScreen({ route, navigation }) {
     try {
       const data = await concatVideos(formdata, idToken);
 
-      if (data.result === "ok") {
+      if (data.result === fetchResult.SUCCESS) {
         setSuccess(true);
       }
     } catch (error) {
@@ -96,8 +96,8 @@ function VideoConcatScreen({ route, navigation }) {
         <ModalContainer
           isRequiredToGoBack={true}
           navigation={navigation}
-          modalHeader="Error"
-          modalBody="동영상 합치기 실패! 다시 시도해 주세요."
+          modalHeader={errorMessage.ERROR}
+          modalBody={errorMessage.ERROR_CONCAT_FAILURE}
         />
       )}
     </View>

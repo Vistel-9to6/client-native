@@ -2,16 +2,13 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, Image } from "react-native";
 import { UserAuth } from "../context/AuthContext";
 
-import Feed from "../components/Feed";
+import MainFeedScreen from "../screen/MainFeedScreen";
 import SearchScreen from "../screen/SearchScreen";
-import AppHeader from "../components/shared/header";
 import Profile from "../screen/ProfileScreen";
-import FeedSlide from "../components/FeedSlide";
+import FeedSlideScreen from "../screen/FeedSlideScreen";
+import AppHeader from "../components/shared/header";
 
-import { AntDesign } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign, Feather, Entypo, FontAwesome } from "@expo/vector-icons";
 
 const EmptyScreen = () => {
   return null;
@@ -25,7 +22,7 @@ function TabNavigation({ navigation }) {
     <Tab.Navigator>
       <Tab.Screen
         name="Feed"
-        component={Feed}
+        component={MainFeedScreen}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
@@ -40,7 +37,7 @@ function TabNavigation({ navigation }) {
       />
       <Tab.Screen
         name="Slide"
-        component={FeedSlide}
+        component={FeedSlideScreen}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
@@ -70,7 +67,7 @@ function TabNavigation({ navigation }) {
           tabBarStyle: { height: 50 },
         }}
       />
-      {/* <Tab.Screen
+      <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={{
@@ -81,7 +78,7 @@ function TabNavigation({ navigation }) {
           header: () => <AppHeader navigation={navigation} />,
           tabBarStyle: { height: 50 },
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Profile"
         component={Profile}

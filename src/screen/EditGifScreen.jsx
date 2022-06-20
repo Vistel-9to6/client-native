@@ -20,22 +20,30 @@ import OptionList from "../components/OptionList";
 import { ModalHandler } from "../context/modalContext";
 import { UserAuth } from "../context/AuthContext";
 import { convertGif } from "../api/index";
-
-const defaultFilterValue = {
-  color: "original",
-  grid: "1x1",
-  fps: 15,
-};
-
-const defaultImageValue = `${process.env.AWS_BUCKET_URL}/assets/1x1_original_15.gif`;
+import {
+  fetchResult,
+  defalutGifFilterValue,
+  defaultExample,
+  filterOptions,
+  errorMessage,
+} from "../../constants";
+import {
+  SAVE_COMPLETED,
+  PERMISSION_GRANTED,
+  SELECT_AGAIN,
+  CONVERT_RESULT,
+  GIF_EXAMPLE,
+  SAVE_GIF,
+  CONVERT_GIF,
+} from "../../constants/text";
 
 function EditGifScreen({ navigation, route }) {
   const { uri } = route.params;
   const [gifUrl, setGifUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasLibraryPermissions, setHasLibraryPermissions] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(defaultImageValue);
-  const [filter, setFilter] = useState(defaultFilterValue);
+  const [previewUrl, setPreviewUrl] = useState(defaultExample);
+  const [filter, setFilter] = useState(defalutGifFilterValue);
   const [downloading, setDownloading] = useState(false);
 
   const { openModal, setOpenModal } = ModalHandler();
@@ -43,7 +51,7 @@ function EditGifScreen({ navigation, route }) {
 
   const showToastMessage = () => {
     ToastAndroid.showWithGravity(
-      "저장 완료",
+      SAVE_COMPLETED,
       ToastAndroid.CENTER,
       ToastAndroid.SHORT,
     );
@@ -55,7 +63,7 @@ function EditGifScreen({ navigation, route }) {
     try {
       const data = await convertGif(idToken, uri, filter);
 
-      if (data.result === "ng") {
+      if (data.result === fetchResult.SUCCESS) {
         setOpenModal(true);
         return;
       }
@@ -75,11 +83,11 @@ function EditGifScreen({ navigation, route }) {
       const downloadedFile = await FileSystem.downloadAsync(gifUrl, fileUri);
       const permission = await MediaLibrary.requestPermissionsAsync();
 
-      if (permission.status === "granted") {
-        setHasLibraryPermissions(permission.status === "granted");
+      if (permission.status === PERMISSION_GRANTED) {
+        setHasLibraryPermissions(permission.status === PERMISSION_GRANTED);
       }
 
-      if (permission.status !== "granted") {
+      if (permission.status !== PERMISSION_GRANTED) {
         navigation.navigate("Home");
       }
 
@@ -103,7 +111,7 @@ function EditGifScreen({ navigation, route }) {
 
   const initializeOption = () => {
     setGifUrl("");
-    setFilter(defaultFilterValue);
+    setFilter(defalutGifFilterValue);
   };
 
   useEffect(() => {
@@ -111,35 +119,6 @@ function EditGifScreen({ navigation, route }) {
       `${process.env.AWS_BUCKET_URL}/assets/${filter.grid}_${filter.color}_${filter.fps}.gif`,
     );
   }, [filter]);
-
-  const filters = [
-    {
-      id: 0,
-      filter: "color",
-      options: [
-        { id: 0, type: "SEPIA" },
-        { id: 1, type: "GRAYSCALE" },
-        { id: 2, type: "REVERSAL" },
-      ],
-    },
-    {
-      id: 1,
-      filter: "grid",
-      options: [
-        { id: 0, type: "2x2" },
-        { id: 1, type: "3x3" },
-        { id: 2, type: "4x4" },
-      ],
-    },
-    {
-      id: 2,
-      filter: "fps",
-      options: [
-        { id: 0, type: 1 },
-        { id: 1, type: "15" },
-      ],
-    },
-  ];
 
   return (
     <View style={styles.container}>
@@ -151,7 +130,7 @@ function EditGifScreen({ navigation, route }) {
           <AntDesign name="left" size={27} color="black" />
         </TouchableOpacity>
         <Text style={styles.pageTitle}>
-          {gifUrl ? "변환 결과" : "GIF 예시"}
+          {gifUrl ? CONVERT_RESULT : GIF_EXAMPLE}
         </Text>
       </View>
       <View style={styles.contentsContainer}>
@@ -163,11 +142,11 @@ function EditGifScreen({ navigation, route }) {
           style={styles.mediaPreview}
         />
         {gifUrl ? (
-          <Button onPress={initializeOption} title="다시 선택하기" />
+          <Button onPress={initializeOption} title={SELECT_AGAIN} />
         ) : (
           <View style={styles.filterContainer}>
             <FlatList
-              data={filters}
+              data={filterOptions}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <OptionList item={item} filter={filter} onPress={setFilter} />
@@ -196,7 +175,7 @@ function EditGifScreen({ navigation, route }) {
               style={styles.button}
             >
               <Text style={styles.buttonText}>
-                {gifUrl ? "저장하기" : "변환하기"}
+                {gifUrl ? SAVE_GIF : CONVERT_GIF}
               </Text>
             </TouchableOpacity>
           )}
@@ -206,11 +185,11 @@ function EditGifScreen({ navigation, route }) {
         <ModalContainer
           isRequiredToGoBack={true}
           navigation={navigation}
-          modalHeader="Error"
+          modalHeader={errorMessage.ERROR}
           modalBody={
             downloading
-              ? "GIF 다운로드 실패! 다시 시도해주세요."
-              : "GIF 만들기 실패! 다시 시도해 주세요."
+              ? errorMessage.ERROR_DOWNLOAD_FAILURE
+              : errorMessage.ERROR_CREATE_GIF_FAILURE
           }
         />
       )}

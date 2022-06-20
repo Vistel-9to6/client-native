@@ -4,14 +4,13 @@ import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { UserAuth } from "../context/AuthContext";
 import { generateThumbnail } from "../api/thumbnail";
-import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 
 function VideoResultScreen({ route, navigation }) {
   const videoRef = useRef(null);
   const [like, setLike] = useState(false);
-  const { idToken, user } = UserAuth();
+  const { idToken } = UserAuth();
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
   const isFocused = useIsFocused();
