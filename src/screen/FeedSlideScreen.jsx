@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import { View, StyleSheet } from "react-native";
+
 import { ModalHandler } from "../context/modalContext";
 import { getVideoList } from "../api";
 
 import FeedSlide from "../components/FeedSlide";
 import ModalContainer from "../components/shared/modal";
+import Loading from "../components/shared/loading";
 import { errorMessage, fetchResult } from "../../constants/index";
 
-function FeedSlideScreen() {
+function FeedSlideScreen({ navigation }) {
   const [feed, setFeed] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { openModal, setOpenModal } = ModalHandler();
@@ -36,10 +38,10 @@ function FeedSlideScreen() {
     <View style={styles.container}>
       {isLoading ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="black" />
+          <Loading color="black" />
         </View>
       ) : (
-        <FeedSlide videoList={feed} />
+        <FeedSlide videoList={feed} navigation={navigation} />
       )}
       {openModal && (
         <ModalContainer

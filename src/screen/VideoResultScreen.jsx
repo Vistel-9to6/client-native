@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Video } from "expo-av";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { UserAuth } from "../context/AuthContext";
-import { generateThumbnail } from "../api/thumbnail";
+import { Video } from "expo-av";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+
+import { UserAuth } from "../context/AuthContext";
+import { generateThumbnail } from "../api/thumbnail";
 
 function VideoResultScreen({ route, navigation }) {
   const videoRef = useRef(null);

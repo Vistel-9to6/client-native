@@ -3,7 +3,6 @@ import { defalutGifFilterValue } from "../../constants/index";
 
 function Option({ item, filterType, filter, onPress }) {
   const handleButtonPress = () => {
-    console.log(item.type);
     if (item.type === filter[filterType]) {
       onPress({ ...filter, [filterType]: defalutGifFilterValue[filterType] });
     } else {

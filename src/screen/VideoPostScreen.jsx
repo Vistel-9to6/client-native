@@ -6,16 +6,17 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  ActivityIndicator,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
 import { postVideo } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
+import Loading from "../components/shared/loading";
 import { INPUT_TITLE } from "../../constants/text";
 import { fetchResult, errorMessage } from "../../constants";
 
@@ -111,7 +112,7 @@ function VideoPostScreen({ route, navigation }) {
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={uploadVideo}>
           {isLoading ? (
-            <ActivityIndicator size="large" color="#2196F3" />
+            <Loading color="#2196F3" />
           ) : (
             <AntDesign name="check" style={styles.uploadIcon} />
           )}

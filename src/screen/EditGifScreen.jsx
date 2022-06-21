@@ -5,17 +5,17 @@ import {
   Text,
   Image,
   StyleSheet,
-  ActivityIndicator,
   ToastAndroid,
   FlatList,
+  Button,
 } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
-import { Button } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import ModalContainer from "../components/shared/modal";
 import OptionList from "../components/OptionList";
+import Loading from "../components/shared/loading";
 
 import { ModalHandler } from "../context/modalContext";
 import { UserAuth } from "../context/AuthContext";
@@ -63,7 +63,7 @@ function EditGifScreen({ navigation, route }) {
     try {
       const data = await convertGif(idToken, uri, filter);
 
-      if (data.result === fetchResult.SUCCESS) {
+      if (data.result === fetchResult.FAILURE) {
         setOpenModal(true);
         return;
       }
@@ -168,7 +168,7 @@ function EditGifScreen({ navigation, route }) {
           }}
         >
           {isLoading ? (
-            <ActivityIndicator size="large" color="#2196F3" />
+            <Loading color={"#2196F3"} />
           ) : (
             <TouchableOpacity
               onPress={gifUrl ? saveGif : convertVideoToGif}

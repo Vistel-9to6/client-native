@@ -9,6 +9,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
+
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
 import { loginGoogle } from "../api/index";

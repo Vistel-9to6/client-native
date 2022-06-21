@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { View, Image, FlatList, StyleSheet, Text } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
+
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
-import { useIsFocused } from "@react-navigation/native";
 import { getUserInfo } from "../api/index";
 
 import FeedItem from "../components/FeedItem";

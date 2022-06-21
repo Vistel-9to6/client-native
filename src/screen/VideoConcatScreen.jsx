@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { AntDesign, Fontisto } from "@expo/vector-icons";
+
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
-import { concatVideos } from "../api/index ";
+import { concatVideos } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
+import Loading from "../components/shared/loading";
 import { fetchResult, errorMessage } from "../../constants";
 
 function VideoConcatScreen({ route, navigation }) {
@@ -84,7 +79,7 @@ function VideoConcatScreen({ route, navigation }) {
           }}
         >
           {isLoading ? (
-            <ActivityIndicator size="large" color="#2196F3" />
+            <Loading color="#2196F3" />
           ) : (
             <TouchableOpacity onPress={concatVideo} style={styles.concatButton}>
               <Text style={styles.concatText}>합치기</Text>

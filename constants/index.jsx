@@ -1,10 +1,18 @@
 exports.cameraStatus = {
   RECORDING_QUALITY: "480p",
+  RECORDING_DURATION: 10,
   CAMERA_RATIO: "16:9",
+};
+
+exports.galleryStatus = {
+  QUALITY: 1,
+  MAX_DURATION: 3000,
+  ASPECT: [16, 9],
 };
 
 exports.fetchResult = {
   SUCCESS: "ok",
+  FAILURE: "ng",
 };
 
 exports.errorMessage = {

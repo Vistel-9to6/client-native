@@ -3,13 +3,17 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-import { ModalHandler } from "../context/modalContext";
 import { useIsFocused } from "@react-navigation/core";
 import { Feather } from "@expo/vector-icons";
 
+import { ModalHandler } from "../context/modalContext";
 import ModalContainer from "../components/shared/modal";
 import { PERMISSION_GRANTED } from "../../constants/text";
-import { cameraStatus, errorMessage } from "../../constants/index";
+import {
+  cameraStatus,
+  galleryStatus,
+  errorMessage,
+} from "../../constants/index";
 
 function CameraScreen({ navigation, route }) {
   const cameraRef = useRef(null);
@@ -66,7 +70,7 @@ function CameraScreen({ navigation, route }) {
     if (cameraRef) {
       try {
         const options = {
-          maxDuration: 10,
+          maxDuration: cameraStatus.RECORDING_DURATION,
           quality:
             Camera.Constants.VideoQuality[cameraStatus.RECORDING_QUALITY],
         };
@@ -101,9 +105,9 @@ function CameraScreen({ navigation, route }) {
     const galleryVideo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 1,
-      maxDuration: 3000,
+      aspect: galleryStatus.ASPECT,
+      quality: galleryStatus.QUALITY,
+      maxDuration: galleryStatus.MAX_DURATION,
     });
 
     if (!galleryVideo.cancelled) {
@@ -159,7 +163,7 @@ function CameraScreen({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <View style={styles.bottomBarContainer}>
-        <View style={{ flex: 1 }}></View>
+        <View style={styles.flexContainer}></View>
         <View style={styles.recordButtonContainer}>
           <TouchableOpacity
             disabled={!isCameraReady}
@@ -169,14 +173,12 @@ function CameraScreen({ navigation, route }) {
           />
         </View>
         {hasGalleryPermissions && (
-          <View style={{ flex: 1 }}>
+          <View style={styles.flexContainer}>
             <TouchableOpacity
               onPress={() => pickFromGallery()}
               style={styles.galleryButton}
             >
-              {galleryItems[0] === undefined ? (
-                <></>
-              ) : (
+              {galleryItems[0] === undefined ? null : (
                 <Image
                   style={styles.galleryButtonImage}
                   source={{ uri: galleryItems[0].uri }}
@@ -253,6 +255,9 @@ const styles = StyleSheet.create({
   sideBarButton: {
     alignItems: "center",
     marginBottom: 25,
+  },
+  flexContainer: {
+    flex: 1,
   },
 });
 
