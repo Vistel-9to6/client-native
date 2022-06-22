@@ -33,12 +33,12 @@ function SearchScreen({ navigation }) {
     setLoading(false);
   };
 
-  const handleInputSearch = (text) => {
-    if (text) {
-      const newData = videos.filter((item) => {
-        const filteredVideos = item.title ? item.title : "";
+  const handleInputSearch = (keyword) => {
+    if (keyword) {
+      const newData = videos.filter((video) => {
+        const videoTitle = video.title ? video.title : "";
 
-        return filteredVideos.indexOf(text) > -1;
+        return videoTitle.indexOf(keyword) > -1;
       });
 
       setFiltered(newData);
@@ -46,7 +46,7 @@ function SearchScreen({ navigation }) {
       setFiltered([]);
     }
 
-    setSearch(text);
+    setSearch(keyword);
   };
 
   useEffect(() => {
