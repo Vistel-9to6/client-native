@@ -15,6 +15,7 @@ function VideoResultScreen({ route, navigation }) {
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
   const isFocused = useIsFocused();
+  console.log(originVideo);
 
   const postVideo = async () => {
     videoRef.current.pauseAsync();
@@ -118,7 +119,7 @@ function VideoResultScreen({ route, navigation }) {
           <Image
             style={styles.profile}
             source={{
-              uri: originVideo?.creators[0].profilePhoto,
+              uri: originVideo?.creators[0]?.profilePhoto,
             }}
           />
         </View>

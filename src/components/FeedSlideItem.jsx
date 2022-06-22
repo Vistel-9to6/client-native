@@ -150,7 +150,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
         <Image
           style={styles.profile}
           source={{
-            uri: item.creators[0].profilePhoto,
+            uri: item?.creators[0]?.profilePhoto,
           }}
         />
       </View>

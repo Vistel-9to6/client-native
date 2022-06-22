@@ -20,6 +20,7 @@ function MainFeedScreen({ navigation }) {
 
     try {
       const data = await getVideoList();
+
       if (data?.result === fetchResult.SUCCESS) {
         setFeeds([...data?.videoList]);
       }
@@ -38,7 +39,6 @@ function MainFeedScreen({ navigation }) {
     <>
       <View style={styles.container}>
         <FlatList
-          style={styles.videoList}
           numColumns={3}
           removeClippedSubviews
           nestedScrollEnabled

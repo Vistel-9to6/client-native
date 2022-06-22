@@ -4,6 +4,8 @@ exports.cameraStatus = {
   CAMERA_RATIO: "16:9",
 };
 
+exports.creatorsOptions = 5;
+
 exports.galleryStatus = {
   QUALITY: 1,
   MAX_DURATION: 3000,
@@ -27,7 +29,7 @@ exports.errorMessage = {
 };
 
 exports.defalutGifFilterValue = {
-  color: "original",
+  color: "ORIGINAL",
   grid: "1x1",
   fps: 15,
 };

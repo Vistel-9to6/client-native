@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   videoListBox: {
+    height: "100%",
     marginTop: 150,
   },
   profile: {

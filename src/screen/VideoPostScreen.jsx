@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Text,
   TextInput,
@@ -21,9 +21,10 @@ import { INPUT_TITLE } from "../../constants/text";
 import { fetchResult, errorMessage } from "../../constants";
 
 function VideoPostScreen({ route, navigation }) {
-  const [title, setTitle] = useState("");
-  const [maxCreators, setMaxCreators] = useState(2);
-  const [success, setSuccess] = useState(false);
+  const [post, setPost] = useState({
+    title: "",
+    maxCreators: 2,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const { uri, thumbnail } = route.params;
   const { idToken } = UserAuth();
@@ -37,38 +38,37 @@ function VideoPostScreen({ route, navigation }) {
     const videoFile = {
       uri,
       type: "multipart/form-data",
-      name: `${Date.now()}_${title}.mp4`,
+      name: `${Date.now()}_${post.title}.mp4`,
     };
 
     const thumbnailFile = {
       uri: thumbnail,
       type: "multipart/form-data",
-      name: `${Date.now()}_${title}_thumbnail.jpg`,
+      name: `${Date.now()}_${post.title}_thumbnail.jpg`,
     };
+
+    if (!post.title) {
+      setOpenModal(true);
+      return;
+    }
 
     formdata.append("video", videoFile);
     formdata.append("thumbnail", thumbnailFile);
-    formdata.append("title", title);
-    formdata.append("maxCreators", maxCreators);
+    formdata.append("title", post.title);
+    formdata.append("maxCreators", post.maxCreators);
 
     try {
       const data = await postVideo(formdata, idToken);
 
       if (data.result === fetchResult.SUCCESS) {
-        setSuccess(true);
+        setIsLoading(false);
+        navigation.navigate("Home");
       }
     } catch {
+      setIsLoading(false);
       setOpenModal(true);
     }
-
-    setIsLoading(false);
   };
-
-  useEffect(() => {
-    if (success) {
-      navigation.navigate("Home");
-    }
-  }, [success]);
 
   return (
     <View style={styles.container}>
@@ -92,14 +92,16 @@ function VideoPostScreen({ route, navigation }) {
           multiline
           maxLength={100}
           placeholder={INPUT_TITLE}
-          onChangeText={(value) => setTitle(value)}
+          onChangeText={(value) => setPost({ ...post, title: value })}
         />
         <View style={styles.participantsContainer}>
           <Text style={styles.person}>참여인원</Text>
           <View style={styles.participants}>
             <Picker
-              selectedValue={maxCreators}
-              onValueChange={(value) => setMaxCreators(value)}
+              selectedValue={post.maxCreators}
+              onValueChange={(value) =>
+                setPost({ ...post, maxCreators: value })
+              }
             >
               <Picker.Item label="2명" value="2" />
               <Picker.Item label="3명" value="3" />
