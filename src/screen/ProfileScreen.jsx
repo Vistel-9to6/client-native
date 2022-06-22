@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { View, Image, FlatList, StyleSheet, Text } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
+
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
-import { useIsFocused } from "@react-navigation/native";
+import { getUserInfo } from "../api/index";
 
 import FeedItem from "../components/FeedItem";
 import ModalContainer from "../components/shared/modal";
+import { errorMessage, fetchResult } from "../../constants";
 
 function ProfileScreen({ navigation }) {
   const { user, idToken } = UserAuth();
@@ -18,18 +21,9 @@ function ProfileScreen({ navigation }) {
     setLoading(true);
 
     try {
-      const response = await fetch(
-        `${process.env.API_SERVER_URL}/api/videos/${user.userId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${idToken}`,
-          },
-        },
-      );
-      const data = await response.json();
+      const data = await getUserInfo(user.userId, idToken);
 
-      if (data?.result === "ok") {
+      if (data?.result === fetchResult.SUCCESS) {
         setFeeds([...data?.videoList]);
       }
     } catch (error) {
@@ -68,8 +62,8 @@ function ProfileScreen({ navigation }) {
       </View>
       {openModal && (
         <ModalContainer
-          modalHeader="Error"
-          modalBody="동영상 목록을 가져오는 데 실패했습니다."
+          modalHeader={errorMessage.ERROR}
+          modalBody={errorMessage.ERROR_VIDEOLIST}
         />
       )}
     </View>
@@ -89,6 +83,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   videoListBox: {
+    height: "100%",
     marginTop: 150,
   },
   profile: {

@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Video } from "expo-av";
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { Video } from "expo-av";
+import { AntDesign, Entypo } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
+
 import { UserAuth } from "../context/AuthContext";
 import { generateThumbnail } from "../api/thumbnail";
-import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
-import { StatusBar } from "expo-status-bar";
 
 function VideoResultScreen({ route, navigation }) {
   const videoRef = useRef(null);
   const [like, setLike] = useState(false);
-  const { idToken, user } = UserAuth();
+  const { idToken } = UserAuth();
   const { originVideo, liveVideo, galleryVideo } = route.params;
   const uri = originVideo?.videoUrl || liveVideo?.uri || galleryVideo?.uri;
   const isFocused = useIsFocused();
+  console.log(originVideo);
 
   const postVideo = async () => {
     videoRef.current.pauseAsync();
@@ -118,7 +119,7 @@ function VideoResultScreen({ route, navigation }) {
           <Image
             style={styles.profile}
             source={{
-              uri: originVideo?.creators[0].profilePhoto,
+              uri: originVideo?.creators[0]?.profilePhoto,
             }}
           />
         </View>

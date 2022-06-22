@@ -3,11 +3,17 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Camera } from "expo-camera";
 import * as ImagePicker from "expo-image-picker";
 import * as MediaLibrary from "expo-media-library";
-import { ModalHandler } from "../context/modalContext";
 import { useIsFocused } from "@react-navigation/core";
 import { Feather } from "@expo/vector-icons";
 
+import { ModalHandler } from "../context/modalContext";
 import ModalContainer from "../components/shared/modal";
+import { PERMISSION_GRANTED } from "../../constants/text";
+import {
+  cameraStatus,
+  galleryStatus,
+  errorMessage,
+} from "../../constants/index";
 
 function CameraScreen({ navigation, route }) {
   const cameraRef = useRef(null);
@@ -29,17 +35,21 @@ function CameraScreen({ navigation, route }) {
     (async () => {
       const cameraPermissionStatus =
         await Camera.requestCameraPermissionsAsync();
-      setHasCameraPermission(cameraPermissionStatus.status === "granted");
+      setHasCameraPermission(
+        cameraPermissionStatus.status === PERMISSION_GRANTED,
+      );
 
       const audioPermissionStatus =
         await Camera.requestMicrophonePermissionsAsync();
-      setHasAudioPermission(audioPermissionStatus.status === "granted");
+      setHasAudioPermission(
+        audioPermissionStatus.status === PERMISSION_GRANTED,
+      );
 
       const galleryStatus =
         await ImagePicker.requestMediaLibraryPermissionsAsync();
-      setHasGalleryPermissions(galleryStatus.status === "granted");
+      setHasGalleryPermissions(galleryStatus.status === PERMISSION_GRANTED);
 
-      if (galleryStatus.status === "granted") {
+      if (galleryStatus.status === PERMISSION_GRANTED) {
         const userGalleryMedia = await MediaLibrary.getAssetsAsync({
           sortBy: ["creationTime"],
           mediaType: ["video"],
@@ -48,8 +58,8 @@ function CameraScreen({ navigation, route }) {
       }
 
       if (
-        cameraPermissionStatus.status !== "granted" &&
-        audioPermissionStatus.status !== "granted"
+        cameraPermissionStatus.status !== PERMISSION_GRANTED &&
+        audioPermissionStatus.status !== PERMISSION_GRANTED
       ) {
         navigation.navigate("Home");
       }
@@ -60,8 +70,9 @@ function CameraScreen({ navigation, route }) {
     if (cameraRef) {
       try {
         const options = {
-          maxDuration: 10,
-          quality: Camera.Constants.VideoQuality["480p"],
+          maxDuration: cameraStatus.RECORDING_DURATION,
+          quality:
+            Camera.Constants.VideoQuality[cameraStatus.RECORDING_QUALITY],
         };
 
         const videoRecordPromise = cameraRef.current.recordAsync(options);
@@ -94,9 +105,9 @@ function CameraScreen({ navigation, route }) {
     const galleryVideo = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Videos,
       allowsEditing: true,
-      aspect: [16, 9],
-      quality: 1,
-      maxDuration: 3000,
+      aspect: galleryStatus.ASPECT,
+      quality: galleryStatus.QUALITY,
+      maxDuration: galleryStatus.MAX_DURATION,
     });
 
     if (!galleryVideo.cancelled) {
@@ -117,7 +128,7 @@ function CameraScreen({ navigation, route }) {
         <Camera
           ref={cameraRef}
           style={styles.camera}
-          ratio={"16:9"}
+          ratio={cameraStatus.CAMERA_RATIO}
           type={cameraType}
           flashMode={cameraFlash}
           onCameraReady={() => setIsCameraReady(true)}
@@ -152,7 +163,7 @@ function CameraScreen({ navigation, route }) {
         </TouchableOpacity>
       </View>
       <View style={styles.bottomBarContainer}>
-        <View style={{ flex: 1 }}></View>
+        <View style={styles.flexContainer}></View>
         <View style={styles.recordButtonContainer}>
           <TouchableOpacity
             disabled={!isCameraReady}
@@ -162,14 +173,12 @@ function CameraScreen({ navigation, route }) {
           />
         </View>
         {hasGalleryPermissions && (
-          <View style={{ flex: 1 }}>
+          <View style={styles.flexContainer}>
             <TouchableOpacity
               onPress={() => pickFromGallery()}
               style={styles.galleryButton}
             >
-              {galleryItems[0] === undefined ? (
-                <></>
-              ) : (
+              {galleryItems[0] === undefined ? null : (
                 <Image
                   style={styles.galleryButtonImage}
                   source={{ uri: galleryItems[0].uri }}
@@ -181,8 +190,8 @@ function CameraScreen({ navigation, route }) {
       </View>
       {openModal && (
         <ModalContainer
-          modalHeader="Error"
-          modalBody="동영상 촬영 실패! 다시 시도해주세요."
+          modalHeader={errorMessage.ERROR}
+          modalBody={errorMessage.ERROR_RECORD_VIDEO}
         />
       )}
     </View>
@@ -246,6 +255,9 @@ const styles = StyleSheet.create({
   sideBarButton: {
     alignItems: "center",
     marginBottom: 25,
+  },
+  flexContainer: {
+    flex: 1,
   },
 });
 

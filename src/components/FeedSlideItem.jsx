@@ -8,15 +8,15 @@ import {
 } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Video } from "expo-av";
-import { AntDesign } from "@expo/vector-icons";
-import { Entypo } from "@expo/vector-icons";
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+
 import { UserAuth } from "../context/AuthContext";
 
 export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
   const videoRef = useRef(null);
   const [like, setLike] = useState(false);
-  const { idToken, user } = UserAuth();
+  const { idToken } = UserAuth();
 
   useImperativeHandle(parentRef, () => ({
     play,
@@ -136,7 +136,6 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
                 <Entypo name="heart-outlined" size={24} color="white" />
               )}
             </TouchableOpacity>
-
             <Text style={styles.gifText}>GIF</Text>
           </>
         </View>
@@ -151,7 +150,7 @@ export const FeedSlideItem = forwardRef(({ item, navigation }, parentRef) => {
         <Image
           style={styles.profile}
           source={{
-            uri: item.creators[0].profilePhoto,
+            uri: item?.creators[0]?.profilePhoto,
           }}
         />
       </View>

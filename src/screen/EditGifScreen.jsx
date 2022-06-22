@@ -5,39 +5,53 @@ import {
   Text,
   Image,
   StyleSheet,
-  ActivityIndicator,
   ToastAndroid,
   FlatList,
+  Button,
 } from "react-native";
 import * as MediaLibrary from "expo-media-library";
 import * as FileSystem from "expo-file-system";
-import { Button } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { UserAuth } from "../context/AuthContext";
-import { ModalHandler } from "../context/modalContext";
 
 import ModalContainer from "../components/shared/modal";
+import OptionList from "../components/OptionList";
+import Loading from "../components/shared/loading";
+
+import { ModalHandler } from "../context/modalContext";
+import { UserAuth } from "../context/AuthContext";
+import { convertGif } from "../api/index";
+import {
+  fetchResult,
+  defalutGifFilterValue,
+  defaultExample,
+  filterOptions,
+  errorMessage,
+} from "../../constants";
+import {
+  SAVE_COMPLETED,
+  PERMISSION_GRANTED,
+  SELECT_AGAIN,
+  CONVERT_RESULT,
+  GIF_EXAMPLE,
+  SAVE_GIF,
+  CONVERT_GIF,
+} from "../../constants/text";
 
 function EditGifScreen({ navigation, route }) {
   const { uri } = route.params;
-  const { idToken } = UserAuth();
   const [gifUrl, setGifUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasLibraryPermissions, setHasLibraryPermissions] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(
-    `${process.env.AWS_BUCKET_URL}/assets/1x1_original_15.gif`,
-  );
-  const [filter, setFilter] = useState({
-    color: "original",
-    grid: "1x1",
-    fps: 15,
-  });
+  const [previewUrl, setPreviewUrl] = useState(defaultExample);
+  const [filter, setFilter] = useState(defalutGifFilterValue);
   const [downloading, setDownloading] = useState(false);
+
   const { openModal, setOpenModal } = ModalHandler();
+  const { idToken } = UserAuth();
 
   const showToastMessage = () => {
     ToastAndroid.showWithGravity(
-      "저장 완료",
+      SAVE_COMPLETED,
       ToastAndroid.CENTER,
       ToastAndroid.SHORT,
     );
@@ -47,33 +61,19 @@ function EditGifScreen({ navigation, route }) {
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        `${process.env.API_SERVER_URL}/api/videos/gif`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${idToken}`,
-          },
-          body: JSON.stringify({
-            videoUrl: uri,
-            filter,
-          }),
-        },
-      );
+      const data = await convertGif(idToken, uri, filter);
 
-      const data = await response.json();
-
-      if (data.result === "ng") {
+      if (data.result === fetchResult.FAILURE) {
         setOpenModal(true);
         return;
       }
 
       setGifUrl(data.file);
-      setIsLoading(false);
     } catch (error) {
       setOpenModal(true);
     }
+
+    setIsLoading(false);
   };
 
   const saveGif = async () => {
@@ -83,11 +83,11 @@ function EditGifScreen({ navigation, route }) {
       const downloadedFile = await FileSystem.downloadAsync(gifUrl, fileUri);
       const permission = await MediaLibrary.requestPermissionsAsync();
 
-      if (permission.status === "granted") {
-        setHasLibraryPermissions(permission.status === "granted");
+      if (permission.status === PERMISSION_GRANTED) {
+        setHasLibraryPermissions(permission.status === PERMISSION_GRANTED);
       }
 
-      if (permission.status !== "granted") {
+      if (permission.status !== PERMISSION_GRANTED) {
         navigation.navigate("Home");
       }
 
@@ -109,43 +109,9 @@ function EditGifScreen({ navigation, route }) {
     }
   };
 
-  const colors = ["SEPIA", "GRAYSCALE", "REVERSAL"];
-
-  const colorButtonPress = (title) => {
-    if (title === filter.color) {
-      setFilter({ ...filter, color: "original" });
-    } else {
-      setFilter({ ...filter, color: title });
-    }
-  };
-
-  const grids = ["2", "3", "4"];
-
-  const gridButtonPress = (title) => {
-    if (title === filter.grid) {
-      setFilter({ ...filter, grid: "1x1" });
-    } else {
-      setFilter({ ...filter, grid: title });
-    }
-  };
-
-  const fps = ["1", "15"];
-
-  const fpsButtonPress = (title) => {
-    if (title === filter.fps) {
-      setFilter({ ...filter, fps: 15 });
-    } else {
-      setFilter({ ...filter, fps: title });
-    }
-  };
-
   const initializeOption = () => {
     setGifUrl("");
-    setFilter({
-      color: "original",
-      grid: "1x1",
-      fps: 15,
-    });
+    setFilter(defalutGifFilterValue);
   };
 
   useEffect(() => {
@@ -164,7 +130,7 @@ function EditGifScreen({ navigation, route }) {
           <AntDesign name="left" size={27} color="black" />
         </TouchableOpacity>
         <Text style={styles.pageTitle}>
-          {gifUrl ? "변환 결과" : "GIF 예시"}
+          {gifUrl ? CONVERT_RESULT : GIF_EXAMPLE}
         </Text>
       </View>
       <View style={styles.contentsContainer}>
@@ -176,100 +142,16 @@ function EditGifScreen({ navigation, route }) {
           style={styles.mediaPreview}
         />
         {gifUrl ? (
-          <Button onPress={initializeOption} title="다시 선택하기" />
+          <Button onPress={initializeOption} title={SELECT_AGAIN} />
         ) : (
           <View style={styles.filterContainer}>
-            <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>색상</Text>
-              <FlatList
-                contentContainerStyle={styles.itemList}
-                keyExtractor={(item) => item}
-                data={colors}
-                renderItem={({ item }) => (
-                  <View style={styles.item}>
-                    <TouchableOpacity
-                      num={item}
-                      style={{
-                        ...styles.optionButton,
-                        backgroundColor:
-                          filter.color === item ? "black" : "white",
-                      }}
-                      onPress={() => colorButtonPress(item)}
-                    >
-                      <Text
-                        style={{
-                          ...styles.option,
-                          color: filter.color === item ? "white" : "black",
-                        }}
-                      >
-                        {item}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-            </View>
-            <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>격자</Text>
-              <FlatList
-                contentContainerStyle={styles.itemList}
-                keyExtractor={(item) => item}
-                data={grids}
-                renderItem={({ item }) => (
-                  <View style={styles.item}>
-                    <TouchableOpacity
-                      num={item}
-                      style={{
-                        ...styles.optionButton,
-                        backgroundColor:
-                          filter.grid === `${item}x${item}` ? "black" : "white",
-                      }}
-                      onPress={() => gridButtonPress(`${item}x${item}`)}
-                    >
-                      <Text
-                        style={{
-                          ...styles.option,
-                          color:
-                            filter.grid === `${item}x${item}`
-                              ? "white"
-                              : "black",
-                        }}
-                      >{`${item}x${item}`}</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-            </View>
-            <View style={styles.filterRow}>
-              <Text style={styles.optionTitle}>FPS</Text>
-              <FlatList
-                contentContainerStyle={styles.itemList}
-                keyExtractor={(item) => item}
-                data={fps}
-                renderItem={({ item }) => (
-                  <View style={styles.item}>
-                    <TouchableOpacity
-                      num={item}
-                      style={{
-                        ...styles.optionButton,
-                        backgroundColor:
-                          filter.fps === item ? "black" : "white",
-                      }}
-                      onPress={() => fpsButtonPress(item)}
-                    >
-                      <Text
-                        style={{
-                          ...styles.option,
-                          color: filter.fps === item ? "white" : "black",
-                        }}
-                      >
-                        {item}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-            </View>
+            <FlatList
+              data={filterOptions}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <OptionList item={item} filter={filter} onPress={setFilter} />
+              )}
+            />
             <View style={styles.normalText}>
               <Text style={{ color: "blue", fontSize: 11 }}>
                 옵션을 선택하지 않으면 기본모드로 설정 됩니다
@@ -286,14 +168,14 @@ function EditGifScreen({ navigation, route }) {
           }}
         >
           {isLoading ? (
-            <ActivityIndicator size="large" color="#2196F3" />
+            <Loading color={"#2196F3"} />
           ) : (
             <TouchableOpacity
               onPress={gifUrl ? saveGif : convertVideoToGif}
               style={styles.button}
             >
               <Text style={styles.buttonText}>
-                {gifUrl ? "저장하기" : "변환하기"}
+                {gifUrl ? SAVE_GIF : CONVERT_GIF}
               </Text>
             </TouchableOpacity>
           )}
@@ -303,11 +185,11 @@ function EditGifScreen({ navigation, route }) {
         <ModalContainer
           isRequiredToGoBack={true}
           navigation={navigation}
-          modalHeader="Error"
+          modalHeader={errorMessage.ERROR}
           modalBody={
             downloading
-              ? "GIF 다운로드 실패! 다시 시도해주세요."
-              : "GIF 만들기 실패! 다시 시도해 주세요."
+              ? errorMessage.ERROR_DOWNLOAD_FAILURE
+              : errorMessage.ERROR_CREATE_GIF_FAILURE
           }
         />
       )}

@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import vistelLogo from "../../../assets/vistel-logo.png";
 
 import { UserAuth } from "../../context/AuthContext";
+import { LOGIN, LOGOUT } from "../../../constants/text";
 
 function AppHeader({ navigation }) {
   const { user, setUser, setIdToken } = UserAuth();
@@ -27,7 +28,7 @@ function AppHeader({ navigation }) {
           style={styles.login}
           onPress={user ? handleLogout : handleLogin}
         >
-          <Text>{user ? "로그아웃" : "로그인"}</Text>
+          <Text>{user ? LOGOUT : LOGIN}</Text>
         </TouchableOpacity>
       </View>
     </View>

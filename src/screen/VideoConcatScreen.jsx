@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
+import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { AntDesign, Fontisto } from "@expo/vector-icons";
+
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
+import { concatVideos } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
+import Loading from "../components/shared/loading";
+import { fetchResult, errorMessage } from "../../constants";
 
 function VideoConcatScreen({ route, navigation }) {
   const [success, setSuccess] = useState(false);
@@ -38,24 +34,16 @@ function VideoConcatScreen({ route, navigation }) {
     formdata.append("video", videoFile);
 
     try {
-      const response = await fetch(`${process.env.API_SERVER_URL}/api/videos`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${idToken}`,
-        },
-        body: formdata,
-      });
+      const data = await concatVideos(formdata, idToken);
 
-      const data = await response.json();
-      setIsLoading(false);
-
-      if (data.result === "ok") {
+      if (data.result === fetchResult.SUCCESS) {
         setSuccess(true);
       }
     } catch (error) {
       setOpenModal(true);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -91,7 +79,7 @@ function VideoConcatScreen({ route, navigation }) {
           }}
         >
           {isLoading ? (
-            <ActivityIndicator size="large" color="#2196F3" />
+            <Loading color="#2196F3" />
           ) : (
             <TouchableOpacity onPress={concatVideo} style={styles.concatButton}>
               <Text style={styles.concatText}>합치기</Text>
@@ -103,8 +91,8 @@ function VideoConcatScreen({ route, navigation }) {
         <ModalContainer
           isRequiredToGoBack={true}
           navigation={navigation}
-          modalHeader="Error"
-          modalBody="동영상 합치기 실패! 다시 시도해 주세요."
+          modalHeader={errorMessage.ERROR}
+          modalBody={errorMessage.ERROR_CONCAT_FAILURE}
         />
       )}
     </View>

@@ -9,10 +9,13 @@ import {
 import { StatusBar } from "expo-status-bar";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
+
 import { UserAuth } from "../context/AuthContext";
 import { ModalHandler } from "../context/modalContext";
+import { loginGoogle } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
+import { errorMessage } from "../../constants";
 
 import googleLoginButtonImage from "../../assets/google-login-button.png";
 import vistelLogoSmall from "../../assets/vistel-logo-small.png";
@@ -36,21 +39,8 @@ function LoginScreen({ navigation }) {
 
   const handleLogin = async (id) => {
     try {
-      const response = await fetch(
-        `${process.env.API_SERVER_URL}/api/auth/google`,
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            token: id,
-          }),
-        },
-      );
+      const user = await loginGoogle(id);
 
-      const user = await response.json();
       setUser(user);
       setIdToken(user.token);
 
@@ -83,8 +73,8 @@ function LoginScreen({ navigation }) {
           <ModalContainer
             isRequiredToGoBack={true}
             navigation={navigation}
-            modalHeader="Error"
-            modalBody="로그인 실패! 다시 시도해 주세요."
+            modalHeader={errorMessage.ERROR}
+            modalBody={errorMessage.ERROR_LOGIN_FAILURE}
           />
         )}
       </View>
