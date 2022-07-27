@@ -1,13 +1,6 @@
-README.md 파일을 추가했습니다.
-아래는 미리보기입니다.
-수정이 필요한 부분에 대한 코멘트 부탁드립니다.
-
 # 📹 **VISTEL**
 
-<img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/c135a99f-37f2-4f69-ba73-74f650aa4259/Screen_Recording_20220622-201309_Expo_Go.mp4_000000.000.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220626%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220626T093737Z&X-Amz-Expires=86400&X-Amz-Signature=6028cb76348b3fadae47dbab17039d5300e320a7d0387d7cc7e57f2e35cdc051&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Screen_Recording_20220622-201309_Expo%2520Go.mp4_000000.000.jpg%22&x-id=GetObject" width="300">
-
 <br />
-
 VISTEL은 자신의 스토리를 이어가고 싶은 누군가가 영상으로 찍어 올리면, 앱의 회원 모두 자유롭게 스토리를 영상으로 이어갈 수 있는 Social Network Service 어플리케이션입니다.
 
 본인이 스토리를 생성하거나 다른 사람의 스토리에 참여하여 다양한 영상을 만들고, gif 형식으로 스토리를 다운받아 웹, sns 등 다양한 곳으로 공유할 수 있습니다.
@@ -29,7 +22,7 @@ VISTEL은 자신의 스토리를 이어가고 싶은 누군가가 영상으로 �
 
 ## 🎯 개발 동기
 
-일반적인 sns은 텍스트 혹은 이야기로 본인의 이야기를 작성하고 피드백을 전달합니다. 만약, 텍스트, 이미지가 아닌 비디오로 나만의 이야기를 전달하면 어떨까요? 또한, 한 명이 시작한 이야기에 여러 사람이 본인의 이야기를 더하여 하나의 이야기를 만들면 어떨까요?
+일반적인 SNS는 텍스트 혹은 이야기로 본인의 이야기를 작성하고 피드백을 전달합니다. 만약, 텍스트, 이미지가 아닌 비디오로 나만의 이야기를 전달하면 어떨까요? 또한, 한 명이 시작한 이야기에 여러 사람이 본인의 이야기를 더하여 하나의 이야기를 만들면 어떨까요?
 
 짧지만 명확한 이미지와 오디오를 제공하는 비디오는 사용자의 눈과 귀를 사로잡고, 이야기를 다채롭게 구성할 수 있어 비디오를 활용한 스토리텔링을 제공하는 어플리케이션을 만들고자 하였습니다. 
 
