@@ -4,7 +4,6 @@ import { UserAuth } from "../context/AuthContext";
 
 import MainFeedScreen from "../screen/MainFeedScreen";
 import SearchScreen from "../screen/SearchScreen";
-import Profile from "../screen/ProfileScreen";
 import FeedSlideScreen from "../screen/FeedSlideScreen";
 import AppHeader from "../components/shared/header";
 
@@ -18,13 +17,15 @@ const Tab = createBottomTabNavigator();
 
 function TabNavigation({ navigation }) {
   const { idToken, user } = UserAuth();
+
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{ tabBarShowLabel: false, tabBarStyle: { height: 50 } }}
+    >
       <Tab.Screen
         name="Feed"
         component={MainFeedScreen}
         options={{
-          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
             <Entypo name="home" size={25} color={color} />
           ),
@@ -32,19 +33,16 @@ function TabNavigation({ navigation }) {
           headerStyle: {
             backgroundColor: "black",
           },
-          tabBarStyle: { height: 50 },
         }}
       />
       <Tab.Screen
         name="Slide"
         component={FeedSlideScreen}
         options={{
-          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
             <FontAwesome name="list" size={25} color={color} />
           ),
           header: () => null,
-          tabBarStyle: { height: 50 },
         }}
       />
       <Tab.Screen
@@ -60,28 +58,25 @@ function TabNavigation({ navigation }) {
           },
         })}
         options={{
-          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
             <AntDesign name="pluscircleo" size={35} color={color} />
           ),
-          tabBarStyle: { height: 50 },
+          header: () => null,
         }}
       />
       <Tab.Screen
         name="Search"
         component={SearchScreen}
         options={{
-          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => (
             <AntDesign name="search1" size={25} color={color} />
           ),
           header: () => <AppHeader navigation={navigation} />,
-          tabBarStyle: { height: 50 },
         }}
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={EmptyScreen}
         listeners={({ navigation }) => ({
           tabPress: (event) => {
             event.preventDefault();
@@ -92,7 +87,6 @@ function TabNavigation({ navigation }) {
           },
         })}
         options={{
-          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => {
             return user ? (
               <Image
@@ -106,7 +100,6 @@ function TabNavigation({ navigation }) {
             );
           },
           header: () => <AppHeader navigation={navigation} />,
-          tabBarStyle: { height: 50 },
         }}
       />
     </Tab.Navigator>
