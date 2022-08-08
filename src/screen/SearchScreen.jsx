@@ -4,7 +4,7 @@ import { useIsFocused } from "@react-navigation/native";
 
 import { getVideoList } from "../api/index";
 import { fetchResult, errorMessage } from "../../constants/index";
-import { ModalHandler } from "../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 
 import FeedItem from "../components/FeedItem";
 import ModalContainer from "../components/shared/modal";
@@ -14,7 +14,8 @@ function SearchScreen({ navigation }) {
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const { openModal, setOpenModal } = ModalHandler();
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
   const isFocused = useIsFocused();
 
   const getData = async () => {
@@ -27,7 +28,7 @@ function SearchScreen({ navigation }) {
         setVideos([...data?.videoList]);
       }
     } catch (error) {
-      setOpenModal(true);
+      handleModalOpen();
     }
 
     setLoading(false);
@@ -75,7 +76,7 @@ function SearchScreen({ navigation }) {
           />
         </View>
       </View>
-      {openModal && (
+      {modalStatus && (
         <ModalContainer
           modalHeader={errorMessage.ERROR}
           modalBody={errorMessage.ERROR_VIDEOLIST}

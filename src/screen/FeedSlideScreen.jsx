@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 
-import { ModalHandler } from "../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 import { getVideoList } from "../api";
 
 import FeedSlide from "../components/FeedSlide";
@@ -12,7 +12,8 @@ import { errorMessage, fetchResult } from "../../constants/index";
 function FeedSlideScreen({ navigation }) {
   const [feed, setFeed] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { openModal, setOpenModal } = ModalHandler();
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
 
   const getFeed = async () => {
     setIsLoading(true);
@@ -24,7 +25,7 @@ function FeedSlideScreen({ navigation }) {
         setFeed([...data?.videoList]);
       }
     } catch (error) {
-      setOpenModal(true);
+      handleModalOpen();
     }
 
     setIsLoading(false);
@@ -43,7 +44,7 @@ function FeedSlideScreen({ navigation }) {
       ) : (
         <FeedSlide videoList={feed} navigation={navigation} />
       )}
-      {openModal && (
+      {modalStatus && (
         <ModalContainer
           modalHeader={errorMessage.ERROR}
           modalBody={errorMessage.ERROR_VIDEOLIST}

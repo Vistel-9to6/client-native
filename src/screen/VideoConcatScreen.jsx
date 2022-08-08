@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { AntDesign, Fontisto } from "@expo/vector-icons";
 
 import { UserAuth } from "../context/AuthContext";
-import { ModalHandler } from "../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 import { concatVideos } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
@@ -15,7 +15,8 @@ function VideoConcatScreen({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { idToken } = UserAuth();
-  const { openModal, setOpenModal } = ModalHandler();
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
 
   const { originVideo, liveVideo, galleryVideo } = route.params.data;
   const uri = liveVideo?.uri || galleryVideo?.uri;
@@ -40,7 +41,7 @@ function VideoConcatScreen({ route, navigation }) {
         setSuccess(true);
       }
     } catch (error) {
-      setOpenModal(true);
+      handleModalOpen();
     }
 
     setIsLoading(false);
@@ -87,7 +88,7 @@ function VideoConcatScreen({ route, navigation }) {
           )}
         </View>
       </View>
-      {openModal && (
+      {modalStatus && (
         <ModalContainer
           isRequiredToGoBack={true}
           navigation={navigation}

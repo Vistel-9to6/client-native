@@ -3,7 +3,7 @@ import { View, Image, FlatList, StyleSheet, Text } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 
 import { UserAuth } from "../context/AuthContext";
-import { ModalHandler } from "../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 import { getUserInfo } from "../api/index";
 
 import FeedItem from "../components/FeedItem";
@@ -14,7 +14,8 @@ function ProfileScreen({ navigation }) {
   const { user, idToken } = UserAuth();
   const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { openModal, setOpenModal } = ModalHandler();
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
   const isFocused = useIsFocused();
 
   const getData = async () => {
@@ -27,7 +28,7 @@ function ProfileScreen({ navigation }) {
         setFeeds([...data?.videoList]);
       }
     } catch (error) {
-      setOpenModal(true);
+      handleModalOpen();
     }
 
     setLoading(false);
@@ -60,7 +61,7 @@ function ProfileScreen({ navigation }) {
           )}
         />
       </View>
-      {openModal && (
+      {modalStatus && (
         <ModalContainer
           modalHeader={errorMessage.ERROR}
           modalBody={errorMessage.ERROR_VIDEOLIST}

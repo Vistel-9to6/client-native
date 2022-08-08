@@ -1,6 +1,6 @@
 import React from "react";
 import { Center, Modal, Button } from "native-base";
-import { ModalHandler } from "../../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../../context/modalContext";
 
 function ModalContainer({
   navigation,
@@ -8,13 +8,14 @@ function ModalContainer({
   modalHeader,
   modalBody,
 }) {
-  const { openModal, setOpenModal } = ModalHandler();
+  const modalStatus = ModalHandler();
+  const { handleModalClose } = ModalDispatchHandler();
 
   return (
     <Center>
       <Modal
-        isOpen={openModal}
-        onClose={() => setOpenModal(false)}
+        isOpen={modalStatus}
+        onClose={handleModalClose}
         _backdrop={{
           _dark: {
             bg: "coolGray.800",
@@ -28,7 +29,7 @@ function ModalContainer({
           <Modal.Footer>
             <Button
               onPress={() => {
-                setOpenModal(false);
+                handleModalClose();
 
                 if (isRequiredToGoBack) {
                   navigation.goBack();

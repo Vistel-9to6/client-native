@@ -2,16 +2,16 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import vistelLogo from "../../../assets/vistel-logo.png";
 
-import { UserAuth } from "../../context/AuthContext";
+import { UserAuth, UserAuthDispatch } from "../../context/AuthContext";
 import { LOGIN, LOGOUT } from "../../../constants/text";
 
 function AppHeader({ navigation }) {
-  const { user, setUser, setIdToken } = UserAuth();
+  const { user } = UserAuth();
+  const authDispatch = UserAuthDispatch();
 
   const handleLogin = () => navigation.navigate("Login");
   const handleLogout = () => {
-    setUser("");
-    setIdToken("");
+    authDispatch({ type: "SIGN_OUT" });
 
     navigation.reset({ index: 0, routes: [{ name: "Home" }] });
   };
