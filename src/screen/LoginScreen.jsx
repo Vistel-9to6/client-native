@@ -10,8 +10,8 @@ import { StatusBar } from "expo-status-bar";
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 
-import { UserAuth } from "../context/AuthContext";
-import { ModalHandler } from "../context/modalContext";
+import { UserAuthDispatch } from "../context/AuthContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 import { loginGoogle } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
@@ -24,8 +24,9 @@ WebBrowser.maybeCompleteAuthSession();
 LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
 function LoginScreen({ navigation }) {
-  const { setUser, setIdToken } = UserAuth();
-  const { openModal, setOpenModal } = ModalHandler();
+  const authDispatch = UserAuthDispatch();
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: process.env.EXPO_CLIENT_ID,
@@ -41,12 +42,10 @@ function LoginScreen({ navigation }) {
     try {
       const user = await loginGoogle(id);
 
-      setUser(user);
-      setIdToken(user.token);
-
+      authDispatch({ type: "SIGN_IN", payload: { user, idToken: user.token } });
       navigation.goBack();
     } catch {
-      setOpenModal(true);
+      handleModalOpen();
     }
   };
 
@@ -69,7 +68,7 @@ function LoginScreen({ navigation }) {
             />
           </TouchableOpacity>
         </View>
-        {openModal && (
+        {modalStatus && (
           <ModalContainer
             isRequiredToGoBack={true}
             navigation={navigation}

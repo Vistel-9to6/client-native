@@ -17,7 +17,7 @@ import ModalContainer from "../components/shared/modal";
 import OptionList from "../components/OptionList";
 import Loading from "../components/shared/loading";
 
-import { ModalHandler } from "../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 import { UserAuth } from "../context/AuthContext";
 import { convertGif } from "../api/index";
 import {
@@ -46,7 +46,8 @@ function EditGifScreen({ navigation, route }) {
   const [filter, setFilter] = useState(defalutGifFilterValue);
   const [downloading, setDownloading] = useState(false);
 
-  const { openModal, setOpenModal } = ModalHandler();
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
   const { idToken } = UserAuth();
 
   const showToastMessage = () => {
@@ -64,13 +65,13 @@ function EditGifScreen({ navigation, route }) {
       const data = await convertGif(idToken, uri, filter);
 
       if (data.result === fetchResult.FAILURE) {
-        setOpenModal(true);
+        handleModalOpen();
         return;
       }
 
       setGifUrl(data.file);
     } catch (error) {
-      setOpenModal(true);
+      handleModalOpen();
     }
 
     setIsLoading(false);
@@ -104,7 +105,7 @@ function EditGifScreen({ navigation, route }) {
 
       navigation.goBack();
     } catch (error) {
-      setOpenModal(true);
+      handleModalOpen();
       setDownloading(true);
     }
   };
@@ -181,7 +182,7 @@ function EditGifScreen({ navigation, route }) {
           )}
         </View>
       </View>
-      {openModal && (
+      {modalStatus && (
         <ModalContainer
           isRequiredToGoBack={true}
           navigation={navigation}

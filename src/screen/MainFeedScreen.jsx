@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 
-import { ModalHandler } from "../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 import { getVideoList } from "../api/index";
 
 import FeedItem from "../components/FeedItem";
@@ -12,7 +12,8 @@ import { fetchResult, errorMessage } from "../../constants/index";
 function MainFeedScreen({ navigation }) {
   const [feeds, setFeeds] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { openModal, setOpenModal } = ModalHandler();
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
   const isFocused = useIsFocused();
 
   const getData = async () => {
@@ -25,7 +26,7 @@ function MainFeedScreen({ navigation }) {
         setFeeds([...data?.videoList]);
       }
     } catch (error) {
-      setOpenModal(true);
+      handleModalOpen();
     }
 
     setLoading(false);
@@ -49,7 +50,7 @@ function MainFeedScreen({ navigation }) {
           )}
         />
       </View>
-      {openModal && (
+      {modalStatus && (
         <ModalContainer
           modalHeader={errorMessage.ERROR}
           modalBody={errorMessage.ERROR_VIDEOLIST}

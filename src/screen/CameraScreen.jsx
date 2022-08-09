@@ -6,7 +6,7 @@ import * as MediaLibrary from "expo-media-library";
 import { useIsFocused } from "@react-navigation/core";
 import { Feather } from "@expo/vector-icons";
 
-import { ModalHandler } from "../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 import ModalContainer from "../components/shared/modal";
 import { PERMISSION_GRANTED } from "../../constants/text";
 import {
@@ -25,8 +25,8 @@ function CameraScreen({ navigation, route }) {
     Camera.Constants.FlashMode.off,
   );
   const originVideo = route?.params?.originVideo;
-  const { openModal, setOpenModal } = ModalHandler();
-
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
   const [galleryItems, setGalleryItems] = useState([]);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const isFocused = useIsFocused();
@@ -90,7 +90,7 @@ function CameraScreen({ navigation, route }) {
             : navigation.navigate("VideoResult", { liveVideo });
         }
       } catch (error) {
-        setOpenModal(true);
+        handleModalOpen();
       }
     }
   };
@@ -188,7 +188,7 @@ function CameraScreen({ navigation, route }) {
           </View>
         )}
       </View>
-      {openModal && (
+      {modalStatus && (
         <ModalContainer
           modalHeader={errorMessage.ERROR}
           modalBody={errorMessage.ERROR_RECORD_VIDEO}

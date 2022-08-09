@@ -12,7 +12,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 
 import { UserAuth } from "../context/AuthContext";
-import { ModalHandler } from "../context/modalContext";
+import { ModalHandler, ModalDispatchHandler } from "../context/modalContext";
 import { postVideo } from "../api/index";
 
 import ModalContainer from "../components/shared/modal";
@@ -28,7 +28,8 @@ function VideoPostScreen({ route, navigation }) {
   const [isLoading, setIsLoading] = useState(false);
   const { uri, thumbnail } = route.params;
   const { idToken } = UserAuth();
-  const { openModal, setOpenModal } = ModalHandler();
+  const modalStatus = ModalHandler();
+  const { handleModalOpen } = ModalDispatchHandler();
 
   const uploadVideo = async () => {
     setIsLoading(true);
@@ -48,7 +49,7 @@ function VideoPostScreen({ route, navigation }) {
     };
 
     if (!post.title) {
-      setOpenModal(true);
+      handleModalOpen();
       return;
     }
 
@@ -66,7 +67,7 @@ function VideoPostScreen({ route, navigation }) {
       }
     } catch {
       setIsLoading(false);
-      setOpenModal(true);
+      handleModalOpen();
     }
   };
 
@@ -120,7 +121,7 @@ function VideoPostScreen({ route, navigation }) {
           )}
         </TouchableOpacity>
       </View>
-      {openModal && (
+      {modalStatus && (
         <ModalContainer
           isRequiredToGoBack={true}
           navigation={navigation}
