@@ -5,6 +5,8 @@ import { UserAuth } from "../context/AuthContext";
 import MainFeedScreen from "../screen/MainFeedScreen";
 import SearchScreen from "../screen/SearchScreen";
 import FeedSlideScreen from "../screen/FeedSlideScreen";
+import ProfileScreen from "../screen/ProfileScreen";
+import CameraScreen from "../screen/CameraScreen";
 import AppHeader from "../components/shared/header";
 
 import { AntDesign, Feather, Entypo, FontAwesome } from "@expo/vector-icons";
@@ -47,7 +49,7 @@ function TabNavigation({ navigation }) {
       />
       <Tab.Screen
         name="Record"
-        component={EmptyScreen}
+        component={CameraScreen}
         listeners={({ navigation }) => ({
           tabPress: (event) => {
             event.preventDefault();
@@ -76,7 +78,7 @@ function TabNavigation({ navigation }) {
       />
       <Tab.Screen
         name="Profile"
-        component={EmptyScreen}
+        component={ProfileScreen}
         listeners={({ navigation }) => ({
           tabPress: (event) => {
             event.preventDefault();
